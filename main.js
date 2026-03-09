@@ -176,6 +176,8 @@ const TONE_ON_TONE_VARIANTS = [
     hueOffset: 0,
     saturationShift: 8,
     neutralBias: -0.05,
+    accentHueOffset: 176,
+    accentLightness: 56,
     lightStops: [8, 16, 24, 32, 40, 50, 60, 72, 84, 94],
     satCurve: [6, 3, 1, 0, 2, 4, 6, 4, 0, -16],
     hueJitter: [-2, -1, 0, 0, 1, 1, 0, -1, -2, -2],
@@ -189,6 +191,8 @@ const TONE_ON_TONE_VARIANTS = [
     hueOffset: 4,
     saturationShift: 0,
     neutralBias: 0.04,
+    accentHueOffset: 150,
+    accentLightness: 52,
     lightStops: [10, 20, 30, 40, 50, 58, 66, 74, 84, 94],
     satCurve: [2, 1, 0, -1, 0, 2, 3, 1, -2, -18],
     hueJitter: [-1, -1, 0, 1, 1, 0, -1, -1, -2, -2],
@@ -202,6 +206,8 @@ const TONE_ON_TONE_VARIANTS = [
     hueOffset: -6,
     saturationShift: -10,
     neutralBias: 0.16,
+    accentHueOffset: 196,
+    accentLightness: 60,
     lightStops: [12, 22, 32, 42, 52, 60, 68, 76, 86, 95],
     satCurve: [0, -2, -3, -4, -3, -1, 1, 0, -4, -20],
     hueJitter: [0, 0, 1, 1, 0, -1, -1, -1, -2, -2],
@@ -216,7 +222,8 @@ const TONE_IN_TONE_VARIANTS = [
     groupLabel: "Tone in Tone",
     note: "인접색 중심",
     hueOffsets: [0, -10, 14, -18, 22, 8, 30, -26, 18, 36],
-    lightStops: [14, 24, 32, 42, 50, 58, 66, 74, 84, 94],
+    satOffsets: [-26, -14, -2, 10, 22, 34, 46, 14, 58],
+    accentHueOffset: 148,
     saturationShift: 0,
   },
   {
@@ -226,7 +233,8 @@ const TONE_IN_TONE_VARIANTS = [
     groupLabel: "Tone in Tone",
     note: "포인트 확장",
     hueOffsets: [0, 12, 24, -16, 38, 8, -28, 48, 18, -36],
-    lightStops: [16, 26, 36, 46, 54, 62, 70, 78, 86, 95],
+    satOffsets: [-18, -4, 10, 22, 34, 46, 58, 20, 68],
+    accentHueOffset: 182,
     saturationShift: 10,
   },
   {
@@ -236,7 +244,8 @@ const TONE_IN_TONE_VARIANTS = [
     groupLabel: "Tone in Tone",
     note: "절제된 변주",
     hueOffsets: [0, -8, 10, 18, -16, 28, 8, -24, 34, 16],
-    lightStops: [18, 28, 38, 46, 54, 62, 70, 78, 88, 96],
+    satOffsets: [-30, -18, -8, 6, 18, 30, 40, 12, 52],
+    accentHueOffset: 132,
     saturationShift: -8,
   },
 ];
@@ -437,10 +446,20 @@ function renderPalettes() {
 }
 
 function renderPaletteCard(palette) {
-  const colorCells = palette.colors.map((hex) => {
-    const textColor = getReadableTextColor(hex);
+  const colorCells = palette.swatches.map((swatch) => {
+    const textColor = getReadableTextColor(swatch.hex);
     const shadow = textColor.includes("255") ? "0 1px 2px rgba(0, 0, 0, 0.26)" : "0 1px 2px rgba(255, 255, 255, 0.22)";
-    return `<div class="color-cell" style="background:${hex};color:${textColor};text-shadow:${shadow};">${hex}</div>`;
+    const tag = swatch.isAccent ? '<span class="color-cell__tag">강조색</span>' : "";
+    const accentClass = swatch.isAccent ? " color-cell--accent" : "";
+
+    return `
+      <div class="color-cell${accentClass}" style="background:${swatch.hex};color:${textColor};text-shadow:${shadow};">
+        <div class="color-cell__copy">
+          ${tag}
+          <strong>${swatch.hex}</strong>
+        </div>
+      </div>
+    `;
   }).join("");
 
   const checked = palette.id === state.activePaletteId ? "checked" : "";
@@ -472,7 +491,7 @@ function renderPreviews() {
 
   const selectedPurposes = getSelectedPurposes();
   const purposeContext = buildPurposeContext(selectedPurposes);
-  const tokens = derivePreviewTokens(activePalette.colors);
+  const tokens = derivePreviewTokens(activePalette);
 
   refs.activePaletteName.textContent = `선택 팔레트: ${activePalette.label}`;
   refs.activePaletteMeta.textContent = `${purposeContext.summary} · ${activePalette.note}`;
@@ -572,31 +591,50 @@ function renderBodySlide(tokens, context) {
 }
 
 function renderTableSlide(tokens, context) {
-  const metricCards = [
-    { label: "Rows", value: String(context.primary.slides.tableRows.length).padStart(2, "0") },
-    { label: "Lead", value: context.primary.slides.tableRows[0][0] },
-    { label: "Mode", value: context.primary.previewLabel.replace(" Mode", "") },
-  ].map((item) => `
-    <div class="metric-card">
-      <span>${item.label}</span>
-      <strong>${item.value}</strong>
-    </div>
-  `).join("");
+  const harveyColors = [tokens.accent, tokens.accentAlt, tokens.secondary];
+  const summaryItems = buildTableSummary(context.primary.slides.tableRows).map((item, index) => {
+    const tone = harveyColors[index % harveyColors.length];
+    const toneSoft = mixHex(tone, tokens.paper, 0.8);
+    return `
+      <div class="harvey-stat harvey-stat--table" style="--fill:${item.fill};--orbital-tone:${tone};--orbital-soft:${toneSoft};">
+        <div class="harvey-ball harvey-ball--md">
+          <span>${item.value}</span>
+        </div>
+        <div class="harvey-stat__meta">
+          <strong>${item.label}</strong>
+          <span>${item.caption}</span>
+        </div>
+      </div>
+    `;
+  }).join("");
   const headerRow = context.primary.slides.tableHeaders.map((header) => `<th>${header}</th>`).join("");
   const bodyRows = context.primary.slides.tableRows.map((row) => `
-    <tr>${row.map((cell) => `<td>${cell}</td>`).join("")}</tr>
+    <tr>
+      <td>
+        <div class="table-topic">
+          <span class="table-topic__dot"></span>
+          <strong>${row[0]}</strong>
+        </div>
+      </td>
+      <td>${row[1]}</td>
+      <td>${row[2]}</td>
+      <td><span class="table-status">${row[3]}</span></td>
+    </tr>
   `).join("");
 
   return `
     <article class="slide-card slide-card--table" style="${buildSlideVars(tokens)}">
       <span class="slide-card__label">04 Table</span>
-      <div class="slide-headline">
-        <p class="section-overline">Reference table</p>
-        <h3>Structured snapshot</h3>
-        <p>The table sits inside a lighter field with only one confident accent.</p>
+      <div class="infographic-topline">
+        <div class="slide-headline">
+          <p class="section-overline">Reference table</p>
+          <h3>Structured snapshot</h3>
+          <p>Clean rings, crisp status tags, and one dominant accent keep the table premium.</p>
+        </div>
+        <span class="dashboard-flag">Infographic table</span>
       </div>
-      <div class="metric-row">${metricCards}</div>
-      <div class="table-shell">
+      <div class="harvey-row">${summaryItems}</div>
+      <div class="table-shell table-shell--infographic">
         <table class="mini-table">
           <thead>
             <tr>${headerRow}</tr>
@@ -609,47 +647,67 @@ function renderTableSlide(tokens, context) {
 }
 
 function renderChartSlide(tokens, context) {
-  const metricCards = context.primary.slides.barValues.slice(0, 3).map((value, index) => `
-    <div class="metric-card metric-card--soft">
-      <span>${context.primary.slides.barLabels[index]}</span>
-      <strong>${value}</strong>
-    </div>
-  `).join("");
-  const values = context.primary.slides.barValues;
-  const max = Math.max(...values);
-  const barColors = [tokens.accent, tokens.accentAlt, tokens.blush, tokens.mist];
-  const bars = values.map((value, index) => {
-    const height = 28 + (value / max) * 72;
+  const chartItems = context.primary.slides.barValues.map((value, index) => ({
+    label: context.primary.slides.barLabels[index],
+    value,
+    tone: [tokens.accent, tokens.accentAlt, tokens.secondary, tokens.tertiary][index % 4],
+  }));
+  const heroItem = chartItems[0];
+  const heroSoft = mixHex(heroItem.tone, tokens.paper, 0.82);
+  const miniItems = chartItems.slice(1).map((item) => {
+    const toneSoft = mixHex(item.tone, tokens.paper, 0.84);
     return `
-      <div class="mini-bar">
-        <div class="mini-bar__track">
-          <span class="mini-bar__value">${value}</span>
-          <span class="mini-bar__fill" style="height:${height}%;background:${barColors[index % barColors.length]};"></span>
+      <div class="harvey-stat harvey-stat--mini" style="--fill:${item.value};--orbital-tone:${item.tone};--orbital-soft:${toneSoft};">
+        <div class="harvey-ball harvey-ball--sm">
+          <span>${item.value}</span>
         </div>
-        <span class="mini-bar__label">${context.primary.slides.barLabels[index]}</span>
+        <div class="harvey-stat__meta">
+          <strong>${item.label}</strong>
+          <span>Signal strength</span>
+        </div>
       </div>
     `;
   }).join("");
+  const legendRows = chartItems.map((item) => `
+    <div class="legend-row">
+      <span class="legend-row__swatch" style="background:${item.tone};"></span>
+      <span class="legend-row__label">${item.label}</span>
+      <strong>${item.value}%</strong>
+    </div>
+  `).join("");
 
   return `
     <article class="slide-card slide-card--chart" style="${buildSlideVars(tokens)}">
       <span class="slide-card__label">05 Chart</span>
-      <div class="dashboard-topline">
+      <div class="infographic-topline">
         <div class="slide-headline">
-          <p class="section-overline">Dashboard view</p>
+          <p class="section-overline">Circular dashboard</p>
           <h3>${context.primary.slides.barTitle}</h3>
-          <p>High-end slides let the chart breathe and keep the framing quiet.</p>
+          <p>Progress rings and quiet legends create the polished dashboard rhythm.</p>
         </div>
         <span class="dashboard-flag">Live preview</span>
       </div>
-      <div class="metric-row metric-row--compact">${metricCards}</div>
-      <div class="dashboard-panel">
-        <div class="dashboard-panel__header">
-          <strong>Performance index</strong>
-          <span>${context.primary.previewLabel}</span>
+      <div class="harvey-dashboard">
+        <div class="harvey-stage">
+          <div class="harvey-hero" style="--fill:${heroItem.value};--orbital-tone:${heroItem.tone};--orbital-soft:${heroSoft};">
+            <div class="harvey-ball harvey-ball--xl">
+              <span>${heroItem.value}%</span>
+            </div>
+            <div class="harvey-hero__meta">
+              <strong>${heroItem.label}</strong>
+              <span>Main signal</span>
+            </div>
+          </div>
+          <div class="harvey-mini-grid">${miniItems}</div>
         </div>
-        <div class="chart-layout">
-          <div class="mini-bars">${bars}</div>
+        <div class="dashboard-panel dashboard-panel--legend">
+          <div class="dashboard-panel__header">
+            <strong>Performance index</strong>
+            <span>${context.primary.previewLabel}</span>
+          </div>
+          <div class="legend-stack">
+            ${legendRows}
+          </div>
         </div>
       </div>
     </article>
@@ -659,11 +717,21 @@ function renderChartSlide(tokens, context) {
 function renderGraphSlide(tokens, context) {
   const values = context.primary.slides.graphValues;
   const points = createPolylinePoints(values, 420, 170, 16);
+  const areaPath = createAreaPath(points, 170, 16);
   const change = values[values.length - 1] - values[0];
-  const circles = points.map((point) => `
-    <circle cx="${point.x}" cy="${point.y}" r="5" fill="${tokens.paper}" stroke="${tokens.accent}" stroke-width="3"></circle>
+  const colors = [tokens.accent, tokens.accentAlt, tokens.secondary];
+  const circles = points.map((point, index) => `
+    <circle
+      cx="${point.x}"
+      cy="${point.y}"
+      r="5"
+      fill="${tokens.paper}"
+      stroke="${colors[index % colors.length]}"
+      stroke-width="3"
+    ></circle>
   `).join("");
   const labels = context.primary.slides.graphLabels.map((label) => `<span>${label}</span>`).join("");
+  const gradientId = `graphArea-${context.primary.id}`;
   const trendCards = [
     { label: "Delta", value: `${change > 0 ? "+" : ""}${change}` },
     { label: "Peak", value: `${Math.max(...values)}` },
@@ -674,21 +742,52 @@ function renderGraphSlide(tokens, context) {
       <strong>${item.value}</strong>
     </div>
   `).join("");
+  const milestoneValues = [
+    { label: "Start", value: values[0], tone: tokens.secondary },
+    { label: "Peak", value: Math.max(...values), tone: tokens.accent },
+    { label: "Close", value: values[values.length - 1], tone: tokens.accentAlt },
+  ].map((item) => {
+    const toneSoft = mixHex(item.tone, tokens.paper, 0.84);
+    return `
+      <div class="harvey-stat harvey-stat--mini" style="--fill:${item.value};--orbital-tone:${item.tone};--orbital-soft:${toneSoft};">
+        <div class="harvey-ball harvey-ball--sm">
+          <span>${item.value}</span>
+        </div>
+        <div class="harvey-stat__meta">
+          <strong>${item.label}</strong>
+          <span>Trend cue</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+  const guideLines = [30, 64, 98, 132].map((y) => `
+    <line x1="16" y1="${y}" x2="404" y2="${y}" stroke="${tokens.line}" stroke-width="1.5" stroke-dasharray="6 6"></line>
+  `).join("");
 
   return `
     <article class="slide-card slide-card--graph" style="${buildSlideVars(tokens)}">
       <span class="slide-card__label">06 Graph</span>
       <div class="graph-shell">
         <div class="graph-main">
-          <div class="slide-headline">
-            <p class="section-overline">Trend line</p>
-            <h3>${context.primary.slides.graphTitle}</h3>
-            <p>${context.primary.slides.footerNote}</p>
+          <div class="infographic-topline">
+            <div class="slide-headline">
+              <p class="section-overline">Trend line</p>
+              <h3>${context.primary.slides.graphTitle}</h3>
+              <p>${context.primary.slides.footerNote}</p>
+            </div>
+            <span class="dashboard-flag">Infographic graph</span>
           </div>
-          <div class="graph-card">
+          <div class="graph-card graph-card--infographic">
             <svg viewBox="0 0 420 170" aria-hidden="true" focusable="false">
+              <defs>
+                <linearGradient id="${gradientId}" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="${mixHex(tokens.accent, tokens.paper, 0.56)}"></stop>
+                  <stop offset="100%" stop-color="${mixHex(tokens.accentAlt, tokens.paper, 0.96)}"></stop>
+                </linearGradient>
+              </defs>
+              ${guideLines}
               <line x1="16" y1="154" x2="404" y2="154" stroke="${tokens.line}" stroke-width="2"></line>
-              <line x1="16" y1="16" x2="16" y2="154" stroke="${tokens.line}" stroke-width="2"></line>
+              <path d="${areaPath}" fill="url(#${gradientId})"></path>
               <polyline
                 points="${points.map((point) => `${point.x},${point.y}`).join(" ")}"
                 fill="none"
@@ -702,12 +801,13 @@ function renderGraphSlide(tokens, context) {
             <div class="graph-labels">${labels}</div>
           </div>
         </div>
-        <aside class="trend-panel">
+        <aside class="trend-panel trend-panel--infographic">
           <div class="trend-panel__copy">
             <span class="body-highlight__tag">Reading</span>
-            <h4>Premium trend cue</h4>
-            <p>Use one strong line, restrained labels, and a soft tinted field.</p>
+            <h4>Curved insight cue</h4>
+            <p>Use one strong path, quiet grid lines, and compact orbital summaries.</p>
           </div>
+          <div class="trend-orb-row">${milestoneValues}</div>
           <div class="trend-grid">${trendCards}</div>
         </aside>
       </div>
@@ -718,7 +818,7 @@ function renderGraphSlide(tokens, context) {
 function buildToneOnTonePalette(baseHsl, profile, variant) {
   const hueBase = wrapHue(baseHsl.h + profile.hueShift + variant.hueOffset);
   const satBase = clamp(baseHsl.s + profile.saturationShift + variant.saturationShift, 18, 86);
-  const colors = variant.lightStops.map((lightness, index) => {
+  const coreColors = variant.lightStops.slice(0, 9).map((lightness, index) => {
     const hue = wrapHue(hueBase + variant.hueJitter[index]);
     const saturation = clamp(
       satBase + variant.satCurve[index] - (profile.neutralBias + variant.neutralBias) * 22 + profile.contrast * (index < 3 ? 0.22 : 0.08),
@@ -728,6 +828,8 @@ function buildToneOnTonePalette(baseHsl, profile, variant) {
     const adjustedLightness = clamp(lightness + profile.lightShift, 4, 97);
     return hslToHex(hue, saturation, adjustedLightness);
   });
+  const accentHex = buildAccentColor(baseHsl, profile, variant, "tone-on-tone");
+  const swatches = buildPaletteSwatches(coreColors, accentHex);
 
   return {
     id: variant.id,
@@ -736,23 +838,23 @@ function buildToneOnTonePalette(baseHsl, profile, variant) {
     note: variant.note,
     groupLabel: variant.groupLabel,
     family: "tone-on-tone",
-    colors,
+    colors: swatches.map((swatch) => swatch.hex),
+    swatches,
+    accentHex,
   };
 }
 
 function buildToneInTonePalette(baseHsl, profile, variant) {
   const hueBase = wrapHue(baseHsl.h + profile.hueShift);
-  const satBase = clamp(baseHsl.s + profile.saturationShift + variant.saturationShift - profile.neutralBias * 14, 16, 84);
-  const colors = variant.lightStops.map((lightness, index) => {
-    const hue = wrapHue(hueBase + variant.hueOffsets[index]);
-    const saturation = clamp(
-      satBase + (index % 2 === 0 ? 3 : -2) - Math.abs(index - 4.5) * 0.8 + profile.contrast * 0.08,
-      10,
-      88,
-    );
-    const adjustedLightness = clamp(lightness + profile.lightShift, 6, 98);
-    return hslToHex(hue, saturation, adjustedLightness);
+  const satBase = clamp(baseHsl.s + profile.saturationShift * 0.55 + variant.saturationShift - profile.neutralBias * 10, 12, 72);
+  const lightness = clamp(baseHsl.l + profile.lightShift * 0.18, 26, 74);
+  const coreColors = variant.hueOffsets.slice(0, 9).map((offset, index) => {
+    const hue = wrapHue(hueBase + offset);
+    const saturation = clamp(satBase + variant.satOffsets[index], 8, 96);
+    return hslToHex(hue, saturation, lightness);
   });
+  const accentHex = buildAccentColor({ ...baseHsl, l: lightness }, profile, variant, "tone-in-tone");
+  const swatches = buildPaletteSwatches(coreColors, accentHex);
 
   return {
     id: variant.id,
@@ -761,7 +863,9 @@ function buildToneInTonePalette(baseHsl, profile, variant) {
     note: variant.note,
     groupLabel: variant.groupLabel,
     family: "tone-in-tone",
-    colors,
+    colors: swatches.map((swatch) => swatch.hex),
+    swatches,
+    accentHex,
   };
 }
 
@@ -802,44 +906,52 @@ function buildPurposeContext(selectedPurposes) {
   };
 }
 
-function derivePreviewTokens(colors) {
-  const reference = {
-    deep: "#880D1E",
-    accent: "#DD2D4A",
-    accentAlt: "#F26A8D",
-    blush: "#F49CBB",
-    mist: "#CBEEF3",
-  };
-  const sortedByLightness = [...colors].sort((left, right) => getRelativeLuminance(hexToRgb(left)) - getRelativeLuminance(hexToRgb(right)));
-  const sortedBySaturation = [...colors].sort((left, right) => rgbToHsl(hexToRgb(right)).s - rgbToHsl(hexToRgb(left)).s);
+function derivePreviewTokens(palette) {
+  const swatches = palette.swatches || palette.colors.map((hex) => ({ hex, isAccent: false }));
+  const accent = swatches.find((swatch) => swatch.isAccent)?.hex || swatches[swatches.length - 1].hex;
+  const bodyColors = swatches.filter((swatch) => !swatch.isAccent).map((swatch) => swatch.hex);
+  const sortedByLightness = [...bodyColors].sort(
+    (left, right) => getRelativeLuminance(hexToRgb(left)) - getRelativeLuminance(hexToRgb(right)),
+  );
+  const sortedBySaturation = [...bodyColors].sort((left, right) => rgbToHsl(hexToRgb(right)).s - rgbToHsl(hexToRgb(left)).s);
 
-  const paper = mixHex(sortedByLightness[sortedByLightness.length - 1], "#FFF9FB", 0.34);
-  const surface = mixHex(sortedByLightness[sortedByLightness.length - 2], "#FFFFFF", 0.4);
-  const ink = mixHex(sortedByLightness[0], reference.deep, 0.2);
-  const accent = mixHex(sortedBySaturation[0], reference.accent, 0.38);
-  const accentAlt = mixHex(sortedBySaturation[1] || sortedByLightness[4], reference.accentAlt, 0.42);
-  const blush = mixHex(paper, reference.blush, 0.56);
-  const mist = mixHex(paper, reference.mist, 0.68);
-  const panel = mixHex(surface, blush, 0.28);
-  const deep = mixHex(ink, reference.deep, 0.42);
+  const darkest = sortedByLightness[0];
+  const mid = sortedByLightness[Math.floor(sortedByLightness.length / 2)];
+  const light = sortedByLightness[sortedByLightness.length - 1];
+  const nearLight = sortedByLightness[sortedByLightness.length - 2] || light;
+  const accentAlt = sortedBySaturation[0] === accent ? sortedBySaturation[1] || mid : sortedBySaturation[0];
+  const secondary = sortedBySaturation[1] || sortedByLightness[2] || accentAlt;
+  const tertiary = sortedByLightness[2] || sortedBySaturation[2] || mid;
+
+  const paper = mixHex(light, "#FFFFFF", 0.84);
+  const surface = mixHex(nearLight, "#FFFFFF", 0.74);
+  const support = mixHex(secondary, paper, 0.86);
+  const surfaceStrong = mixHex(accentAlt, paper, 0.82);
+  const panel = mixHex(mid, paper, 0.76);
+  const deep = mixHex(darkest, accent, 0.14);
+  const ink = getRelativeLuminance(hexToRgb(darkest)) < 0.08
+    ? mixHex(darkest, "#18202F", 0.34)
+    : darkest;
 
   return {
     paper,
     surface,
-    support: mist,
-    surfaceStrong: blush,
+    support,
+    surfaceStrong,
     panel,
-    blush,
-    mist,
+    blush: mixHex(accent, paper, 0.84),
+    mist: mixHex(tertiary, paper, 0.82),
     deep,
     ink,
     inkSoft: mixHex(ink, paper, 0.48),
     line: mixHex(ink, paper, 0.74),
     accent,
     accentAlt,
+    secondary,
+    tertiary,
     accentInk: getReadableTextColor(accent),
-    coverBg: mixHex(deep, accent, 0.12),
-    coverInk: getReadableTextColor(mixHex(deep, accent, 0.12)),
+    coverBg: mixHex(deep, accent, 0.18),
+    coverInk: getReadableTextColor(mixHex(deep, accent, 0.18)),
   };
 }
 
@@ -858,6 +970,8 @@ function buildSlideVars(tokens) {
     `--slide-line:${tokens.line}`,
     `--slide-accent:${tokens.accent}`,
     `--slide-accent-alt:${tokens.accentAlt}`,
+    `--slide-secondary:${tokens.secondary}`,
+    `--slide-tertiary:${tokens.tertiary}`,
     `--slide-accent-ink:${tokens.accentInk}`,
     `--slide-cover-bg:${tokens.coverBg}`,
     `--slide-cover-ink:${tokens.coverInk}`,
@@ -886,6 +1000,59 @@ function createPolylinePoints(values, width, height, padding) {
     const y = height - padding - normalized * (height - padding * 2);
     return { x: roundTo(x, 2), y: roundTo(y, 2) };
   });
+}
+
+function createAreaPath(points, height, padding) {
+  if (!points.length) {
+    return "";
+  }
+
+  const baseY = height - padding;
+  return [
+    `M ${points[0].x} ${baseY}`,
+    ...points.map((point) => `L ${point.x} ${point.y}`),
+    `L ${points[points.length - 1].x} ${baseY}`,
+    "Z",
+  ].join(" ");
+}
+
+function buildPaletteSwatches(coreColors, accentHex) {
+  return [
+    ...coreColors.map((hex) => ({ hex, isAccent: false })),
+    { hex: accentHex, isAccent: true, label: "강조색" },
+  ];
+}
+
+function buildAccentColor(baseHsl, profile, variant, family) {
+  const hue = wrapHue(baseHsl.h + profile.hueShift + (variant.accentHueOffset || 168));
+  const saturation = clamp(84 + profile.contrast * 0.24 - profile.neutralBias * 18, 74, 98);
+  const lightness = family === "tone-in-tone"
+    ? clamp(baseHsl.l + (baseHsl.l > 54 ? -8 : 10), 32, 66)
+    : clamp((variant.accentLightness || 56) + profile.lightShift * 0.2, 34, 68);
+
+  return hslToHex(hue, saturation, lightness);
+}
+
+function buildTableSummary(rows) {
+  return rows.slice(0, 3).map((row, index) => {
+    const target = parseMetricNumber(row[1]);
+    const actual = parseMetricNumber(row[2]);
+    const fill = target !== null && actual !== null && target > 0
+      ? clamp((actual / Math.max(target, actual)) * 100, 24, 96)
+      : clamp((actual || 48 + index * 12), 24, 96);
+
+    return {
+      label: row[0],
+      value: `${Math.round(fill)}%`,
+      fill: Math.round(fill),
+      caption: String(row[3]),
+    };
+  });
+}
+
+function parseMetricNumber(value) {
+  const match = String(value).match(/-?\d+(\.\d+)?/);
+  return match ? parseFloat(match[0]) : null;
 }
 
 function parseHex(value) {
