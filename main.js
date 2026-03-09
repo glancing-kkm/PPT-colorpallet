@@ -2,156 +2,166 @@ const PURPOSES = [
   {
     id: "report",
     label: "보고용",
+    previewLabel: "Report Mode",
+    previewTone: "Grounded editorial tone",
     tooltip: "묵직한 표현",
     profile: { hueShift: 0, saturationShift: -6, lightShift: -5, contrast: 18, neutralBias: 0.18 },
     slides: {
-      coverTitle: "분기 보고",
-      coverSubtitle: "성과와 결론을 빠르게 읽는 보고형 구성",
-      agenda: ["요약", "실적", "이슈", "결론"],
+      coverTitle: "Board Review",
+      coverSubtitle: "A concise premium deck for performance reporting.",
+      agenda: ["Overview", "Performance", "Risk view", "Decision"],
       bullets: [
-        "성과는 안정 상승",
-        "이슈는 2건 집중",
-        "다음 분기 실행안 확정",
+        "Revenue stayed above plan across the core portfolio.",
+        "Two issues remain material and need direct ownership.",
+        "Next-quarter spend narrows to the highest-yield channels.",
       ],
-      highlightTitle: "핵심 판단",
-      highlightCopy: "지금은 선택과 집중이 유효합니다.",
-      tableHeaders: ["항목", "목표", "실적", "판단"],
+      highlightTitle: "Executive Note",
+      highlightCopy: "The layout should feel calm, premium, and evidence-led.",
+      tableHeaders: ["Area", "Target", "Actual", "Status"],
       tableRows: [
-        ["매출", "120", "128", "양호"],
-        ["이익", "18", "20", "우수"],
-        ["유지율", "84%", "86%", "안정"],
+        ["Revenue", "120", "128", "On track"],
+        ["Margin", "18", "20", "Ahead"],
+        ["Retention", "84%", "86%", "Stable"],
       ],
-      barTitle: "부문 실적",
-      barLabels: ["매출", "이익", "신규", "유지"],
+      barTitle: "Segment mix",
+      barLabels: ["Revenue", "Margin", "New", "Retention"],
       barValues: [72, 58, 64, 81],
-      graphTitle: "월별 추세",
-      graphLabels: ["1월", "2월", "3월", "4월", "5월", "6월"],
+      graphTitle: "Monthly pace",
+      graphLabels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
       graphValues: [44, 52, 58, 67, 72, 78],
-      footerNote: "강한 결론 중심",
+      footerNote: "Quiet authority with strong hierarchy",
     },
   },
   {
     id: "proposal",
     label: "제안용",
+    previewLabel: "Pitch Mode",
+    previewTone: "Sharp and polished tone",
     tooltip: "선명하고 세련된 표현",
     profile: { hueShift: 8, saturationShift: 14, lightShift: 2, contrast: 14, neutralBias: -0.06 },
     slides: {
-      coverTitle: "제안서",
-      coverSubtitle: "포인트를 선명하게 보여주는 제안형 구성",
-      agenda: ["배경", "컨셉", "실행", "효과"],
+      coverTitle: "Concept Pitch",
+      coverSubtitle: "A refined proposal deck with clear persuasion points.",
+      agenda: ["Context", "Idea", "Execution", "Impact"],
       bullets: [
-        "메시지는 짧고 선명하게",
-        "접점 톤은 하나로 통일",
-        "실행안은 빠르게 설득",
+        "Use one bold message per screen for faster buy-in.",
+        "Create cleaner contrast between the brand field and the proof field.",
+        "Keep the visual rhythm polished, bright, and directional.",
       ],
-      highlightTitle: "제안 포인트",
-      highlightCopy: "짧고 선명한 대비가 설득력을 높입니다.",
-      tableHeaders: ["영역", "현재", "제안", "효과"],
+      highlightTitle: "Pitch Thesis",
+      highlightCopy: "Crisp contrast and confident whitespace make the story feel premium.",
+      tableHeaders: ["Area", "Current", "Proposed", "Effect"],
       tableRows: [
-        ["메인 톤", "분산", "집중", "명확"],
-        ["표현 밀도", "복잡", "간결", "향상"],
-        ["시선 유도", "약함", "강함", "개선"],
+        ["Main tone", "Scattered", "Focused", "Sharper"],
+        ["Density", "Busy", "Reduced", "Cleaner"],
+        ["Attention", "Soft", "Directed", "Faster"],
       ],
-      barTitle: "제안 효과",
-      barLabels: ["인지", "호감", "전환", "재방문"],
+      barTitle: "Projected lift",
+      barLabels: ["Awareness", "Appeal", "Conversion", "Return"],
       barValues: [68, 74, 62, 79],
-      graphTitle: "반응 흐름",
-      graphLabels: ["주1", "주2", "주3", "주4", "주5", "주6"],
+      graphTitle: "Response curve",
+      graphLabels: ["W1", "W2", "W3", "W4", "W5", "W6"],
       graphValues: [38, 49, 63, 72, 81, 88],
-      footerNote: "선명한 제안 톤",
+      footerNote: "Sharper contrast with polished restraint",
     },
   },
   {
     id: "planning",
     label: "계획용",
+    previewLabel: "Planning Mode",
+    previewTone: "Composed operational tone",
     tooltip: "차분하고 안정적 표현",
     profile: { hueShift: -10, saturationShift: -10, lightShift: 5, contrast: 8, neutralBias: 0.22 },
     slides: {
-      coverTitle: "실행 계획",
-      coverSubtitle: "일정과 우선순위를 차분하게 읽는 계획형 구성",
-      agenda: ["목표", "일정", "자원", "리스크"],
+      coverTitle: "Execution Plan",
+      coverSubtitle: "A stable planning deck built for roadmap clarity.",
+      agenda: ["Goal", "Timeline", "Resourcing", "Risk"],
       bullets: [
-        "단계별 책임을 분리",
-        "확장보다 안정 우선",
-        "리스크는 조기 대응",
+        "Separate milestones by ownership instead of by department.",
+        "Keep pacing steady and remove avoidable visual noise.",
+        "Show risk and mitigation in the same field for faster reading.",
       ],
-      highlightTitle: "운영 원칙",
-      highlightCopy: "안정적인 축적이 우선입니다.",
-      tableHeaders: ["구간", "일정", "책임", "상태"],
+      highlightTitle: "Operating Rule",
+      highlightCopy: "The deck should feel measured, spacious, and dependable.",
+      tableHeaders: ["Phase", "Timing", "Owner", "Status"],
       tableRows: [
-        ["준비", "1Q", "PM", "준비"],
-        ["실행", "2Q", "Ops", "진행"],
-        ["확장", "3Q", "Lead", "예정"],
+        ["Setup", "Q1", "PM", "Ready"],
+        ["Launch", "Q2", "Ops", "Live"],
+        ["Scale", "Q3", "Lead", "Queued"],
       ],
-      barTitle: "자원 배분",
-      barLabels: ["준비", "실행", "검증", "확장"],
+      barTitle: "Resource split",
+      barLabels: ["Setup", "Launch", "Review", "Scale"],
       barValues: [46, 71, 59, 64],
-      graphTitle: "로드맵 추이",
-      graphLabels: ["1Q", "2Q", "3Q", "4Q", "5Q", "6Q"],
+      graphTitle: "Roadmap pace",
+      graphLabels: ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6"],
       graphValues: [24, 36, 49, 59, 68, 77],
-      footerNote: "안정적 운영 톤",
+      footerNote: "Measured structure with calm pacing",
     },
   },
   {
     id: "analysis",
     label: "분석용",
+    previewLabel: "Analysis Mode",
+    previewTone: "Crisp analytical tone",
     tooltip: "명확한 표현",
     profile: { hueShift: -18, saturationShift: 2, lightShift: 0, contrast: 22, neutralBias: 0.04 },
     slides: {
-      coverTitle: "분석 요약",
-      coverSubtitle: "지표와 결론을 또렷하게 보여주는 분석형 구성",
-      agenda: ["가설", "데이터", "인사이트", "액션"],
+      coverTitle: "Market Readout",
+      coverSubtitle: "A data-first deck with crisp hierarchy and fast scan paths.",
+      agenda: ["Hypothesis", "Data", "Insight", "Action"],
       bullets: [
-        "핵심 지표 대비 강화",
-        "수치와 결론을 먼저 노출",
-        "표와 차트 역할 분리",
+        "Put the conclusion first and let the evidence follow.",
+        "Use clean contrast to separate signal from supporting data.",
+        "Avoid decorative weight so the numbers stay primary.",
       ],
-      highlightTitle: "분석 요약",
-      highlightCopy: "결론 우선 구조가 가장 중요합니다.",
-      tableHeaders: ["지표", "기준", "현재", "해석"],
+      highlightTitle: "Reading Frame",
+      highlightCopy: "High legibility and clear sequencing are the core of the style.",
+      tableHeaders: ["Metric", "Baseline", "Current", "Reading"],
       tableRows: [
-        ["전환율", "3.2", "3.8", "상승"],
-        ["이탈률", "41", "34", "개선"],
-        ["재방문", "22", "27", "증가"],
+        ["Conversion", "3.2", "3.8", "Up"],
+        ["Drop-off", "41", "34", "Improved"],
+        ["Return", "22", "27", "Growing"],
       ],
-      barTitle: "지표 비교",
-      barLabels: ["획득", "전환", "재구매", "유지"],
+      barTitle: "Metric comparison",
+      barLabels: ["Acquire", "Convert", "Repeat", "Retain"],
       barValues: [61, 78, 58, 73],
-      graphTitle: "변화 추이",
+      graphTitle: "Change over time",
       graphLabels: ["W1", "W2", "W3", "W4", "W5", "W6"],
       graphValues: [35, 46, 57, 65, 74, 82],
-      footerNote: "명확한 분석 톤",
+      footerNote: "Data-first clarity with crisp contrast",
     },
   },
   {
     id: "submission",
     label: "제출용",
+    previewLabel: "Submission Mode",
+    previewTone: "Formal and neutral tone",
     tooltip: "무난하고 보수적 표현",
     profile: { hueShift: 4, saturationShift: -14, lightShift: 7, contrast: 10, neutralBias: 0.28 },
     slides: {
-      coverTitle: "제출 자료",
-      coverSubtitle: "공식 검토에 무리가 없는 제출형 구성",
-      agenda: ["개요", "요건", "범위", "결론"],
+      coverTitle: "Formal Submission",
+      coverSubtitle: "A disciplined presentation style for official review settings.",
+      agenda: ["Scope", "Requirement", "Evidence", "Conclusion"],
       bullets: [
-        "정돈된 신뢰감 우선",
-        "핵심 정보는 빠르게 탐색",
-        "익숙한 구조를 유지",
+        "Keep the tone neutral and the composition highly structured.",
+        "Make every label easy to locate on the first pass.",
+        "Use polish without looking overly expressive or risky.",
       ],
-      highlightTitle: "제출 기준",
-      highlightCopy: "차분한 공식 톤이 적합합니다.",
-      tableHeaders: ["구분", "내용", "담당", "비고"],
+      highlightTitle: "Review Standard",
+      highlightCopy: "The safest premium look is restrained, ordered, and balanced.",
+      tableHeaders: ["Section", "Content", "Owner", "Note"],
       tableRows: [
-        ["개요", "사업 정의", "기획", "완료"],
-        ["예산", "배분안", "재무", "검토"],
-        ["일정", "제출 일정", "운영", "확정"],
+        ["Overview", "Program scope", "Planning", "Ready"],
+        ["Budget", "Allocation", "Finance", "Review"],
+        ["Schedule", "Submission", "Ops", "Locked"],
       ],
-      barTitle: "준비도",
-      barLabels: ["자료", "예산", "검토", "일정"],
+      barTitle: "Readiness",
+      barLabels: ["Docs", "Budget", "Review", "Timing"],
       barValues: [66, 57, 73, 69],
-      graphTitle: "검토 흐름",
-      graphLabels: ["초안", "1차", "2차", "3차", "최종", "제출"],
+      graphTitle: "Review path",
+      graphLabels: ["Draft", "R1", "R2", "R3", "Final", "Send"],
       graphValues: [28, 42, 55, 63, 74, 84],
-      footerNote: "보수적 제출 톤",
+      footerNote: "Formal polish with measured restraint",
     },
   },
 ];
@@ -479,59 +489,82 @@ function renderPreviews() {
 function renderCoverSlide(tokens, context) {
   return `
     <article class="slide-card slide-card--cover" style="${buildSlideVars(tokens)}">
-      <span class="slide-card__label">01 메인 표지</span>
-      <div class="slide-headline">
-        <p class="cover-kicker">${context.badge}</p>
-        <h3 class="cover-title">${context.primary.slides.coverTitle}</h3>
-        <p class="cover-subtitle">${context.primary.slides.coverSubtitle}</p>
+      <span class="slide-card__label">01 Cover</span>
+      <div class="cover-shell">
+        <div class="cover-main">
+          <p class="cover-kicker">${context.primary.previewLabel}</p>
+          <h3 class="cover-title">${context.primary.slides.coverTitle}</h3>
+          <p class="cover-subtitle">${context.primary.slides.coverSubtitle}</p>
+        </div>
+        <aside class="cover-panel">
+          <span class="cover-panel__eyebrow">Direction</span>
+          <strong>${context.primary.previewTone}</strong>
+          <p>${context.supportingNote}</p>
+        </aside>
       </div>
       <div class="cover-band">
-        <span>${context.primary.tooltip}</span>
-        <span>${context.summary}</span>
-        <span>${context.supportingNote}</span>
+        <span>Premium slide system</span>
+        <span>${context.blendTag}</span>
       </div>
     </article>
   `;
 }
 
 function renderAgendaSlide(tokens, context) {
+  const agendaCaptions = ["Frame", "Signal", "Proof", "Move"];
   const agendaItems = context.primary.slides.agenda.map((item, index) => `
     <div class="agenda-item">
-      <span class="agenda-item__number">${index + 1}</span>
-      <strong>${item}</strong>
+      <span class="agenda-item__number">${String(index + 1).padStart(2, "0")}</span>
+      <div class="agenda-item__copy">
+        <strong>${item}</strong>
+        <span>${agendaCaptions[index] || "Focus"}</span>
+      </div>
     </div>
   `).join("");
 
   return `
     <article class="slide-card slide-card--agenda" style="${buildSlideVars(tokens)}">
-      <span class="slide-card__label">02 목차</span>
-      <div class="slide-headline">
-        <h3>목차</h3>
-        <p>${context.primary.tooltip} 중심 구성</p>
+      <span class="slide-card__label">02 Contents</span>
+      <div class="agenda-shell">
+        <div class="slide-headline">
+          <p class="section-overline">Sequence</p>
+          <h3>Contents</h3>
+          <p>${context.primary.previewTone}</p>
+        </div>
+        <div class="agenda-list">${agendaItems}</div>
       </div>
-      <div class="agenda-list">${agendaItems}</div>
     </article>
   `;
 }
 
 function renderBodySlide(tokens, context) {
+  const averageScore = Math.round(
+    context.primary.slides.barValues.reduce((total, value) => total + value, 0) / context.primary.slides.barValues.length,
+  );
   const bulletItems = context.primary.slides.bullets.map((item) => `
     <div class="body-item">${item}</div>
   `).join("");
 
   return `
     <article class="slide-card slide-card--content" style="${buildSlideVars(tokens)}">
-      <span class="slide-card__label">03 본문 내용</span>
-      <div class="slide-headline">
-        <h3>핵심 내용</h3>
-        <p>강조색과 중립색을 분리했습니다.</p>
-      </div>
+      <span class="slide-card__label">03 Narrative</span>
       <div class="body-layout">
-        <div class="body-list">${bulletItems}</div>
+        <div class="body-copy">
+          <div class="slide-headline">
+            <p class="section-overline">Storyline</p>
+            <h3>Key narrative</h3>
+            <p>Whitespace, rhythm, and hierarchy stay tightly controlled.</p>
+          </div>
+          <div class="body-list">${bulletItems}</div>
+        </div>
         <aside class="body-highlight">
           <span class="body-highlight__tag">${context.primary.slides.highlightTitle}</span>
           <h4>${context.primary.slides.highlightTitle}</h4>
           <p>${context.primary.slides.highlightCopy}</p>
+          <div class="insight-metric">
+            <strong>${averageScore}%</strong>
+            <span>clarity index</span>
+          </div>
         </aside>
       </div>
     </article>
@@ -539,6 +572,16 @@ function renderBodySlide(tokens, context) {
 }
 
 function renderTableSlide(tokens, context) {
+  const metricCards = [
+    { label: "Rows", value: String(context.primary.slides.tableRows.length).padStart(2, "0") },
+    { label: "Lead", value: context.primary.slides.tableRows[0][0] },
+    { label: "Mode", value: context.primary.previewLabel.replace(" Mode", "") },
+  ].map((item) => `
+    <div class="metric-card">
+      <span>${item.label}</span>
+      <strong>${item.value}</strong>
+    </div>
+  `).join("");
   const headerRow = context.primary.slides.tableHeaders.map((header) => `<th>${header}</th>`).join("");
   const bodyRows = context.primary.slides.tableRows.map((row) => `
     <tr>${row.map((cell) => `<td>${cell}</td>`).join("")}</tr>
@@ -546,25 +589,35 @@ function renderTableSlide(tokens, context) {
 
   return `
     <article class="slide-card slide-card--table" style="${buildSlideVars(tokens)}">
-      <span class="slide-card__label">04 표가 있는 내용</span>
+      <span class="slide-card__label">04 Table</span>
       <div class="slide-headline">
-        <h3>표 정리</h3>
-        <p>헤더만 핵심 색으로 강조합니다.</p>
+        <p class="section-overline">Reference table</p>
+        <h3>Structured snapshot</h3>
+        <p>The table sits inside a lighter field with only one confident accent.</p>
       </div>
-      <table class="mini-table">
-        <thead>
-          <tr>${headerRow}</tr>
-        </thead>
-        <tbody>${bodyRows}</tbody>
-      </table>
+      <div class="metric-row">${metricCards}</div>
+      <div class="table-shell">
+        <table class="mini-table">
+          <thead>
+            <tr>${headerRow}</tr>
+          </thead>
+          <tbody>${bodyRows}</tbody>
+        </table>
+      </div>
     </article>
   `;
 }
 
 function renderChartSlide(tokens, context) {
+  const metricCards = context.primary.slides.barValues.slice(0, 3).map((value, index) => `
+    <div class="metric-card metric-card--soft">
+      <span>${context.primary.slides.barLabels[index]}</span>
+      <strong>${value}</strong>
+    </div>
+  `).join("");
   const values = context.primary.slides.barValues;
   const max = Math.max(...values);
-  const barColors = [tokens.accent, tokens.accentAlt, tokens.support, tokens.surfaceStrong];
+  const barColors = [tokens.accent, tokens.accentAlt, tokens.blush, tokens.mist];
   const bars = values.map((value, index) => {
     const height = 28 + (value / max) * 72;
     return `
@@ -580,13 +633,24 @@ function renderChartSlide(tokens, context) {
 
   return `
     <article class="slide-card slide-card--chart" style="${buildSlideVars(tokens)}">
-      <span class="slide-card__label">05 차트가 있는 내용</span>
-      <div class="slide-headline">
-        <h3>${context.primary.slides.barTitle}</h3>
-        <p>비교 포인트만 강하게 표시합니다.</p>
+      <span class="slide-card__label">05 Chart</span>
+      <div class="dashboard-topline">
+        <div class="slide-headline">
+          <p class="section-overline">Dashboard view</p>
+          <h3>${context.primary.slides.barTitle}</h3>
+          <p>High-end slides let the chart breathe and keep the framing quiet.</p>
+        </div>
+        <span class="dashboard-flag">Live preview</span>
       </div>
-      <div class="chart-layout">
-        <div class="mini-bars">${bars}</div>
+      <div class="metric-row metric-row--compact">${metricCards}</div>
+      <div class="dashboard-panel">
+        <div class="dashboard-panel__header">
+          <strong>Performance index</strong>
+          <span>${context.primary.previewLabel}</span>
+        </div>
+        <div class="chart-layout">
+          <div class="mini-bars">${bars}</div>
+        </div>
       </div>
     </article>
   `;
@@ -595,35 +659,57 @@ function renderChartSlide(tokens, context) {
 function renderGraphSlide(tokens, context) {
   const values = context.primary.slides.graphValues;
   const points = createPolylinePoints(values, 420, 170, 16);
+  const change = values[values.length - 1] - values[0];
   const circles = points.map((point) => `
     <circle cx="${point.x}" cy="${point.y}" r="5" fill="${tokens.paper}" stroke="${tokens.accent}" stroke-width="3"></circle>
   `).join("");
   const labels = context.primary.slides.graphLabels.map((label) => `<span>${label}</span>`).join("");
+  const trendCards = [
+    { label: "Delta", value: `${change > 0 ? "+" : ""}${change}` },
+    { label: "Peak", value: `${Math.max(...values)}` },
+    { label: "Mode", value: context.primary.previewLabel.replace(" Mode", "") },
+  ].map((item) => `
+    <div class="trend-card">
+      <span>${item.label}</span>
+      <strong>${item.value}</strong>
+    </div>
+  `).join("");
 
   return `
     <article class="slide-card slide-card--graph" style="${buildSlideVars(tokens)}">
-      <span class="slide-card__label">06 그래프가 있는 내용</span>
-      <div class="slide-headline">
-        <h3>${context.primary.slides.graphTitle}</h3>
-        <p>${context.primary.slides.footerNote}</p>
-      </div>
-      <div class="graph-layout">
-        <div class="graph-card">
-          <svg viewBox="0 0 420 170" aria-hidden="true" focusable="false">
-            <line x1="16" y1="154" x2="404" y2="154" stroke="${tokens.line}" stroke-width="2"></line>
-            <line x1="16" y1="16" x2="16" y2="154" stroke="${tokens.line}" stroke-width="2"></line>
-            <polyline
-              points="${points.map((point) => `${point.x},${point.y}`).join(" ")}"
-              fill="none"
-              stroke="${tokens.accent}"
-              stroke-width="4"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            ></polyline>
-            ${circles}
-          </svg>
-          <div class="graph-labels">${labels}</div>
+      <span class="slide-card__label">06 Graph</span>
+      <div class="graph-shell">
+        <div class="graph-main">
+          <div class="slide-headline">
+            <p class="section-overline">Trend line</p>
+            <h3>${context.primary.slides.graphTitle}</h3>
+            <p>${context.primary.slides.footerNote}</p>
+          </div>
+          <div class="graph-card">
+            <svg viewBox="0 0 420 170" aria-hidden="true" focusable="false">
+              <line x1="16" y1="154" x2="404" y2="154" stroke="${tokens.line}" stroke-width="2"></line>
+              <line x1="16" y1="16" x2="16" y2="154" stroke="${tokens.line}" stroke-width="2"></line>
+              <polyline
+                points="${points.map((point) => `${point.x},${point.y}`).join(" ")}"
+                fill="none"
+                stroke="${tokens.accent}"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></polyline>
+              ${circles}
+            </svg>
+            <div class="graph-labels">${labels}</div>
+          </div>
         </div>
+        <aside class="trend-panel">
+          <div class="trend-panel__copy">
+            <span class="body-highlight__tag">Reading</span>
+            <h4>Premium trend cue</h4>
+            <p>Use one strong line, restrained labels, and a soft tinted field.</p>
+          </div>
+          <div class="trend-grid">${trendCards}</div>
+        </aside>
       </div>
     </article>
   `;
@@ -703,42 +789,57 @@ function buildPurposeContext(selectedPurposes) {
   const activePurposes = selectedPurposes.length ? selectedPurposes : [PURPOSES[0]];
   const primary = activePurposes[0];
   const secondary = activePurposes.slice(1);
+  const secondaryLabels = secondary.map((purpose) => purpose.previewLabel.replace(" Mode", "")).join(", ");
 
   return {
     primary,
     summary: activePurposes.map((purpose) => purpose.label).join(" · "),
-    badge: secondary.length ? `${primary.label} + ${secondary.length}` : primary.label,
+    badge: secondary.length ? `${primary.previewLabel} / +${secondary.length}` : primary.previewLabel,
     supportingNote: secondary.length
-      ? `보조 톤: ${secondary.map((purpose) => purpose.label).join(" · ")}`
-      : `${primary.tooltip}`,
+      ? `${secondaryLabels} cues layered in`
+      : primary.previewTone,
+    blendTag: secondary.length ? `${secondary.length} support cues blended` : "Single-mode refinement",
   };
 }
 
 function derivePreviewTokens(colors) {
+  const reference = {
+    deep: "#880D1E",
+    accent: "#DD2D4A",
+    accentAlt: "#F26A8D",
+    blush: "#F49CBB",
+    mist: "#CBEEF3",
+  };
   const sortedByLightness = [...colors].sort((left, right) => getRelativeLuminance(hexToRgb(left)) - getRelativeLuminance(hexToRgb(right)));
   const sortedBySaturation = [...colors].sort((left, right) => rgbToHsl(hexToRgb(right)).s - rgbToHsl(hexToRgb(left)).s);
 
-  const paper = sortedByLightness[sortedByLightness.length - 1];
-  const surface = sortedByLightness[sortedByLightness.length - 2];
-  const support = sortedByLightness[3];
-  const surfaceStrong = sortedByLightness[2];
-  const ink = sortedByLightness[0];
-  const accent = sortedBySaturation[0];
-  const accentAlt = sortedBySaturation[1] || sortedByLightness[4];
+  const paper = mixHex(sortedByLightness[sortedByLightness.length - 1], "#FFF9FB", 0.34);
+  const surface = mixHex(sortedByLightness[sortedByLightness.length - 2], "#FFFFFF", 0.4);
+  const ink = mixHex(sortedByLightness[0], reference.deep, 0.2);
+  const accent = mixHex(sortedBySaturation[0], reference.accent, 0.38);
+  const accentAlt = mixHex(sortedBySaturation[1] || sortedByLightness[4], reference.accentAlt, 0.42);
+  const blush = mixHex(paper, reference.blush, 0.56);
+  const mist = mixHex(paper, reference.mist, 0.68);
+  const panel = mixHex(surface, blush, 0.28);
+  const deep = mixHex(ink, reference.deep, 0.42);
 
   return {
     paper,
     surface,
-    support,
-    surfaceStrong,
+    support: mist,
+    surfaceStrong: blush,
+    panel,
+    blush,
+    mist,
+    deep,
     ink,
     inkSoft: mixHex(ink, paper, 0.48),
     line: mixHex(ink, paper, 0.74),
     accent,
     accentAlt,
     accentInk: getReadableTextColor(accent),
-    coverBg: mixHex(surfaceStrong, accent, 0.28),
-    coverInk: getReadableTextColor(mixHex(surfaceStrong, accent, 0.28)),
+    coverBg: mixHex(deep, accent, 0.12),
+    coverInk: getReadableTextColor(mixHex(deep, accent, 0.12)),
   };
 }
 
@@ -748,6 +849,10 @@ function buildSlideVars(tokens) {
     `--slide-surface:${tokens.surface}`,
     `--slide-support:${tokens.support}`,
     `--slide-surface-strong:${tokens.surfaceStrong}`,
+    `--slide-panel:${tokens.panel}`,
+    `--slide-blush:${tokens.blush}`,
+    `--slide-mist:${tokens.mist}`,
+    `--slide-deep:${tokens.deep}`,
     `--slide-ink:${tokens.ink}`,
     `--slide-ink-soft:${tokens.inkSoft}`,
     `--slide-line:${tokens.line}`,
