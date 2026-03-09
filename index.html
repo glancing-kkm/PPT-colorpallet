@@ -1,14 +1,229 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hello World</title>
-  <link href='/style.css' rel='stylesheet'>
+  <title>PPT Palette Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link href="/style.css" rel="stylesheet">
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <button onclick="console.log('hello');">Press me</button>
+  <div class="page-shell">
+    <header class="hero">
+      <p class="hero__eyebrow">PPT Palette Lab</p>
+      <div class="hero__copy">
+        <h1>PPT용 팔레트를 고르고 바로 미리봅니다.</h1>
+        <p>기준색 1개로 추천 팔레트 6종과 슬라이드 6장을 동시에 확인합니다.</p>
+      </div>
+      <div class="hero__status">
+        <span class="status-chip">
+          <span class="status-chip__dot" id="heroColorDot"></span>
+          <strong>기준색</strong>
+          <span id="heroColorCode">#1F4C95</span>
+        </span>
+        <span class="status-chip" id="heroPurposeSummary">용도: 보고용</span>
+      </div>
+    </header>
+
+    <main class="planner">
+      <section class="panel" aria-labelledby="row1-title">
+        <div class="panel__meta">
+          <span class="panel__index">01</span>
+          <p>기준색 설정</p>
+        </div>
+        <div class="panel__body">
+          <div class="panel__header">
+            <h2 id="row1-title">기준색 지정</h2>
+            <p>HEX, RGB, 이미지 중 하나로 기준색을 정합니다.</p>
+          </div>
+
+          <div class="base-grid">
+            <article class="base-card">
+              <label class="field-label" for="hexInput">HEX 코드</label>
+              <input
+                class="text-input text-input--large"
+                id="hexInput"
+                name="hexInput"
+                maxlength="7"
+                value="#1F4C95"
+                autocomplete="off"
+                spellcheck="false"
+              >
+              <p class="field-note">예시: #1F4C95</p>
+            </article>
+
+            <article class="base-card">
+              <span class="field-label">RGB 코드</span>
+              <div class="rgb-grid">
+                <label class="rgb-field" for="rInput">
+                  <span>R</span>
+                  <input class="number-input" id="rInput" type="number" min="0" max="255" value="31">
+                </label>
+                <label class="rgb-field" for="gInput">
+                  <span>G</span>
+                  <input class="number-input" id="gInput" type="number" min="0" max="255" value="76">
+                </label>
+                <label class="rgb-field" for="bInput">
+                  <span>B</span>
+                  <input class="number-input" id="bInput" type="number" min="0" max="255" value="149">
+                </label>
+              </div>
+              <p class="field-note">0~255 범위 입력</p>
+            </article>
+
+            <article class="base-card base-card--upload">
+              <label class="field-label" for="imageInput">이미지로 색상 추출</label>
+              <label class="upload-zone" for="imageInput">
+                <input id="imageInput" type="file" accept="image/*" hidden>
+                <span class="upload-zone__title">이미지 첨부</span>
+                <span class="upload-zone__hint">회사로고, 제품 사진, 브랜드 이미지 등</span>
+              </label>
+              <div class="upload-result">
+                <img id="imagePreview" alt="업로드한 이미지 미리보기" hidden>
+                <div class="upload-result__info">
+                  <span class="swatch" id="extractedSwatch"></span>
+                  <div>
+                    <p>최근 추출색</p>
+                    <strong id="extractedColorCode">#1F4C95</strong>
+                  </div>
+                </div>
+              </div>
+              <p class="field-note field-note--status" id="imageFeedback">대표 색상을 기준색으로 반영합니다.</p>
+            </article>
+
+            <article class="base-card base-card--preview">
+              <span class="field-label">현재 기준색</span>
+              <div class="base-preview">
+                <div class="base-preview__swatch" id="baseSwatch"></div>
+                <div class="base-preview__codes">
+                  <strong id="baseHexLabel">#1F4C95</strong>
+                  <span id="baseRgbLabel">RGB 31, 76, 149</span>
+                </div>
+              </div>
+              <p class="field-note">팔레트와 미리보기가 즉시 갱신됩니다.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="row2-title">
+        <div class="panel__meta">
+          <span class="panel__index">02</span>
+          <p>용도 선택</p>
+        </div>
+        <div class="panel__body">
+          <div class="panel__header">
+            <h2 id="row2-title">용도 선택</h2>
+            <p>복수 선택 가능. 체크한 용도 톤이 팔레트와 미리보기에 반영됩니다.</p>
+          </div>
+
+          <div class="purpose-grid" id="purposeOptions">
+            <label class="purpose-card" data-tooltip="묵직한 표현" title="묵직한 표현">
+              <input type="checkbox" name="purpose" value="report" checked title="묵직한 표현">
+              <div>
+                <strong>보고용</strong>
+                <span>강한 결론과 보고 흐름</span>
+              </div>
+            </label>
+
+            <label class="purpose-card" data-tooltip="선명하고 세련된 표현" title="선명하고 세련된 표현">
+              <input type="checkbox" name="purpose" value="proposal" title="선명하고 세련된 표현">
+              <div>
+                <strong>제안용</strong>
+                <span>선명한 설득 톤</span>
+              </div>
+            </label>
+
+            <label class="purpose-card" data-tooltip="차분하고 안정적 표현" title="차분하고 안정적 표현">
+              <input type="checkbox" name="purpose" value="planning" title="차분하고 안정적 표현">
+              <div>
+                <strong>계획용</strong>
+                <span>안정적 실행 톤</span>
+              </div>
+            </label>
+
+            <label class="purpose-card" data-tooltip="명확한 표현" title="명확한 표현">
+              <input type="checkbox" name="purpose" value="analysis" title="명확한 표현">
+              <div>
+                <strong>분석용</strong>
+                <span>명료한 데이터 톤</span>
+              </div>
+            </label>
+
+            <label class="purpose-card" data-tooltip="무난하고 보수적 표현" title="무난하고 보수적 표현">
+              <input type="checkbox" name="purpose" value="submission" title="무난하고 보수적 표현">
+              <div>
+                <strong>제출용</strong>
+                <span>보수적 공식 톤</span>
+              </div>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="row3-title">
+        <div class="panel__meta">
+          <span class="panel__index">03</span>
+          <p>추천 팔레트</p>
+        </div>
+        <div class="panel__body">
+          <div class="panel__header">
+            <h2 id="row3-title">추천 팔레트</h2>
+            <p>톤온톤 3종, 톤인톤 3종. 각 팔레트는 10색입니다.</p>
+          </div>
+
+          <div class="palette-columns" id="paletteSection">
+            <section class="palette-column" aria-labelledby="tone-on-tone-title">
+              <div class="palette-column__header">
+                <h3 id="tone-on-tone-title">톤온톤</h3>
+                <p>같은 계열 안에서 농도 변화</p>
+              </div>
+              <div class="palette-list" id="toneOnToneList"></div>
+            </section>
+
+            <section class="palette-column" aria-labelledby="tone-in-tone-title">
+              <div class="palette-column__header">
+                <h3 id="tone-in-tone-title">톤인톤</h3>
+                <p>비슷한 톤으로 색 영역 확장</p>
+              </div>
+              <div class="palette-list" id="toneInToneList"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="row4-title">
+        <div class="panel__meta">
+          <span class="panel__index">04</span>
+          <p>PPT 미리보기</p>
+        </div>
+        <div class="panel__body">
+          <div class="panel__header">
+            <h2 id="row4-title">선택 팔레트 PPT 미리보기</h2>
+            <p>선택 팔레트 기준 6장 슬라이드를 2열로 보여줍니다.</p>
+          </div>
+
+          <div class="preview-summary">
+            <div>
+              <strong id="activePaletteName">선택 팔레트: 톤온톤 01</strong>
+              <p id="activePaletteMeta">보고용 · 딥 톤</p>
+            </div>
+          </div>
+
+          <div class="slide-grid" id="slidePreviewGrid"></div>
+
+          <div class="preview-actions">
+            <button class="copy-button" id="copyPaletteButton" type="button">선택 팔레트 복사</button>
+            <p class="copy-status" id="copyStatus" aria-live="polite"></p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
   <script defer type="text/javascript" src="/main.js"></script>
 </body>
 </html>
