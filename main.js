@@ -466,6 +466,11 @@ function renderPreviews() {
 function renderMainTemplateSlide(tokens, context) {
   const donutValue = context.primary.slides.barValues[0] || 60;
   const shapePalette = [tokens.theme, tokens.secondary, tokens.tertiary, tokens.accentAlt, tokens.accent];
+  const keyMetrics = [
+    { label: "Target", value: `${context.primary.slides.barValues[1] || 0}%` },
+    { label: "Current", value: `${context.primary.slides.barValues[2] || 0}%` },
+    { label: "Delta", value: `${(context.primary.slides.barValues[2] || 0) - (context.primary.slides.barValues[1] || 0)}pt` },
+  ];
 
   return `
     <article class="slide-card slide-card--ref" style="${buildSlideVars(tokens)}">
@@ -474,27 +479,39 @@ function renderMainTemplateSlide(tokens, context) {
         <h3>${context.primary.slides.coverTitle}</h3>
         <span class="ppt-ref-page">01</span>
       </div>
-      <div class="ppt-ref-layout">
-        <div class="ppt-ref-copy">
-          <p class="ppt-ref-kicker">${context.primary.previewLabel}</p>
-          <p>${context.primary.slides.coverSubtitle}</p>
-          <p>${context.primary.previewTone}</p>
-        </div>
-        <div class="ppt-ref-panel">
-          <div class="ppt-donut" style="--value:${donutValue};--donut-main:${shapePalette[0]};--donut-soft:${mixHex(shapePalette[0], "#FFFFFF", 0.8)};">
-            <span>${donutValue}%</span>
+      <div class="ppt-frame">
+        <div class="ppt-col ppt-col--main">
+          <div class="ppt-ref-copy">
+            <p class="ppt-ref-kicker">${context.primary.previewLabel}</p>
+            <p>${context.primary.slides.coverSubtitle}</p>
+            <p>${context.primary.previewTone}</p>
           </div>
-          <div class="ppt-micro-bars">
-            ${context.primary.slides.barValues.map((value, index) => `
-              <span
-                style="--h:${Math.max(18, value)}%;--tone:${shapePalette[index % shapePalette.length]};"
-              ></span>
+          <div class="ppt-chip-row">
+            ${keyMetrics.map((item, index) => `
+              <div class="ppt-chip" style="--chip:${shapePalette[index % shapePalette.length]};">
+                <span>${item.label}</span>
+                <strong>${item.value}</strong>
+              </div>
             `).join("")}
+          </div>
+        </div>
+        <div class="ppt-col ppt-col--side">
+          <div class="ppt-ref-panel">
+            <div class="ppt-donut" style="--value:${donutValue};--donut-main:${shapePalette[0]};--donut-soft:${mixHex(shapePalette[0], "#FFFFFF", 0.8)};">
+              <span>${donutValue}%</span>
+            </div>
+            <div class="ppt-micro-bars">
+              ${context.primary.slides.barValues.map((value, index) => `
+                <span
+                  style="--h:${Math.max(18, value)}%;--tone:${shapePalette[index % shapePalette.length]};"
+                ></span>
+              `).join("")}
+            </div>
           </div>
         </div>
       </div>
       <div class="ppt-ref-footer">
-        <span>key point</span>
+        <span>Executive summary</span>
         <strong>${context.blendTag}</strong>
       </div>
     </article>
@@ -502,10 +519,20 @@ function renderMainTemplateSlide(tokens, context) {
 }
 
 function renderContentsTemplateSlide(tokens, context) {
+  const agendaCaptions = ["Background", "Objective", "Execution", "Impact"];
   const items = context.primary.slides.agenda.map((item, index) => `
     <div class="ppt-step">
       <span>${String(index + 1).padStart(2, "0")}</span>
-      <strong>${item}</strong>
+      <div>
+        <strong>${item}</strong>
+        <small>${agendaCaptions[index] || "Detail"}</small>
+      </div>
+    </div>
+  `).join("");
+  const timeline = context.primary.slides.graphLabels.map((label, index) => `
+    <div class="ppt-timeline-item">
+      <span>${label}</span>
+      <strong>${context.primary.slides.graphValues[index] || "-"}</strong>
     </div>
   `).join("");
 
@@ -516,13 +543,19 @@ function renderContentsTemplateSlide(tokens, context) {
         <h3>목차</h3>
         <span class="ppt-ref-page">02</span>
       </div>
-      <div class="ppt-ref-layout">
-        <div class="ppt-ref-copy">
-          <p class="ppt-ref-kicker">${context.summary}</p>
-          <p>핵심 흐름을 한 페이지에서 확인할 수 있도록 구성했습니다.</p>
-        </div>
-        <div class="ppt-ref-panel">
+      <div class="ppt-frame">
+        <div class="ppt-col ppt-col--main">
+          <div class="ppt-ref-copy">
+            <p class="ppt-ref-kicker">${context.summary}</p>
+            <p>핵심 흐름을 한 페이지에서 확인할 수 있도록 구성했습니다.</p>
+          </div>
           <div class="ppt-track">${items}</div>
+        </div>
+        <div class="ppt-col ppt-col--side">
+          <div class="ppt-ref-panel">
+            <p class="ppt-ref-kicker">Timeline</p>
+            <div class="ppt-timeline">${timeline}</div>
+          </div>
         </div>
       </div>
     </article>
@@ -531,6 +564,12 @@ function renderContentsTemplateSlide(tokens, context) {
 
 function renderBodyTemplateSlide(tokens, context) {
   const bulletItems = context.primary.slides.bullets.map((item) => `<li>${item}</li>`).join("");
+  const highlightScores = context.primary.slides.barLabels.map((label, index) => `
+    <div class="ppt-mini-stat">
+      <span>${label}</span>
+      <strong>${context.primary.slides.barValues[index] || 0}%</strong>
+    </div>
+  `).join("");
 
   return `
     <article class="slide-card slide-card--ref" style="${buildSlideVars(tokens)}">
@@ -539,17 +578,22 @@ function renderBodyTemplateSlide(tokens, context) {
         <h3>본문</h3>
         <span class="ppt-ref-page">03</span>
       </div>
-      <div class="ppt-ref-layout">
-        <div class="ppt-ref-copy">
-          <p class="ppt-ref-kicker">${context.primary.slides.highlightTitle}</p>
-          <ul class="ppt-bullets">${bulletItems}</ul>
-        </div>
-        <div class="ppt-ref-panel">
-          <div class="ppt-stat-box">
-            <strong>${Math.max(...context.primary.slides.graphValues)}</strong>
-            <span>Peak value</span>
+      <div class="ppt-frame">
+        <div class="ppt-col ppt-col--main">
+          <div class="ppt-ref-copy">
+            <p class="ppt-ref-kicker">${context.primary.slides.highlightTitle}</p>
+            <ul class="ppt-bullets">${bulletItems}</ul>
           </div>
-          <p>${context.primary.slides.highlightCopy}</p>
+        </div>
+        <div class="ppt-col ppt-col--side">
+          <div class="ppt-ref-panel">
+            <div class="ppt-stat-box">
+              <strong>${Math.max(...context.primary.slides.graphValues)}</strong>
+              <span>Peak value</span>
+            </div>
+            <p>${context.primary.slides.highlightCopy}</p>
+            <div class="ppt-mini-stat-grid">${highlightScores}</div>
+          </div>
         </div>
       </div>
     </article>
@@ -568,6 +612,12 @@ function renderTableTemplateSlide(tokens, context) {
       `).join("")}
     </tr>
   `).join("");
+  const summaryCards = context.primary.slides.tableRows.map((row, index) => `
+    <div class="ppt-mini-stat" style="--chip:${tablePalette[index % tablePalette.length]};">
+      <span>${row[0]}</span>
+      <strong>${row[2]}</strong>
+    </div>
+  `).join("");
 
   return `
     <article class="slide-card slide-card--ref" style="${buildSlideVars(tokens)}">
@@ -576,16 +626,22 @@ function renderTableTemplateSlide(tokens, context) {
         <h3>표</h3>
         <span class="ppt-ref-page">04</span>
       </div>
-      <div class="ppt-ref-layout">
-        <div class="ppt-ref-copy">
-          <p class="ppt-ref-kicker">${context.primary.slides.tableHeaders[0]} 기준 요약</p>
-          <p>표와 구분선에 추천 팔레트 컬러를 나누어 적용했습니다.</p>
-        </div>
-        <div class="ppt-ref-panel">
+      <div class="ppt-frame">
+        <div class="ppt-col ppt-col--main">
+          <div class="ppt-ref-copy">
+            <p class="ppt-ref-kicker">${context.primary.slides.tableHeaders[0]} 기준 요약</p>
+            <p>구획만 있는 화면이 아니라 표 + 요약 지표를 함께 배치했습니다.</p>
+          </div>
           <table class="ppt-table">
             <thead><tr>${headerRow}</tr></thead>
             <tbody>${bodyRows}</tbody>
           </table>
+        </div>
+        <div class="ppt-col ppt-col--side">
+          <div class="ppt-ref-panel">
+            <p class="ppt-ref-kicker">Status summary</p>
+            <div class="ppt-mini-stat-grid">${summaryCards}</div>
+          </div>
         </div>
       </div>
     </article>
@@ -606,6 +662,16 @@ function renderGraphTemplateSlide(tokens, context) {
       <strong>${context.primary.slides.barLabels[index] || `S${index + 1}`}</strong>
     </div>
   `).join("");
+  const graphSummary = [
+    { label: "Start", value: graphValues[0] || 0 },
+    { label: "Peak", value: Math.max(...graphValues) || 0 },
+    { label: "End", value: graphValues[graphValues.length - 1] || 0 },
+  ].map((item, index) => `
+    <div class="ppt-mini-stat" style="--chip:${graphPalette[index % graphPalette.length]};">
+      <span>${item.label}</span>
+      <strong>${item.value}</strong>
+    </div>
+  `).join("");
 
   return `
     <article class="slide-card slide-card--ref" style="${buildSlideVars(tokens)}">
@@ -614,19 +680,25 @@ function renderGraphTemplateSlide(tokens, context) {
         <h3>그래프</h3>
         <span class="ppt-ref-page">05</span>
       </div>
-      <div class="ppt-ref-layout">
-        <div class="ppt-ref-panel">
-          <svg class="ppt-line-chart" viewBox="0 0 360 140" aria-hidden="true" focusable="false">
-            <polyline points="${linePath}" fill="none" stroke="var(--ppt-accent)" stroke-width="3"></polyline>
-            <polyline points="${comparePath}" fill="none" stroke="${tokens.accentAlt}" stroke-width="2.5" stroke-dasharray="4 4"></polyline>
-            ${linePoints.map((point, index) => `
-              <circle cx="${point.x}" cy="${point.y}" r="3.5" fill="${graphPalette[index % graphPalette.length]}"></circle>
-            `).join("")}
-          </svg>
-          <div class="ppt-graph-labels">${labels}</div>
-        </div>
-        <div class="ppt-ref-panel">
+      <div class="ppt-frame">
+        <div class="ppt-col ppt-col--main">
+          <div class="ppt-ref-panel">
+            <svg class="ppt-line-chart" viewBox="0 0 360 140" aria-hidden="true" focusable="false">
+              <polyline points="${linePath}" fill="none" stroke="var(--ppt-accent)" stroke-width="3"></polyline>
+              <polyline points="${comparePath}" fill="none" stroke="${tokens.accentAlt}" stroke-width="2.5" stroke-dasharray="4 4"></polyline>
+              ${linePoints.map((point, index) => `
+                <circle cx="${point.x}" cy="${point.y}" r="3.5" fill="${graphPalette[index % graphPalette.length]}"></circle>
+              `).join("")}
+            </svg>
+            <div class="ppt-graph-labels">${labels}</div>
+          </div>
           <div class="ppt-bar-grid">${bars}</div>
+        </div>
+        <div class="ppt-col ppt-col--side">
+          <div class="ppt-ref-panel">
+            <p class="ppt-ref-kicker">Trend summary</p>
+            <div class="ppt-mini-stat-grid">${graphSummary}</div>
+          </div>
         </div>
       </div>
     </article>
@@ -639,12 +711,14 @@ function renderIconTemplateSlide(tokens, context) {
     label: item,
     value: context.primary.slides.barValues[index] ?? context.primary.slides.graphValues[index] ?? 50,
     color: iconPalette[index % iconPalette.length],
+    desc: context.primary.slides.bullets[index % context.primary.slides.bullets.length],
   }));
 
   const iconRows = iconItems.map((item) => `
     <div class="ppt-icon-item">
       <div class="ppt-icon-dot" style="--dot:${item.color};">${item.value}</div>
       <strong>${item.label}</strong>
+      <small>${item.desc}</small>
     </div>
   `).join("");
 
@@ -655,13 +729,21 @@ function renderIconTemplateSlide(tokens, context) {
         <h3>아이콘</h3>
         <span class="ppt-ref-page">06</span>
       </div>
-      <div class="ppt-ref-layout">
-        <div class="ppt-ref-copy">
-          <p class="ppt-ref-kicker">${context.primary.slides.footerNote}</p>
-          <p>아이콘/지표 조합으로 섹션 정보를 빠르게 스캔할 수 있게 구성했습니다.</p>
-        </div>
-        <div class="ppt-ref-panel">
+      <div class="ppt-frame">
+        <div class="ppt-col ppt-col--main">
+          <div class="ppt-ref-copy">
+            <p class="ppt-ref-kicker">${context.primary.slides.footerNote}</p>
+            <p>핵심 단계의 수치와 설명을 동시에 보이도록 카드형으로 구성했습니다.</p>
+          </div>
           <div class="ppt-icon-grid">${iconRows}</div>
+        </div>
+        <div class="ppt-col ppt-col--side">
+          <div class="ppt-ref-panel">
+            <p class="ppt-ref-kicker">Execution note</p>
+            <ul class="ppt-bullets">
+              ${context.primary.slides.bullets.map((item) => `<li>${item}</li>`).join("")}
+            </ul>
+          </div>
         </div>
       </div>
     </article>
