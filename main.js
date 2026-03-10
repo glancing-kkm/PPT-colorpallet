@@ -166,87 +166,72 @@ const PURPOSES = [
   },
 ];
 
+const COLOR_WHEEL_STEPS = 12;
+const COLOR_WHEEL_UNIT = 360 / COLOR_WHEEL_STEPS;
+
 const TONE_ON_TONE_VARIANTS = [
   {
-    id: "tone-on-deep",
+    id: "tone-on-analogous",
     label: "톤온톤 01",
-    short: "딥",
+    short: "유사색 조합",
     groupLabel: "Tone on Tone",
-    note: "짙고 단단한 톤",
-    hueOffset: 0,
-    saturationShift: 8,
-    neutralBias: -0.05,
-    accentHueOffset: 176,
-    accentLightness: 56,
-    lightStops: [8, 16, 24, 32, 40, 50, 60, 72, 84, 94],
-    satCurve: [6, 3, 1, 0, 2, 4, 6, 4, 0, -16],
-    hueJitter: [-2, -1, 0, 0, 1, 1, 0, -1, -2, -2],
+    note: "같은 색상 · 채도/명도 변화",
+    mainHueStep: 1,
+    accentHueStep: 5,
+    satStops: [86, 80, 74, 66, 58, 50, 42, 34, 26],
+    lightStops: [20, 28, 36, 44, 52, 60, 68, 78, 88],
   },
   {
-    id: "tone-on-balance",
+    id: "tone-on-complementary",
     label: "톤온톤 02",
-    short: "밸런스",
+    short: "보색 조합",
     groupLabel: "Tone on Tone",
-    note: "균형 잡힌 톤",
-    hueOffset: 4,
-    saturationShift: 0,
-    neutralBias: 0.04,
-    accentHueOffset: 150,
-    accentLightness: 52,
-    lightStops: [10, 20, 30, 40, 50, 58, 66, 74, 84, 94],
-    satCurve: [2, 1, 0, -1, 0, 2, 3, 1, -2, -18],
-    hueJitter: [-1, -1, 0, 1, 1, 0, -1, -1, -2, -2],
+    note: "같은 색상 · 채도/명도 변화",
+    mainHueStep: 6,
+    accentHueStep: 0,
+    satStops: [84, 78, 72, 64, 56, 48, 40, 32, 24],
+    lightStops: [18, 26, 34, 42, 50, 58, 66, 76, 86],
   },
   {
-    id: "tone-on-soft",
+    id: "tone-on-mixed",
     label: "톤온톤 03",
-    short: "소프트",
+    short: "유사+보색 혼합",
     groupLabel: "Tone on Tone",
-    note: "밝고 차분한 톤",
-    hueOffset: -6,
-    saturationShift: -10,
-    neutralBias: 0.16,
-    accentHueOffset: 196,
-    accentLightness: 60,
-    lightStops: [12, 22, 32, 42, 52, 60, 68, 76, 86, 95],
-    satCurve: [0, -2, -3, -4, -3, -1, 1, 0, -4, -20],
-    hueJitter: [0, 0, 1, 1, 0, -1, -1, -1, -2, -2],
+    note: "같은 색상 · 채도/명도 변화",
+    mainHueStep: 4,
+    accentHueStep: 10,
+    satStops: [88, 82, 74, 66, 58, 50, 42, 36, 28],
+    lightStops: [22, 30, 38, 46, 54, 62, 70, 80, 90],
   },
 ];
 
 const TONE_IN_TONE_VARIANTS = [
   {
-    id: "tone-in-adjacent",
+    id: "tone-in-analogous",
     label: "톤인톤 01",
-    short: "인접",
+    short: "유사색 조합",
     groupLabel: "Tone in Tone",
-    note: "인접색 중심",
-    hueOffsets: [0, -10, 14, -18, 22, 8, 30, -26, 18, 36],
-    satOffsets: [-26, -14, -2, 10, 22, 34, 46, 14, 58],
-    accentHueOffset: 148,
-    saturationShift: 0,
+    note: "색상 변화 · 채도/명도 동일",
+    hueStepPattern: [-2, -1, -1, 0, 0, 1, 1, 2, 2],
+    accentHueStep: 4,
   },
   {
-    id: "tone-in-modern",
+    id: "tone-in-complementary",
     label: "톤인톤 02",
-    short: "포인트",
+    short: "보색 조합",
     groupLabel: "Tone in Tone",
-    note: "포인트 확장",
-    hueOffsets: [0, 12, 24, -16, 38, 8, -28, 48, 18, -36],
-    satOffsets: [-18, -4, 10, 22, 34, 46, 58, 20, 68],
-    accentHueOffset: 182,
-    saturationShift: 10,
+    note: "색상 변화 · 채도/명도 동일",
+    hueStepPattern: [-1, 0, 1, 5, 6, 7, 5, 6, 7],
+    accentHueStep: 3,
   },
   {
-    id: "tone-in-refined",
+    id: "tone-in-mixed",
     label: "톤인톤 03",
-    short: "리파인",
+    short: "유사+보색 혼합",
     groupLabel: "Tone in Tone",
-    note: "절제된 변주",
-    hueOffsets: [0, -8, 10, 18, -16, 28, 8, -24, 34, 16],
-    satOffsets: [-30, -18, -8, 6, 18, 30, 40, 12, 52],
-    accentHueOffset: 132,
-    saturationShift: -8,
+    note: "색상 변화 · 채도/명도 동일",
+    hueStepPattern: [-2, -1, 0, 1, 5, 6, 7, 2, 8],
+    accentHueStep: 9,
   },
 ];
 
@@ -815,17 +800,12 @@ function renderGraphSlide(tokens, context) {
 }
 
 function buildToneOnTonePalette(baseHsl, profile, variant) {
-  const hueBase = wrapHue(baseHsl.h + profile.hueShift + variant.hueOffset);
-  const satBase = clamp(baseHsl.s + profile.saturationShift + variant.saturationShift, 18, 86);
+  const wheelBaseHue = snapToColorWheel(baseHsl.h + profile.hueShift);
+  const toneHue = wheelHueFromBase(wheelBaseHue, variant.mainHueStep);
   const coreColors = variant.lightStops.slice(0, 9).map((lightness, index) => {
-    const hue = wrapHue(hueBase + variant.hueJitter[index]);
-    const saturation = clamp(
-      satBase + variant.satCurve[index] - (profile.neutralBias + variant.neutralBias) * 22 + profile.contrast * (index < 3 ? 0.22 : 0.08),
-      8,
-      90,
-    );
-    const adjustedLightness = clamp(lightness + profile.lightShift, 4, 97);
-    return hslToHex(hue, saturation, adjustedLightness);
+    const saturation = clamp(variant.satStops[index] + profile.saturationShift * 0.18 - profile.neutralBias * 6, 12, 95);
+    const adjustedLightness = clamp(lightness + profile.lightShift * 0.24, 8, 95);
+    return hslToHex(toneHue, saturation, adjustedLightness);
   });
   const accentHex = buildAccentColor(baseHsl, profile, variant, "tone-on-tone");
   const swatches = buildPaletteSwatches(coreColors, accentHex);
@@ -844,12 +824,11 @@ function buildToneOnTonePalette(baseHsl, profile, variant) {
 }
 
 function buildToneInTonePalette(baseHsl, profile, variant) {
-  const hueBase = wrapHue(baseHsl.h + profile.hueShift);
-  const satBase = clamp(baseHsl.s + profile.saturationShift * 0.55 + variant.saturationShift - profile.neutralBias * 10, 12, 72);
-  const lightness = clamp(baseHsl.l + profile.lightShift * 0.18, 26, 74);
-  const coreColors = variant.hueOffsets.slice(0, 9).map((offset, index) => {
-    const hue = wrapHue(hueBase + offset);
-    const saturation = clamp(satBase + variant.satOffsets[index], 8, 96);
+  const wheelBaseHue = snapToColorWheel(baseHsl.h + profile.hueShift);
+  const saturation = clamp(baseHsl.s + profile.saturationShift * 0.32 - profile.neutralBias * 4, 30, 74);
+  const lightness = clamp(baseHsl.l + profile.lightShift * 0.16, 30, 74);
+  const coreColors = variant.hueStepPattern.slice(0, 9).map((stepOffset) => {
+    const hue = wheelHueFromBase(wheelBaseHue, stepOffset);
     return hslToHex(hue, saturation, lightness);
   });
   const accentHex = buildAccentColor({ ...baseHsl, l: lightness }, profile, variant, "tone-in-tone");
@@ -1022,6 +1001,14 @@ function createAreaPath(points, height, padding) {
   ].join(" ");
 }
 
+function snapToColorWheel(hue) {
+  return wrapHue(Math.round(hue / COLOR_WHEEL_UNIT) * COLOR_WHEEL_UNIT);
+}
+
+function wheelHueFromBase(baseHue, stepOffset) {
+  return wrapHue(baseHue + stepOffset * COLOR_WHEEL_UNIT);
+}
+
 function buildPaletteSwatches(coreColors, accentHex) {
   return [
     ...coreColors.map((hex) => ({ hex, isAccent: false })),
@@ -1030,11 +1017,12 @@ function buildPaletteSwatches(coreColors, accentHex) {
 }
 
 function buildAccentColor(baseHsl, profile, variant, family) {
-  const hue = wrapHue(baseHsl.h + profile.hueShift + (variant.accentHueOffset || 168));
-  const saturation = clamp(84 + profile.contrast * 0.24 - profile.neutralBias * 18, 74, 98);
+  const wheelBaseHue = snapToColorWheel(baseHsl.h + profile.hueShift);
+  const hue = wheelHueFromBase(wheelBaseHue, variant.accentHueStep ?? 6);
+  const saturation = clamp(88 + profile.contrast * 0.14 - profile.neutralBias * 8, 78, 98);
   const lightness = family === "tone-in-tone"
-    ? clamp(baseHsl.l + (baseHsl.l > 54 ? -8 : 10), 32, 66)
-    : clamp((variant.accentLightness || 56) + profile.lightShift * 0.2, 34, 68);
+    ? clamp(baseHsl.l + (baseHsl.l > 56 ? -8 : 8), 34, 66)
+    : clamp(baseHsl.l + (baseHsl.l > 56 ? -10 : 10), 32, 68);
 
   return hslToHex(hue, saturation, lightness);
 }
