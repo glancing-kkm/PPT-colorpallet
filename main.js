@@ -715,7 +715,7 @@ function renderGraphSlide(tokens, context) {
     ></circle>
   `).join("");
   const labels = context.primary.slides.graphLabels.map((label) => `<span>${label}</span>`).join("");
-  const gradientId = `graphArea-${context.primary.id}`;
+  const areaFill = mixHex(tokens.secondary, tokens.paper, 0.74);
   const trendCards = [
     { label: "Delta", value: `${change > 0 ? "+" : ""}${change}` },
     { label: "Peak", value: `${Math.max(...values)}` },
@@ -763,15 +763,9 @@ function renderGraphSlide(tokens, context) {
           </div>
           <div class="graph-card graph-card--infographic">
             <svg viewBox="0 0 420 170" aria-hidden="true" focusable="false">
-              <defs>
-                <linearGradient id="${gradientId}" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stop-color="${mixHex(tokens.accent, tokens.paper, 0.56)}"></stop>
-                  <stop offset="100%" stop-color="${mixHex(tokens.accentAlt, tokens.paper, 0.96)}"></stop>
-                </linearGradient>
-              </defs>
               ${guideLines}
               <line x1="16" y1="154" x2="404" y2="154" stroke="${tokens.line}" stroke-width="2"></line>
-              <path d="${areaPath}" fill="url(#${gradientId})"></path>
+              <path d="${areaPath}" fill="${areaFill}"></path>
               <polyline
                 points="${points.map((point) => `${point.x},${point.y}`).join(" ")}"
                 fill="none"
@@ -911,6 +905,8 @@ function derivePreviewTokens(palette) {
     ? mixHex(darkest, "#0E1426", 0.22)
     : darkest;
   const coverBg = mixHex(deep, accent, 0.06);
+  const textMain = getBinaryTextColor(paper);
+  const textOnAccent = getBinaryTextColor(accent);
 
   return {
     paper,
@@ -931,6 +927,8 @@ function derivePreviewTokens(palette) {
     accentInk: getReadableTextColor(accent),
     coverBg,
     coverInk: getReadableTextColor(coverBg),
+    textMain,
+    textOnAccent,
     vivid: mixHex(accent, accentAlt, 0.32),
     glow: mixHex(accentAlt, "#FFFFFF", 0.22),
     shadow: mixHex(deep, "#0A0F1D", 0.38),
@@ -954,6 +952,8 @@ function buildSlideVars(tokens) {
     `--slide-accent-alt:${tokens.accentAlt}`,
     `--slide-secondary:${tokens.secondary}`,
     `--slide-tertiary:${tokens.tertiary}`,
+    `--slide-text-main:${tokens.textMain}`,
+    `--slide-text-on-accent:${tokens.textOnAccent}`,
     `--slide-accent-ink:${tokens.accentInk}`,
     `--slide-cover-bg:${tokens.coverBg}`,
     `--slide-cover-ink:${tokens.coverInk}`,
@@ -1164,6 +1164,10 @@ function getReadableTextColor(hex) {
   return getRelativeLuminance(hexToRgb(hex)) > 0.48
     ? "rgba(16, 24, 42, 0.92)"
     : "rgba(255, 255, 255, 0.94)";
+}
+
+function getBinaryTextColor(hex) {
+  return getRelativeLuminance(hexToRgb(hex)) > 0.48 ? "#111111" : "#FFFFFF";
 }
 
 function mixHex(leftHex, rightHex, weight) {

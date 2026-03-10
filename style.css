@@ -1597,6 +1597,103 @@ img {
   box-shadow: 0 8px 0 rgba(216, 255, 69, 0.95);
 }
 
+/* PPT preview: flat style (no gradients), black/white text, palette-driven accents */
+.preview-summary {
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: none;
+}
+
+.slide-card,
+.slide-card--cover {
+  background: var(--slide-paper) !important;
+  border: 1px solid var(--slide-line) !important;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08) !important;
+  color: var(--slide-text-main, #111111) !important;
+}
+
+.slide-card::before {
+  height: 5px;
+  background: var(--slide-accent) !important;
+}
+
+.slide-card::after {
+  display: none;
+}
+
+.slide-card h3,
+.slide-card h4,
+.slide-card strong,
+.slide-card td,
+.slide-card th,
+.slide-card span {
+  color: inherit;
+}
+
+.slide-headline p,
+.cover-subtitle,
+.cover-panel p,
+.harvey-stat__meta span,
+.legend-row__label,
+.dashboard-panel__header span,
+.trend-panel__copy p,
+.mini-table th,
+.mini-table td {
+  color: var(--slide-text-main, #111111) !important;
+}
+
+.slide-card__label,
+.body-highlight__tag,
+.dashboard-flag,
+.table-status,
+.agenda-item__number {
+  background: var(--slide-accent) !important;
+  border-color: var(--slide-accent) !important;
+  color: var(--slide-text-on-accent, #FFFFFF) !important;
+}
+
+.cover-panel,
+.cover-band span,
+.agenda-item,
+.body-item,
+.body-highlight,
+.harvey-hero,
+.harvey-stat,
+.table-shell,
+.dashboard-panel,
+.graph-card,
+.graph-card--infographic,
+.trend-panel,
+.trend-card,
+.legend-row {
+  background: var(--slide-surface) !important;
+  border: 1px solid var(--slide-line) !important;
+  box-shadow: none !important;
+}
+
+.table-shell--infographic::before {
+  display: none;
+}
+
+.mini-table thead {
+  background: color-mix(in srgb, var(--slide-accent) 18%, #ffffff) !important;
+}
+
+.table-topic__dot {
+  background: var(--slide-accent) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--slide-accent) 22%, #ffffff) !important;
+}
+
+.harvey-ball {
+  background: var(--slide-paper) !important;
+  border: 6px solid var(--orbital-tone);
+  box-shadow: none !important;
+}
+
+.harvey-ball::before {
+  display: none;
+}
+
 @media (max-width: 1320px) {
   .purpose-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
