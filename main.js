@@ -454,319 +454,202 @@ function renderPreviews() {
   refs.activePaletteName.textContent = `선택 팔레트: ${activePalette.label}`;
   refs.activePaletteMeta.textContent = `${purposeContext.summary} · ${activePalette.note}`;
   refs.slidePreviewGrid.innerHTML = [
-    renderCoverSlide(tokens, purposeContext),
-    renderAgendaSlide(tokens, purposeContext),
-    renderBodySlide(tokens, purposeContext),
-    renderTableSlide(tokens, purposeContext),
-    renderChartSlide(tokens, purposeContext),
-    renderGraphSlide(tokens, purposeContext),
+    renderMainTemplateSlide(tokens, purposeContext),
+    renderContentsTemplateSlide(tokens, purposeContext),
+    renderBodyTemplateSlide(tokens, purposeContext),
+    renderTableTemplateSlide(tokens, purposeContext),
+    renderGraphTemplateSlide(tokens, purposeContext),
+    renderIconTemplateSlide(tokens, purposeContext),
   ].join("");
 }
 
-function renderCoverSlide(tokens, context) {
+function renderMainTemplateSlide(tokens, context) {
+  const donutValue = context.primary.slides.barValues[0] || 60;
+
   return `
-    <article class="slide-card slide-card--cover" style="${buildSlideVars(tokens)}">
-      <span class="slide-card__label">01 Cover</span>
-      <div class="cover-shell">
-        <div class="cover-main">
-          <p class="cover-kicker">${context.primary.previewLabel}</p>
-          <h3 class="cover-title">${context.primary.slides.coverTitle}</h3>
-          <p class="cover-subtitle">${context.primary.slides.coverSubtitle}</p>
-        </div>
-        <aside class="cover-panel">
-          <span class="cover-panel__eyebrow">Direction</span>
-          <strong>${context.primary.previewTone}</strong>
-          <p>${context.supportingNote}</p>
-        </aside>
+    <article class="slide-card slide-card--ref" style="${buildSlideVars(tokens)}">
+      <span class="slide-card__label">01 Main</span>
+      <div class="ppt-ref-head">
+        <h3>${context.primary.slides.coverTitle}</h3>
+        <span class="ppt-ref-page">01</span>
       </div>
-      <div class="cover-band">
-        <span>Premium slide system</span>
-        <span>${context.blendTag}</span>
+      <div class="ppt-ref-layout">
+        <div class="ppt-ref-copy">
+          <p class="ppt-ref-kicker">${context.primary.previewLabel}</p>
+          <p>${context.primary.slides.coverSubtitle}</p>
+          <p>${context.primary.previewTone}</p>
+        </div>
+        <div class="ppt-ref-panel">
+          <div class="ppt-donut" style="--value:${donutValue};">
+            <span>${donutValue}%</span>
+          </div>
+          <div class="ppt-micro-bars">
+            ${context.primary.slides.barValues.map((value) => `<span style="--h:${Math.max(18, value)}%;"></span>`).join("")}
+          </div>
+        </div>
+      </div>
+      <div class="ppt-ref-footer">
+        <span>key point</span>
+        <strong>${context.blendTag}</strong>
       </div>
     </article>
   `;
 }
 
-function renderAgendaSlide(tokens, context) {
-  const agendaCaptions = ["Frame", "Signal", "Proof", "Move"];
-  const agendaItems = context.primary.slides.agenda.map((item, index) => `
-    <div class="agenda-item">
-      <span class="agenda-item__number">${String(index + 1).padStart(2, "0")}</span>
-      <div class="agenda-item__copy">
-        <strong>${item}</strong>
-        <span>${agendaCaptions[index] || "Focus"}</span>
-      </div>
+function renderContentsTemplateSlide(tokens, context) {
+  const items = context.primary.slides.agenda.map((item, index) => `
+    <div class="ppt-step">
+      <span>${String(index + 1).padStart(2, "0")}</span>
+      <strong>${item}</strong>
     </div>
   `).join("");
 
   return `
-    <article class="slide-card slide-card--agenda" style="${buildSlideVars(tokens)}">
+    <article class="slide-card slide-card--ref" style="${buildSlideVars(tokens)}">
       <span class="slide-card__label">02 Contents</span>
-      <div class="agenda-shell">
-        <div class="slide-headline">
-          <p class="section-overline">Sequence</p>
-          <h3>Contents</h3>
-          <p>${context.primary.previewTone}</p>
+      <div class="ppt-ref-head">
+        <h3>목차</h3>
+        <span class="ppt-ref-page">02</span>
+      </div>
+      <div class="ppt-ref-layout">
+        <div class="ppt-ref-copy">
+          <p class="ppt-ref-kicker">${context.summary}</p>
+          <p>핵심 흐름을 한 페이지에서 확인할 수 있도록 구성했습니다.</p>
         </div>
-        <div class="agenda-list">${agendaItems}</div>
+        <div class="ppt-ref-panel">
+          <div class="ppt-track">${items}</div>
+        </div>
       </div>
     </article>
   `;
 }
 
-function renderBodySlide(tokens, context) {
-  const averageScore = Math.round(
-    context.primary.slides.barValues.reduce((total, value) => total + value, 0) / context.primary.slides.barValues.length,
-  );
-  const bulletItems = context.primary.slides.bullets.map((item) => `
-    <div class="body-item">${item}</div>
-  `).join("");
+function renderBodyTemplateSlide(tokens, context) {
+  const bulletItems = context.primary.slides.bullets.map((item) => `<li>${item}</li>`).join("");
 
   return `
-    <article class="slide-card slide-card--content" style="${buildSlideVars(tokens)}">
-      <span class="slide-card__label">03 Narrative</span>
-      <div class="body-layout">
-        <div class="body-copy">
-          <div class="slide-headline">
-            <p class="section-overline">Storyline</p>
-            <h3>Key narrative</h3>
-            <p>Whitespace, rhythm, and hierarchy stay tightly controlled.</p>
-          </div>
-          <div class="body-list">${bulletItems}</div>
+    <article class="slide-card slide-card--ref" style="${buildSlideVars(tokens)}">
+      <span class="slide-card__label">03 Body</span>
+      <div class="ppt-ref-head">
+        <h3>본문</h3>
+        <span class="ppt-ref-page">03</span>
+      </div>
+      <div class="ppt-ref-layout">
+        <div class="ppt-ref-copy">
+          <p class="ppt-ref-kicker">${context.primary.slides.highlightTitle}</p>
+          <ul class="ppt-bullets">${bulletItems}</ul>
         </div>
-        <aside class="body-highlight">
-          <span class="body-highlight__tag">${context.primary.slides.highlightTitle}</span>
-          <h4>${context.primary.slides.highlightTitle}</h4>
-          <p>${context.primary.slides.highlightCopy}</p>
-          <div class="insight-metric">
-            <strong>${averageScore}%</strong>
-            <span>clarity index</span>
+        <div class="ppt-ref-panel">
+          <div class="ppt-stat-box">
+            <strong>${Math.max(...context.primary.slides.graphValues)}</strong>
+            <span>Peak value</span>
           </div>
-        </aside>
+          <p>${context.primary.slides.highlightCopy}</p>
+        </div>
       </div>
     </article>
   `;
 }
 
-function renderTableSlide(tokens, context) {
-  const harveyColors = [tokens.accent, tokens.accentAlt, tokens.secondary];
-  const summaryItems = buildTableSummary(context.primary.slides.tableRows).map((item, index) => {
-    const tone = harveyColors[index % harveyColors.length];
-    const toneSoft = mixHex(tone, tokens.paper, 0.8);
-    return `
-      <div class="harvey-stat harvey-stat--table" style="--fill:${item.fill};--orbital-tone:${tone};--orbital-soft:${toneSoft};">
-        <div class="harvey-ball harvey-ball--md">
-          <span>${item.value}</span>
-        </div>
-        <div class="harvey-stat__meta">
-          <strong>${item.label}</strong>
-          <span>${item.caption}</span>
-        </div>
-      </div>
-    `;
-  }).join("");
+function renderTableTemplateSlide(tokens, context) {
   const headerRow = context.primary.slides.tableHeaders.map((header) => `<th>${header}</th>`).join("");
   const bodyRows = context.primary.slides.tableRows.map((row) => `
     <tr>
-      <td>
-        <div class="table-topic">
-          <span class="table-topic__dot"></span>
-          <strong>${row[0]}</strong>
-        </div>
-      </td>
-      <td>${row[1]}</td>
-      <td>${row[2]}</td>
-      <td><span class="table-status">${row[3]}</span></td>
+      ${row.map((cell) => `<td>${cell}</td>`).join("")}
     </tr>
   `).join("");
 
   return `
-    <article class="slide-card slide-card--table" style="${buildSlideVars(tokens)}">
+    <article class="slide-card slide-card--ref" style="${buildSlideVars(tokens)}">
       <span class="slide-card__label">04 Table</span>
-      <div class="infographic-topline">
-        <div class="slide-headline">
-          <p class="section-overline">Reference table</p>
-          <h3>Structured snapshot</h3>
-          <p>Clean rings, crisp status tags, and one dominant accent keep the table premium.</p>
-        </div>
-        <span class="dashboard-flag">Infographic table</span>
+      <div class="ppt-ref-head">
+        <h3>표</h3>
+        <span class="ppt-ref-page">04</span>
       </div>
-      <div class="harvey-row">${summaryItems}</div>
-      <div class="table-shell table-shell--infographic">
-        <table class="mini-table">
-          <thead>
-            <tr>${headerRow}</tr>
-          </thead>
-          <tbody>${bodyRows}</tbody>
-        </table>
-      </div>
-    </article>
-  `;
-}
-
-function renderChartSlide(tokens, context) {
-  const chartItems = context.primary.slides.barValues.map((value, index) => ({
-    label: context.primary.slides.barLabels[index],
-    value,
-    tone: [tokens.accent, tokens.accentAlt, tokens.secondary, tokens.tertiary][index % 4],
-  }));
-  const heroItem = chartItems[0];
-  const heroSoft = mixHex(heroItem.tone, tokens.paper, 0.82);
-  const miniItems = chartItems.slice(1).map((item) => {
-    const toneSoft = mixHex(item.tone, tokens.paper, 0.84);
-    return `
-      <div class="harvey-stat harvey-stat--mini" style="--fill:${item.value};--orbital-tone:${item.tone};--orbital-soft:${toneSoft};">
-        <div class="harvey-ball harvey-ball--sm">
-          <span>${item.value}</span>
+      <div class="ppt-ref-layout">
+        <div class="ppt-ref-copy">
+          <p class="ppt-ref-kicker">${context.primary.slides.tableHeaders[0]} 기준 요약</p>
+          <p>표 구조는 화이트 기반으로 유지하고 헤더만 포인트 컬러를 사용합니다.</p>
         </div>
-        <div class="harvey-stat__meta">
-          <strong>${item.label}</strong>
-          <span>Signal strength</span>
-        </div>
-      </div>
-    `;
-  }).join("");
-  const legendRows = chartItems.map((item) => `
-    <div class="legend-row">
-      <span class="legend-row__swatch" style="background:${item.tone};"></span>
-      <span class="legend-row__label">${item.label}</span>
-      <strong>${item.value}%</strong>
-    </div>
-  `).join("");
-
-  return `
-    <article class="slide-card slide-card--chart" style="${buildSlideVars(tokens)}">
-      <span class="slide-card__label">05 Chart</span>
-      <div class="infographic-topline">
-        <div class="slide-headline">
-          <p class="section-overline">Circular dashboard</p>
-          <h3>${context.primary.slides.barTitle}</h3>
-          <p>Progress rings and quiet legends create the polished dashboard rhythm.</p>
-        </div>
-        <span class="dashboard-flag">Live preview</span>
-      </div>
-      <div class="harvey-dashboard">
-        <div class="harvey-stage">
-          <div class="harvey-hero" style="--fill:${heroItem.value};--orbital-tone:${heroItem.tone};--orbital-soft:${heroSoft};">
-            <div class="harvey-ball harvey-ball--xl">
-              <span>${heroItem.value}%</span>
-            </div>
-            <div class="harvey-hero__meta">
-              <strong>${heroItem.label}</strong>
-              <span>Main signal</span>
-            </div>
-          </div>
-          <div class="harvey-mini-grid">${miniItems}</div>
-        </div>
-        <div class="dashboard-panel dashboard-panel--legend">
-          <div class="dashboard-panel__header">
-            <strong>Performance index</strong>
-            <span>${context.primary.previewLabel}</span>
-          </div>
-          <div class="legend-stack">
-            ${legendRows}
-          </div>
+        <div class="ppt-ref-panel">
+          <table class="ppt-table">
+            <thead><tr>${headerRow}</tr></thead>
+            <tbody>${bodyRows}</tbody>
+          </table>
         </div>
       </div>
     </article>
   `;
 }
 
-function renderGraphSlide(tokens, context) {
-  const values = context.primary.slides.graphValues;
-  const points = createPolylinePoints(values, 420, 170, 16);
-  const areaPath = createAreaPath(points, 170, 16);
-  const change = values[values.length - 1] - values[0];
-  const colors = [tokens.accent, tokens.accentAlt, tokens.secondary];
-  const circles = points.map((point, index) => `
-    <circle
-      cx="${point.x}"
-      cy="${point.y}"
-      r="5"
-      fill="${tokens.paper}"
-      stroke="${colors[index % colors.length]}"
-      stroke-width="3"
-    ></circle>
-  `).join("");
+function renderGraphTemplateSlide(tokens, context) {
+  const graphValues = context.primary.slides.graphValues;
+  const linePoints = createPolylinePoints(graphValues, 360, 140, 14);
+  const linePath = linePoints.map((point) => `${point.x},${point.y}`).join(" ");
   const labels = context.primary.slides.graphLabels.map((label) => `<span>${label}</span>`).join("");
-  const areaFill = mixHex(tokens.secondary, tokens.paper, 0.74);
-  const trendCards = [
-    { label: "Delta", value: `${change > 0 ? "+" : ""}${change}` },
-    { label: "Peak", value: `${Math.max(...values)}` },
-    { label: "Mode", value: context.primary.previewLabel.replace(" Mode", "") },
-  ].map((item) => `
-    <div class="trend-card">
-      <span>${item.label}</span>
-      <strong>${item.value}</strong>
+  const bars = context.primary.slides.barValues.map((value, index) => `
+    <div class="ppt-bar-col">
+      <span style="--h:${Math.max(12, value)}%;"></span>
+      <strong>${context.primary.slides.barLabels[index] || `S${index + 1}`}</strong>
     </div>
-  `).join("");
-  const milestoneValues = [
-    { label: "Start", value: values[0], tone: tokens.secondary },
-    { label: "Peak", value: Math.max(...values), tone: tokens.accent },
-    { label: "Close", value: values[values.length - 1], tone: tokens.accentAlt },
-  ].map((item) => {
-    const toneSoft = mixHex(item.tone, tokens.paper, 0.84);
-    return `
-      <div class="harvey-stat harvey-stat--mini" style="--fill:${item.value};--orbital-tone:${item.tone};--orbital-soft:${toneSoft};">
-        <div class="harvey-ball harvey-ball--sm">
-          <span>${item.value}</span>
-        </div>
-        <div class="harvey-stat__meta">
-          <strong>${item.label}</strong>
-          <span>Trend cue</span>
-        </div>
-      </div>
-    `;
-  }).join("");
-  const guideLines = [30, 64, 98, 132].map((y) => `
-    <line x1="16" y1="${y}" x2="404" y2="${y}" stroke="${tokens.line}" stroke-width="1.5" stroke-dasharray="6 6"></line>
   `).join("");
 
   return `
-    <article class="slide-card slide-card--graph" style="${buildSlideVars(tokens)}">
-      <span class="slide-card__label">06 Graph</span>
-      <div class="graph-shell">
-        <div class="graph-main">
-          <div class="infographic-topline">
-            <div class="slide-headline">
-              <p class="section-overline">Trend line</p>
-              <h3>${context.primary.slides.graphTitle}</h3>
-              <p>${context.primary.slides.footerNote}</p>
-            </div>
-            <span class="dashboard-flag">Infographic graph</span>
-          </div>
-          <div class="graph-card graph-card--infographic">
-            <svg viewBox="0 0 420 170" aria-hidden="true" focusable="false">
-              ${guideLines}
-              <line x1="16" y1="154" x2="404" y2="154" stroke="${tokens.line}" stroke-width="2"></line>
-              <path d="${areaPath}" fill="${areaFill}"></path>
-              <polyline
-                points="${points.map((point) => `${point.x},${point.y}`).join(" ")}"
-                fill="none"
-                stroke="${tokens.accent}"
-                stroke-width="4"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              ></polyline>
-              ${circles}
-            </svg>
-            <div class="graph-labels">${labels}</div>
-          </div>
+    <article class="slide-card slide-card--ref" style="${buildSlideVars(tokens)}">
+      <span class="slide-card__label">05 Graph</span>
+      <div class="ppt-ref-head">
+        <h3>그래프</h3>
+        <span class="ppt-ref-page">05</span>
+      </div>
+      <div class="ppt-ref-layout">
+        <div class="ppt-ref-panel">
+          <svg class="ppt-line-chart" viewBox="0 0 360 140" aria-hidden="true" focusable="false">
+            <polyline points="${linePath}" fill="none" stroke="var(--ppt-accent)" stroke-width="3"></polyline>
+            ${linePoints.map((point) => `<circle cx="${point.x}" cy="${point.y}" r="3.5" fill="var(--ppt-accent)"></circle>`).join("")}
+          </svg>
+          <div class="ppt-graph-labels">${labels}</div>
         </div>
-        <aside class="trend-panel trend-panel--infographic">
-          <div class="trend-panel__copy">
-            <span class="body-highlight__tag">Reading</span>
-            <h4>Curved insight cue</h4>
-            <p>Use one strong path, quiet grid lines, and compact orbital summaries.</p>
-          </div>
-          <div class="trend-orb-row">${milestoneValues}</div>
-          <div class="trend-grid">${trendCards}</div>
-        </aside>
+        <div class="ppt-ref-panel">
+          <div class="ppt-bar-grid">${bars}</div>
+        </div>
       </div>
     </article>
   `;
 }
 
+function renderIconTemplateSlide(tokens, context) {
+  const iconItems = context.primary.slides.agenda.map((item, index) => ({
+    label: item,
+    value: context.primary.slides.barValues[index] ?? context.primary.slides.graphValues[index] ?? 50,
+    color: [tokens.accent, tokens.accentAlt, tokens.secondary, tokens.tertiary][index % 4],
+  }));
+
+  const iconRows = iconItems.map((item) => `
+    <div class="ppt-icon-item">
+      <div class="ppt-icon-dot" style="--dot:${item.color};">${item.value}</div>
+      <strong>${item.label}</strong>
+    </div>
+  `).join("");
+
+  return `
+    <article class="slide-card slide-card--ref" style="${buildSlideVars(tokens)}">
+      <span class="slide-card__label">06 Icons</span>
+      <div class="ppt-ref-head">
+        <h3>아이콘</h3>
+        <span class="ppt-ref-page">06</span>
+      </div>
+      <div class="ppt-ref-layout">
+        <div class="ppt-ref-copy">
+          <p class="ppt-ref-kicker">${context.primary.slides.footerNote}</p>
+          <p>아이콘/지표 조합으로 섹션 정보를 빠르게 스캔할 수 있게 구성했습니다.</p>
+        </div>
+        <div class="ppt-ref-panel">
+          <div class="ppt-icon-grid">${iconRows}</div>
+        </div>
+      </div>
+    </article>
+  `;
+}
 function buildHarmonyPalette(baseHsl, profile, variant) {
   const wheelBaseHue = snapToColorWheel(baseHsl.h + profile.hueShift);
   const saturation = clamp(baseHsl.s + profile.saturationShift * 0.3 - profile.neutralBias * 4, 24, 82);
@@ -877,84 +760,39 @@ function derivePreviewTokens(palette) {
   const swatches = palette.swatches || palette.colors.map((hex) => ({ hex, isAccent: false }));
   const accent = swatches.find((swatch) => swatch.isAccent)?.hex || swatches[swatches.length - 1].hex;
   const bodyColors = swatches.filter((swatch) => !swatch.isAccent).map((swatch) => swatch.hex);
-  const sortedByLightness = [...bodyColors].sort(
-    (left, right) => getRelativeLuminance(hexToRgb(left)) - getRelativeLuminance(hexToRgb(right)),
-  );
   const sortedBySaturation = [...bodyColors].sort((left, right) => rgbToHsl(hexToRgb(right)).s - rgbToHsl(hexToRgb(left)).s);
-
-  const darkest = sortedByLightness[0];
-  const mid = sortedByLightness[Math.floor(sortedByLightness.length / 2)];
-  const light = sortedByLightness[sortedByLightness.length - 1];
-  const nearLight = sortedByLightness[sortedByLightness.length - 2] || light;
-  const accentAlt = sortedBySaturation[0] === accent ? sortedBySaturation[1] || mid : sortedBySaturation[0];
-  const secondary = sortedBySaturation[1] || sortedByLightness[2] || accentAlt;
-  const tertiary = sortedByLightness[2] || sortedBySaturation[2] || mid;
-
-  const paper = mixHex(light, "#FFFFFF", 0.44);
-  const surface = mixHex(nearLight, paper, 0.42);
-  const support = mixHex(secondary, paper, 0.68);
-  const surfaceStrong = mixHex(accentAlt, paper, 0.56);
-  const panel = mixHex(mid, paper, 0.52);
-  const deep = mixHex(darkest, accent, 0.28);
-  const ink = getRelativeLuminance(hexToRgb(darkest)) < 0.08
-    ? mixHex(darkest, "#0E1426", 0.22)
-    : darkest;
-  const coverBg = mixHex(deep, accent, 0.06);
-  const textMain = getBinaryTextColor(paper);
-  const textOnAccent = getBinaryTextColor(accent);
+  const accentAlt = sortedBySaturation[0] || bodyColors[0] || accent;
+  const secondary = sortedBySaturation[1] || bodyColors[1] || accentAlt;
+  const tertiary = sortedBySaturation[2] || bodyColors[2] || secondary;
 
   return {
-    paper,
-    surface,
-    support,
-    surfaceStrong,
-    panel,
-    blush: mixHex(accent, paper, 0.56),
-    mist: mixHex(tertiary, paper, 0.62),
-    deep,
-    ink,
-    inkSoft: mixHex(ink, paper, 0.42),
-    line: mixHex(ink, paper, 0.56),
+    bg: "#FFFFFF",
+    ink: "#111111",
+    muted: "#666A73",
+    line: "#E6E9F0",
     accent,
     accentAlt,
     secondary,
     tertiary,
-    accentInk: getReadableTextColor(accent),
-    coverBg,
-    coverInk: getReadableTextColor(coverBg),
-    textMain,
-    textOnAccent,
-    vivid: mixHex(accent, accentAlt, 0.32),
-    glow: mixHex(accentAlt, "#FFFFFF", 0.22),
-    shadow: mixHex(deep, "#0A0F1D", 0.38),
+    accentSoft: mixHex(accent, "#FFFFFF", 0.82),
+    accentLight: mixHex(accent, "#FFFFFF", 0.68),
+    accentAltSoft: mixHex(accentAlt, "#FFFFFF", 0.78),
   };
 }
 
 function buildSlideVars(tokens) {
   return [
-    `--slide-paper:${tokens.paper}`,
-    `--slide-surface:${tokens.surface}`,
-    `--slide-support:${tokens.support}`,
-    `--slide-surface-strong:${tokens.surfaceStrong}`,
-    `--slide-panel:${tokens.panel}`,
-    `--slide-blush:${tokens.blush}`,
-    `--slide-mist:${tokens.mist}`,
-    `--slide-deep:${tokens.deep}`,
-    `--slide-ink:${tokens.ink}`,
-    `--slide-ink-soft:${tokens.inkSoft}`,
-    `--slide-line:${tokens.line}`,
-    `--slide-accent:${tokens.accent}`,
-    `--slide-accent-alt:${tokens.accentAlt}`,
-    `--slide-secondary:${tokens.secondary}`,
-    `--slide-tertiary:${tokens.tertiary}`,
-    `--slide-text-main:${tokens.textMain}`,
-    `--slide-text-on-accent:${tokens.textOnAccent}`,
-    `--slide-accent-ink:${tokens.accentInk}`,
-    `--slide-cover-bg:${tokens.coverBg}`,
-    `--slide-cover-ink:${tokens.coverInk}`,
-    `--slide-vivid:${tokens.vivid}`,
-    `--slide-glow:${tokens.glow}`,
-    `--slide-shadow:${tokens.shadow}`,
+    `--ppt-bg:${tokens.bg}`,
+    `--ppt-ink:${tokens.ink}`,
+    `--ppt-muted:${tokens.muted}`,
+    `--ppt-line:${tokens.line}`,
+    `--ppt-accent:${tokens.accent}`,
+    `--ppt-accent-soft:${tokens.accentSoft}`,
+    `--ppt-accent-light:${tokens.accentLight}`,
+    `--ppt-accent-alt:${tokens.accentAlt}`,
+    `--ppt-accent-alt-soft:${tokens.accentAltSoft}`,
+    `--ppt-secondary:${tokens.secondary}`,
+    `--ppt-tertiary:${tokens.tertiary}`,
   ].join(";");
 }
 
