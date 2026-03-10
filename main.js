@@ -796,7 +796,7 @@ function renderGraphSlide(tokens, context) {
 function buildToneOnTonePalette(baseHsl, profile, variant) {
   const wheelBaseHue = snapToColorWheel(baseHsl.h + profile.hueShift);
   const toneHue = wheelHueFromBase(wheelBaseHue, variant.mainHueStep);
-  const coreColors = variant.lightStops.slice(0, 9).map((lightness, index) => {
+  const coreColors = variant.lightStops.slice(0, 5).map((lightness, index) => {
     const saturation = clamp(variant.satStops[index] + profile.saturationShift * 0.18 - profile.neutralBias * 6, 12, 95);
     const adjustedLightness = clamp(lightness + profile.lightShift * 0.24, 8, 95);
     return hslToHex(toneHue, saturation, adjustedLightness);
@@ -821,7 +821,7 @@ function buildToneInTonePalette(baseHsl, profile, variant) {
   const wheelBaseHue = snapToColorWheel(baseHsl.h + profile.hueShift);
   const saturation = clamp(baseHsl.s + profile.saturationShift * 0.32 - profile.neutralBias * 4, 30, 74);
   const lightness = clamp(baseHsl.l + profile.lightShift * 0.16, 30, 74);
-  const coreColors = variant.hueStepPattern.slice(0, 9).map((stepOffset) => {
+  const coreColors = variant.hueStepPattern.slice(0, 5).map((stepOffset) => {
     const hue = wheelHueFromBase(wheelBaseHue, stepOffset);
     return hslToHex(hue, saturation, lightness);
   });
