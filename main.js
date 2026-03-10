@@ -465,6 +465,7 @@ function renderPreviews() {
 
 function renderMainTemplateSlide(tokens, context) {
   const donutValue = context.primary.slides.barValues[0] || 60;
+  const shapePalette = [tokens.theme, tokens.secondary, tokens.tertiary, tokens.accentAlt, tokens.accent];
 
   return `
     <article class="slide-card slide-card--ref" style="${buildSlideVars(tokens)}">
@@ -480,11 +481,15 @@ function renderMainTemplateSlide(tokens, context) {
           <p>${context.primary.previewTone}</p>
         </div>
         <div class="ppt-ref-panel">
-          <div class="ppt-donut" style="--value:${donutValue};">
+          <div class="ppt-donut" style="--value:${donutValue};--donut-main:${shapePalette[0]};--donut-soft:${mixHex(shapePalette[0], "#FFFFFF", 0.8)};">
             <span>${donutValue}%</span>
           </div>
           <div class="ppt-micro-bars">
-            ${context.primary.slides.barValues.map((value) => `<span style="--h:${Math.max(18, value)}%;"></span>`).join("")}
+            ${context.primary.slides.barValues.map((value, index) => `
+              <span
+                style="--h:${Math.max(18, value)}%;--tone:${shapePalette[index % shapePalette.length]};"
+              ></span>
+            `).join("")}
           </div>
         </div>
       </div>
@@ -552,10 +557,15 @@ function renderBodyTemplateSlide(tokens, context) {
 }
 
 function renderTableTemplateSlide(tokens, context) {
-  const headerRow = context.primary.slides.tableHeaders.map((header) => `<th>${header}</th>`).join("");
-  const bodyRows = context.primary.slides.tableRows.map((row) => `
+  const tablePalette = [tokens.theme, tokens.secondary, tokens.tertiary, tokens.accentAlt, tokens.accent];
+  const headerRow = context.primary.slides.tableHeaders.map((header, index) => `
+    <th style="--th:${tablePalette[index % tablePalette.length]};">${header}</th>
+  `).join("");
+  const bodyRows = context.primary.slides.tableRows.map((row, rowIndex) => `
     <tr>
-      ${row.map((cell) => `<td>${cell}</td>`).join("")}
+      ${row.map((cell, cellIndex) => `
+        <td style="--cell:${tablePalette[(rowIndex + cellIndex) % tablePalette.length]};">${cell}</td>
+      `).join("")}
     </tr>
   `).join("");
 
@@ -569,7 +579,7 @@ function renderTableTemplateSlide(tokens, context) {
       <div class="ppt-ref-layout">
         <div class="ppt-ref-copy">
           <p class="ppt-ref-kicker">${context.primary.slides.tableHeaders[0]} 기준 요약</p>
-          <p>표 구조는 화이트 기반으로 유지하고 비강조 색상만 사용합니다.</p>
+          <p>표와 구분선에 추천 팔레트 컬러를 나누어 적용했습니다.</p>
         </div>
         <div class="ppt-ref-panel">
           <table class="ppt-table">
@@ -585,11 +595,14 @@ function renderTableTemplateSlide(tokens, context) {
 function renderGraphTemplateSlide(tokens, context) {
   const graphValues = context.primary.slides.graphValues;
   const linePoints = createPolylinePoints(graphValues, 360, 140, 14);
+  const comparePoints = createPolylinePoints(context.primary.slides.barValues, 360, 140, 14);
+  const graphPalette = [tokens.theme, tokens.secondary, tokens.tertiary, tokens.accentAlt, tokens.accent];
   const linePath = linePoints.map((point) => `${point.x},${point.y}`).join(" ");
+  const comparePath = comparePoints.map((point) => `${point.x},${point.y}`).join(" ");
   const labels = context.primary.slides.graphLabels.map((label) => `<span>${label}</span>`).join("");
   const bars = context.primary.slides.barValues.map((value, index) => `
     <div class="ppt-bar-col">
-      <span style="--h:${Math.max(12, value)}%;"></span>
+      <span style="--h:${Math.max(12, value)}%;--bar:${graphPalette[index % graphPalette.length]};"></span>
       <strong>${context.primary.slides.barLabels[index] || `S${index + 1}`}</strong>
     </div>
   `).join("");
@@ -605,7 +618,10 @@ function renderGraphTemplateSlide(tokens, context) {
         <div class="ppt-ref-panel">
           <svg class="ppt-line-chart" viewBox="0 0 360 140" aria-hidden="true" focusable="false">
             <polyline points="${linePath}" fill="none" stroke="var(--ppt-accent)" stroke-width="3"></polyline>
-            ${linePoints.map((point) => `<circle cx="${point.x}" cy="${point.y}" r="3.5" fill="var(--ppt-accent)"></circle>`).join("")}
+            <polyline points="${comparePath}" fill="none" stroke="${tokens.accentAlt}" stroke-width="2.5" stroke-dasharray="4 4"></polyline>
+            ${linePoints.map((point, index) => `
+              <circle cx="${point.x}" cy="${point.y}" r="3.5" fill="${graphPalette[index % graphPalette.length]}"></circle>
+            `).join("")}
           </svg>
           <div class="ppt-graph-labels">${labels}</div>
         </div>
@@ -618,10 +634,11 @@ function renderGraphTemplateSlide(tokens, context) {
 }
 
 function renderIconTemplateSlide(tokens, context) {
+  const iconPalette = [tokens.theme, tokens.secondary, tokens.tertiary, tokens.accentAlt, tokens.accent];
   const iconItems = context.primary.slides.agenda.map((item, index) => ({
     label: item,
     value: context.primary.slides.barValues[index] ?? context.primary.slides.graphValues[index] ?? 50,
-    color: [tokens.secondary, tokens.tertiary, tokens.accentAlt, tokens.secondary][index % 4],
+    color: iconPalette[index % iconPalette.length],
   }));
 
   const iconRows = iconItems.map((item) => `

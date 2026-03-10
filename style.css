@@ -1758,7 +1758,7 @@ img {
   color: #111;
   background:
     radial-gradient(circle at center, #fff 56%, transparent 57%),
-    conic-gradient(var(--ppt-theme, #5d6fbd) calc(var(--value) * 1%), var(--ppt-theme-soft, #dce2f6) 0);
+    conic-gradient(var(--donut-main, var(--ppt-theme, #5d6fbd)) calc(var(--value) * 1%), var(--donut-soft, var(--ppt-theme-soft, #dce2f6)) 0);
 }
 
 .ppt-micro-bars {
@@ -1773,7 +1773,7 @@ img {
 .ppt-micro-bars span {
   display: block;
   height: var(--h);
-  background: linear-gradient(180deg, var(--ppt-theme-light, #aeb8e2), var(--ppt-theme, #5d6fbd));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--tone, var(--ppt-theme, #5d6fbd)) 34%, #ffffff), var(--tone, var(--ppt-theme, #5d6fbd)));
 }
 
 .ppt-track {
@@ -1847,15 +1847,16 @@ img {
 }
 
 .ppt-table thead {
-  background: color-mix(in srgb, var(--ppt-theme, #5d6fbd) 78%, #ffffff);
+  background: #ffffff;
 }
 
 .ppt-table th {
-  color: #fff;
+  color: #ffffff;
   font-weight: 700;
   text-align: left;
   padding: 0.24rem 0.3rem;
-  border: 1px solid color-mix(in srgb, var(--ppt-theme, #5d6fbd) 54%, #ffffff);
+  background: var(--th, var(--ppt-theme, #5d6fbd));
+  border: 1px solid color-mix(in srgb, var(--th, var(--ppt-theme, #5d6fbd)) 54%, #ffffff);
   font-size: var(--ppt-fs-caption);
 }
 
@@ -1864,6 +1865,12 @@ img {
   padding: 0.23rem 0.3rem;
   border: 1px solid var(--ppt-line, #e6e9f0);
   font-size: var(--ppt-fs-caption);
+  background: color-mix(in srgb, var(--cell, #cdd5ee) 8%, #ffffff);
+}
+
+.ppt-table td:first-child {
+  border-left: 3px solid var(--cell, var(--ppt-theme, #5d6fbd));
+  font-weight: 700;
 }
 
 .ppt-line-chart {
@@ -1897,7 +1904,7 @@ img {
 .ppt-bar-col span {
   display: block;
   height: var(--h);
-  background: linear-gradient(180deg, var(--ppt-theme-light, #aeb8e2), var(--ppt-theme, #5d6fbd));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--bar, var(--ppt-theme, #5d6fbd)) 34%, #ffffff), var(--bar, var(--ppt-theme, #5d6fbd)));
 }
 
 .ppt-bar-col strong {
