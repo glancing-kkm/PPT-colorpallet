@@ -42,23 +42,25 @@
           <div class="base-grid">
             <article class="base-card">
               <label class="field-label" for="hexInput">HEX 코드</label>
-              <input
-                class="text-input text-input--large"
-                id="hexInput"
-                name="hexInput"
-                maxlength="7"
-                value="#1F4C95"
-                autocomplete="off"
-                spellcheck="false"
-              >
-              <label class="field-label" for="hexColorPicker">색상표 선택</label>
-              <input
-                class="color-input"
-                id="hexColorPicker"
-                name="hexColorPicker"
-                type="color"
-                value="#1F4C95"
-              >
+              <div class="base-card__row">
+                <input
+                  class="text-input text-input--large"
+                  id="hexInput"
+                  name="hexInput"
+                  maxlength="7"
+                  value="#1F4C95"
+                  autocomplete="off"
+                  spellcheck="false"
+                >
+                <input
+                  class="color-input color-input--inline"
+                  id="hexColorPicker"
+                  name="hexColorPicker"
+                  type="color"
+                  value="#1F4C95"
+                  aria-label="색상표 선택"
+                >
+              </div>
               <p class="field-note">예시: #1F4C95</p>
             </article>
 
@@ -83,18 +85,20 @@
 
             <article class="base-card base-card--upload">
               <label class="field-label" for="imageInput">이미지로 색상 추출</label>
-              <label class="upload-zone" for="imageInput">
-                <input id="imageInput" type="file" accept="image/*" hidden>
-                <span class="upload-zone__title">이미지 첨부</span>
-                <span class="upload-zone__hint">회사로고, 제품 사진, 브랜드 이미지 등</span>
-              </label>
-              <div class="upload-result">
-                <img id="imagePreview" alt="업로드한 이미지 미리보기" hidden>
-                <div class="upload-result__info">
-                  <span class="swatch" id="extractedSwatch"></span>
-                  <div>
-                    <p>최근 추출색</p>
-                    <strong id="extractedColorCode">#1F4C95</strong>
+              <div class="base-card__row base-card__row--upload">
+                <label class="upload-zone upload-zone--inline" for="imageInput">
+                  <input id="imageInput" type="file" accept="image/*" hidden>
+                  <span class="upload-zone__title">이미지 첨부</span>
+                  <span class="upload-zone__hint">회사로고/제품/브랜드</span>
+                </label>
+                <div class="upload-result">
+                  <img id="imagePreview" alt="업로드한 이미지 미리보기" hidden>
+                  <div class="upload-result__info">
+                    <span class="swatch" id="extractedSwatch"></span>
+                    <div>
+                      <p>최근 추출색</p>
+                      <strong id="extractedColorCode">#1F4C95</strong>
+                    </div>
                   </div>
                 </div>
               </div>
