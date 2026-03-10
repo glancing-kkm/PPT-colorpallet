@@ -277,9 +277,6 @@ function bindRefs() {
   refs.imageFeedback = document.getElementById("imageFeedback");
   refs.extractedSwatch = document.getElementById("extractedSwatch");
   refs.extractedColorCode = document.getElementById("extractedColorCode");
-  refs.baseSwatch = document.getElementById("baseSwatch");
-  refs.baseHexLabel = document.getElementById("baseHexLabel");
-  refs.baseRgbLabel = document.getElementById("baseRgbLabel");
   refs.heroColorDot = document.getElementById("heroColorDot");
   refs.heroColorCode = document.getElementById("heroColorCode");
   refs.heroPurposeSummary = document.getElementById("heroPurposeSummary");
@@ -411,9 +408,6 @@ function syncBaseInputs(rgb) {
   refs.rInput.value = rgb.r;
   refs.gInput.value = rgb.g;
   refs.bInput.value = rgb.b;
-  refs.baseSwatch.style.background = hex;
-  refs.baseHexLabel.textContent = hex;
-  refs.baseRgbLabel.textContent = `RGB ${rgb.r}, ${rgb.g}, ${rgb.b}`;
   refs.heroColorDot.style.background = hex;
   refs.heroColorCode.textContent = hex;
   refs.extractedSwatch.style.background = state.lastExtractedHex;
