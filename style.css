@@ -124,12 +124,17 @@ img {
 }
 
 .hero__copy {
+  grid-column: 1 / -1;
+  min-height: 148px;
   padding-top: 1.45rem;
+  display: grid;
+  place-items: center;
+  text-align: center;
 }
 
 .hero__copy h1 {
   margin: 0;
-  max-width: 12ch;
+  max-width: none;
   font-family: "Space Grotesk", "Pretendard", sans-serif;
   font-size: clamp(2rem, 4vw, 4rem);
   line-height: 0.95;
@@ -353,6 +358,21 @@ img {
 .text-input.is-invalid {
   border-color: rgba(255, 141, 103, 0.8);
   box-shadow: 0 0 0 5px rgba(255, 141, 103, 0.14);
+}
+
+.color-input {
+  width: 100%;
+  min-height: 58px;
+  padding: 0.3rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 18px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.color-input:focus {
+  border-color: rgba(45, 91, 255, 0.55);
+  box-shadow: 0 0 0 5px rgba(45, 91, 255, 0.1);
 }
 
 .rgb-grid {
@@ -669,7 +689,7 @@ img {
 }
 
 .color-strip-wrap {
-  overflow-x: auto;
+  overflow: hidden;
   border-radius: 18px;
   border: 1px solid var(--line);
   background: #fff;
@@ -677,13 +697,13 @@ img {
 
 .color-strip {
   display: grid;
-  grid-template-columns: repeat(10, minmax(82px, 1fr));
-  min-width: 820px;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  min-width: 0;
 }
 
 .color-cell {
-  min-height: 90px;
-  padding: 0.55rem 0.35rem;
+  min-height: 84px;
+  padding: 0.45rem 0.25rem;
   display: flex;
   align-items: end;
   justify-content: center;
@@ -776,12 +796,13 @@ img {
   aspect-ratio: 16 / 9;
   padding: 1.05rem;
   background:
-    radial-gradient(circle at 88% 14%, color-mix(in srgb, var(--slide-accent) 14%, transparent), transparent 22%),
-    radial-gradient(circle at 14% 100%, color-mix(in srgb, var(--slide-secondary) 12%, transparent), transparent 28%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.94), var(--slide-paper));
-  border: 1px solid color-mix(in srgb, var(--slide-accent) 12%, white);
+    radial-gradient(circle at 88% 14%, color-mix(in srgb, var(--slide-vivid) 34%, transparent), transparent 26%),
+    radial-gradient(circle at 14% 100%, color-mix(in srgb, var(--slide-secondary) 28%, transparent), transparent 34%),
+    linear-gradient(170deg, color-mix(in srgb, var(--slide-paper) 66%, white), var(--slide-paper));
+  border: 1px solid color-mix(in srgb, var(--slide-accent) 28%, white);
   box-shadow:
-    0 18px 36px rgba(34, 20, 23, 0.08),
+    0 18px 36px color-mix(in srgb, var(--slide-shadow) 36%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--slide-glow) 20%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.78);
   color: var(--slide-ink);
 }
@@ -792,19 +813,19 @@ img {
   left: 0;
   right: 0;
   top: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--slide-accent), var(--slide-accent-alt));
+  height: 6px;
+  background: linear-gradient(90deg, var(--slide-accent), var(--slide-vivid), var(--slide-accent-alt));
 }
 
 .slide-card::after {
   content: "";
   position: absolute;
-  right: -12%;
+  right: -10%;
   bottom: -18%;
-  width: 200px;
-  height: 200px;
+  width: 230px;
+  height: 230px;
   border-radius: 50%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--slide-accent-alt) 18%, transparent), transparent 66%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--slide-vivid) 34%, transparent), transparent 68%);
   pointer-events: none;
 }
 
@@ -834,9 +855,9 @@ img {
 .slide-card--cover {
   align-content: space-between;
   background:
-    radial-gradient(circle at 86% 18%, color-mix(in srgb, var(--slide-accent) 32%, transparent), transparent 22%),
-    radial-gradient(circle at 18% 82%, color-mix(in srgb, var(--slide-secondary) 26%, transparent), transparent 28%),
-    linear-gradient(135deg, var(--slide-cover-bg), color-mix(in srgb, var(--slide-accent) 28%, var(--slide-deep)));
+    radial-gradient(circle at 86% 18%, color-mix(in srgb, var(--slide-accent) 56%, transparent), transparent 26%),
+    radial-gradient(circle at 18% 82%, color-mix(in srgb, var(--slide-secondary) 42%, transparent), transparent 34%),
+    linear-gradient(135deg, var(--slide-cover-bg), color-mix(in srgb, var(--slide-accent) 52%, var(--slide-deep)));
   color: var(--slide-cover-ink);
 }
 

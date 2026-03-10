@@ -268,6 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function bindRefs() {
   refs.hexInput = document.getElementById("hexInput");
+  refs.hexColorPicker = document.getElementById("hexColorPicker");
   refs.rInput = document.getElementById("rInput");
   refs.gInput = document.getElementById("gInput");
   refs.bInput = document.getElementById("bInput");
@@ -299,6 +300,7 @@ function bindEvents() {
     refs.hexInput.value = rgbToHex(state.baseColor);
     refs.hexInput.classList.remove("is-invalid");
   });
+  refs.hexColorPicker.addEventListener("input", handleHexInput);
 
   [refs.rInput, refs.gInput, refs.bInput].forEach((input) => {
     input.addEventListener("input", handleRgbInput);
@@ -405,6 +407,7 @@ function setBaseColor(rgb) {
 function syncBaseInputs(rgb) {
   const hex = rgbToHex(rgb);
   refs.hexInput.value = hex;
+  refs.hexColorPicker.value = hex;
   refs.rInput.value = rgb.r;
   refs.gInput.value = rgb.g;
   refs.bInput.value = rgb.b;
@@ -923,15 +926,16 @@ function derivePreviewTokens(palette) {
   const secondary = sortedBySaturation[1] || sortedByLightness[2] || accentAlt;
   const tertiary = sortedByLightness[2] || sortedBySaturation[2] || mid;
 
-  const paper = mixHex(light, "#FFFFFF", 0.84);
-  const surface = mixHex(nearLight, "#FFFFFF", 0.74);
-  const support = mixHex(secondary, paper, 0.86);
-  const surfaceStrong = mixHex(accentAlt, paper, 0.82);
-  const panel = mixHex(mid, paper, 0.76);
-  const deep = mixHex(darkest, accent, 0.14);
+  const paper = mixHex(light, "#FFFFFF", 0.44);
+  const surface = mixHex(nearLight, paper, 0.42);
+  const support = mixHex(secondary, paper, 0.68);
+  const surfaceStrong = mixHex(accentAlt, paper, 0.56);
+  const panel = mixHex(mid, paper, 0.52);
+  const deep = mixHex(darkest, accent, 0.28);
   const ink = getRelativeLuminance(hexToRgb(darkest)) < 0.08
-    ? mixHex(darkest, "#18202F", 0.34)
+    ? mixHex(darkest, "#0E1426", 0.22)
     : darkest;
+  const coverBg = mixHex(deep, accent, 0.06);
 
   return {
     paper,
@@ -939,19 +943,22 @@ function derivePreviewTokens(palette) {
     support,
     surfaceStrong,
     panel,
-    blush: mixHex(accent, paper, 0.84),
-    mist: mixHex(tertiary, paper, 0.82),
+    blush: mixHex(accent, paper, 0.56),
+    mist: mixHex(tertiary, paper, 0.62),
     deep,
     ink,
-    inkSoft: mixHex(ink, paper, 0.48),
-    line: mixHex(ink, paper, 0.74),
+    inkSoft: mixHex(ink, paper, 0.42),
+    line: mixHex(ink, paper, 0.56),
     accent,
     accentAlt,
     secondary,
     tertiary,
     accentInk: getReadableTextColor(accent),
-    coverBg: mixHex(deep, accent, 0.18),
-    coverInk: getReadableTextColor(mixHex(deep, accent, 0.18)),
+    coverBg,
+    coverInk: getReadableTextColor(coverBg),
+    vivid: mixHex(accent, accentAlt, 0.32),
+    glow: mixHex(accentAlt, "#FFFFFF", 0.22),
+    shadow: mixHex(deep, "#0A0F1D", 0.38),
   };
 }
 
@@ -975,6 +982,9 @@ function buildSlideVars(tokens) {
     `--slide-accent-ink:${tokens.accentInk}`,
     `--slide-cover-bg:${tokens.coverBg}`,
     `--slide-cover-ink:${tokens.coverInk}`,
+    `--slide-vivid:${tokens.vivid}`,
+    `--slide-glow:${tokens.glow}`,
+    `--slide-shadow:${tokens.shadow}`,
   ].join(";");
 }
 
