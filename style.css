@@ -61,7 +61,7 @@ img {
 }
 
 .page-shell {
-  width: min(1480px, calc(100% - 2rem));
+  width: min(1200px, calc(100% - 2rem));
   margin: 0 auto;
   padding: 1.2rem 0 2.6rem;
 }
