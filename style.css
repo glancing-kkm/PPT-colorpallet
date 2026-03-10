@@ -1598,6 +1598,32 @@ img {
 }
 
 /* PPT preview: flat style (no gradients), black/white text, palette-driven accents */
+.flat-no-gradient *,
+.flat-no-gradient *::before,
+.flat-no-gradient *::after {
+  background-image: none !important;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+}
+
+.flat-no-gradient body,
+body.flat-no-gradient {
+  background-color: var(--bg) !important;
+}
+
+/* Default: remove gradient effects across the website */
+*,
+*::before,
+*::after {
+  background-image: none !important;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+}
+
+body {
+  background-color: var(--bg) !important;
+}
+
 .preview-summary {
   background: #fff;
   border: 1px solid var(--line);
