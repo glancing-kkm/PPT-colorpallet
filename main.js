@@ -269,6 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function bindRefs() {
   refs.hexInput = document.getElementById("hexInput");
   refs.hexColorPicker = document.getElementById("hexColorPicker");
+  refs.hexColorPickerLabel = document.getElementById("hexColorPickerLabel");
   refs.rInput = document.getElementById("rInput");
   refs.gInput = document.getElementById("gInput");
   refs.bInput = document.getElementById("bInput");
@@ -405,6 +406,7 @@ function syncBaseInputs(rgb) {
   const hex = rgbToHex(rgb);
   refs.hexInput.value = hex;
   refs.hexColorPicker.value = hex;
+  refs.hexColorPickerLabel.textContent = hex;
   refs.rInput.value = rgb.r;
   refs.gInput.value = rgb.g;
   refs.bInput.value = rgb.b;

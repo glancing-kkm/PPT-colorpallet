@@ -295,6 +295,7 @@ img {
 }
 
 .base-card {
+  --base-card-text-size: 0.88rem;
   display: grid;
   gap: 0.55rem;
   padding: 0.9rem;
@@ -323,9 +324,9 @@ img {
   align-items: center;
   gap: 0.45rem;
   font-family: "Space Grotesk", "Pretendard", sans-serif;
-  font-size: var(--text-label);
+  font-size: var(--base-card-text-size, var(--text-label));
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
@@ -344,7 +345,7 @@ img {
   min-height: 46px;
   padding: 0.65rem 0.8rem;
   font-family: "Space Grotesk", "Pretendard", sans-serif;
-  font-size: 0.95rem;
+  font-size: var(--base-card-text-size, 0.95rem);
   font-weight: 700;
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -352,7 +353,7 @@ img {
 
 .number-input {
   padding: 0.5rem 0.55rem;
-  font-size: 0.88rem;
+  font-size: var(--base-card-text-size, 0.88rem);
   font-weight: 600;
 }
 
@@ -384,6 +385,16 @@ img {
   padding: 0.12rem;
 }
 
+.picker-hex {
+  min-width: 7.2ch;
+  font-family: "Space Grotesk", "Pretendard", sans-serif;
+  font-size: var(--base-card-text-size, 0.88rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
 .color-input:focus {
   border-color: rgba(45, 91, 255, 0.55);
   box-shadow: 0 0 0 5px rgba(45, 91, 255, 0.1);
@@ -406,7 +417,7 @@ img {
 
 .rgb-field span {
   font-family: "Space Grotesk", "Pretendard", sans-serif;
-  font-size: 0.7rem;
+  font-size: var(--base-card-text-size, 0.88rem);
   font-weight: 700;
   color: var(--ink-soft);
   width: 0.9rem;
@@ -455,7 +466,7 @@ img {
 
 .upload-zone__title {
   font-weight: 700;
-  font-size: var(--text-body);
+  font-size: var(--base-card-text-size, var(--text-body));
 }
 
 .upload-result {
@@ -486,7 +497,7 @@ img {
 
 .upload-result__info p {
   margin: 0 0 0.15rem;
-  font-size: var(--text-body);
+  font-size: var(--base-card-text-size, var(--text-body));
   color: var(--ink-soft);
 }
 
@@ -494,10 +505,16 @@ img {
   display: block;
   min-width: 0;
   font-family: "Space Grotesk", "Pretendard", sans-serif;
-  font-size: var(--text-body);
+  font-size: var(--base-card-text-size, var(--text-body));
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.base-card .field-note,
+.base-card .field-note--status,
+.base-card .upload-zone__hint {
+  font-size: var(--base-card-text-size);
 }
 
 .swatch,
