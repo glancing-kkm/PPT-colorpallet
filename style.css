@@ -1787,3 +1787,110 @@ img {
     height: 5.8rem;
   }
 }
+
+/* Coolors-inspired flat redesign (no gradients) */
+:root {
+  --bg: #f3f5ff;
+  --bg-soft: #eef2ff;
+  --surface: #ffffff;
+  --surface-soft: #eef4ff;
+  --surface-warm: #fff3e8;
+  --ink: #1d2238;
+  --ink-soft: #5f6580;
+  --line: #dbe1f5;
+  --line-strong: #c8d0ea;
+  --blue: #3a5bff;
+  --lime: #c8f05a;
+  --peach: #ff7f50;
+  --mint: #45c4b0;
+  --yellow: #ffd166;
+  --apricot-neon: #ffb703;
+  --apricot-core: #ff9f1c;
+  --apricot-hot: #fb8500;
+  --apricot-glow: rgba(251, 133, 0, 0.28);
+  --shadow: 0 10px 24px rgba(38, 55, 94, 0.1);
+  --shadow-soft: 0 6px 16px rgba(38, 55, 94, 0.08);
+}
+
+body {
+  background: var(--bg);
+}
+
+.hero,
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  backdrop-filter: none;
+}
+
+.hero::before {
+  height: 10px;
+  background: var(--blue);
+}
+
+.hero__eyebrow {
+  background: color-mix(in srgb, var(--blue) 10%, #fff);
+  color: var(--blue);
+}
+
+.status-chip {
+  border-color: var(--line-strong);
+}
+
+.status-chip__dot {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--blue) 24%, #fff);
+}
+
+.panel__index {
+  background: var(--apricot-core);
+  text-shadow: none;
+}
+
+.base-card,
+.palette-card,
+.purpose-card {
+  border-color: var(--line);
+  box-shadow: var(--shadow-soft);
+}
+
+.base-card--upload {
+  background: var(--surface-warm);
+}
+
+.base-card--preview {
+  background: var(--surface-soft);
+}
+
+.upload-zone {
+  background: color-mix(in srgb, var(--apricot-neon) 15%, #fff);
+  border-color: color-mix(in srgb, var(--apricot-core) 24%, var(--line-strong));
+}
+
+.base-preview {
+  background: color-mix(in srgb, var(--blue) 12%, #fff);
+}
+
+.purpose-card:has(input:checked) {
+  background: color-mix(in srgb, var(--yellow) 20%, #fff);
+  border-color: color-mix(in srgb, var(--apricot-core) 36%, var(--line));
+}
+
+.slide-card::before {
+  height: 5px;
+  background: var(--slide-accent);
+}
+
+.copy-button {
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 0 8px 0 color-mix(in srgb, var(--lime) 72%, #fff);
+}
+
+.copy-button:hover {
+  box-shadow: 0 10px 0 color-mix(in srgb, var(--lime) 72%, #fff);
+}
+
+.copy-button:active {
+  box-shadow: 0 6px 0 color-mix(in srgb, var(--lime) 72%, #fff);
+}
