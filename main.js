@@ -169,69 +169,46 @@ const PURPOSES = [
 const COLOR_WHEEL_STEPS = 12;
 const COLOR_WHEEL_UNIT = 360 / COLOR_WHEEL_STEPS;
 
-const TONE_ON_TONE_VARIANTS = [
+const HARMONY_VARIANTS = [
   {
-    id: "tone-on-analogous",
-    label: "톤온톤 01",
-    short: "유사색 조합",
-    groupLabel: "Tone on Tone",
-    note: "같은 색상 · 채도/명도 변화",
-    mainHueStep: 1,
-    accentHueStep: 5,
-    satStops: [86, 80, 74, 66, 58, 50, 42, 34, 26],
-    lightStops: [20, 28, 36, 44, 52, 60, 68, 78, 88],
+    id: "base-monochromatic",
+    label: "기준색 01",
+    short: "단색 배색",
+    groupLabel: "기준색 중심",
+    note: "기준색 단일 Hue에서 명도/채도 변화",
+    family: "base-led",
+    mode: "monochromatic",
+    accentHueStep: 6,
   },
   {
-    id: "tone-on-complementary",
-    label: "톤온톤 02",
-    short: "보색 조합",
-    groupLabel: "Tone on Tone",
-    note: "같은 색상 · 채도/명도 변화",
-    mainHueStep: 6,
-    accentHueStep: 0,
-    satStops: [84, 78, 72, 64, 56, 48, 40, 32, 24],
-    lightStops: [18, 26, 34, 42, 50, 58, 66, 76, 86],
+    id: "base-analogous",
+    label: "기준색 02",
+    short: "유사색 배색",
+    groupLabel: "기준색 중심",
+    note: "기준색 인접 Hue(색상환 기준) 활용",
+    family: "base-led",
+    mode: "analogous",
+    accentHueStep: 6,
   },
   {
-    id: "tone-on-mixed",
-    label: "톤온톤 03",
-    short: "유사+보색 혼합",
-    groupLabel: "Tone on Tone",
-    note: "같은 색상 · 채도/명도 변화",
-    mainHueStep: 4,
-    accentHueStep: 10,
-    satStops: [88, 82, 74, 66, 58, 50, 42, 36, 28],
-    lightStops: [22, 30, 38, 46, 54, 62, 70, 80, 90],
-  },
-];
-
-const TONE_IN_TONE_VARIANTS = [
-  {
-    id: "tone-in-analogous",
-    label: "톤인톤 01",
-    short: "유사색 조합",
-    groupLabel: "Tone in Tone",
-    note: "색상 변화 · 채도/명도 동일",
-    hueStepPattern: [-2, -1, -1, 0, 0, 1, 1, 2, 2],
-    accentHueStep: 4,
+    id: "contrast-complementary",
+    label: "기준색 03",
+    short: "보색 배색",
+    groupLabel: "대비 중심",
+    note: "기준색과 정반대 Hue를 함께 사용",
+    family: "contrast-led",
+    mode: "complementary",
+    accentHueStep: 1,
   },
   {
-    id: "tone-in-complementary",
-    label: "톤인톤 02",
-    short: "보색 조합",
-    groupLabel: "Tone in Tone",
-    note: "색상 변화 · 채도/명도 동일",
-    hueStepPattern: [-1, 0, 1, 5, 6, 7, 5, 6, 7],
-    accentHueStep: 3,
-  },
-  {
-    id: "tone-in-mixed",
-    label: "톤인톤 03",
-    short: "유사+보색 혼합",
-    groupLabel: "Tone in Tone",
-    note: "색상 변화 · 채도/명도 동일",
-    hueStepPattern: [-2, -1, 0, 1, 5, 6, 7, 2, 8],
-    accentHueStep: 9,
+    id: "contrast-split-complementary",
+    label: "기준색 04",
+    short: "분할보색 배색",
+    groupLabel: "대비 중심",
+    note: "보색 양옆 Hue로 대비를 완화",
+    family: "contrast-led",
+    mode: "split-complementary",
+    accentHueStep: 11,
   },
 ];
 
@@ -266,8 +243,8 @@ function bindRefs() {
   refs.heroColorDot = document.getElementById("heroColorDot");
   refs.heroColorCode = document.getElementById("heroColorCode");
   refs.heroPurposeSummary = document.getElementById("heroPurposeSummary");
-  refs.toneOnToneList = document.getElementById("toneOnToneList");
-  refs.toneInToneList = document.getElementById("toneInToneList");
+  refs.baseLedList = document.getElementById("baseLedList");
+  refs.contrastLedList = document.getElementById("contrastLedList");
   refs.paletteSection = document.getElementById("paletteSection");
   refs.slidePreviewGrid = document.getElementById("slidePreviewGrid");
   refs.activePaletteName = document.getElementById("activePaletteName");
@@ -405,10 +382,7 @@ function regenerateExperience() {
   const selectedPurposes = getSelectedPurposes();
   const baseHsl = rgbToHsl(state.baseColor);
   const profile = buildPurposeProfile(selectedPurposes);
-  const toneOnTone = TONE_ON_TONE_VARIANTS.map((variant) => buildToneOnTonePalette(baseHsl, profile, variant));
-  const toneInTone = TONE_IN_TONE_VARIANTS.map((variant) => buildToneInTonePalette(baseHsl, profile, variant));
-
-  state.palettes = [...toneOnTone, ...toneInTone];
+  state.palettes = HARMONY_VARIANTS.map((variant) => buildHarmonyPalette(baseHsl, profile, variant));
   if (!state.palettes.some((palette) => palette.id === state.activePaletteId)) {
     state.activePaletteId = state.palettes[0].id;
   }
@@ -422,11 +396,11 @@ function regenerateExperience() {
 }
 
 function renderPalettes() {
-  const toneOnTone = state.palettes.filter((palette) => palette.family === "tone-on-tone");
-  const toneInTone = state.palettes.filter((palette) => palette.family === "tone-in-tone");
+  const baseLed = state.palettes.filter((palette) => palette.family === "base-led");
+  const contrastLed = state.palettes.filter((palette) => palette.family === "contrast-led");
 
-  refs.toneOnToneList.innerHTML = toneOnTone.map(renderPaletteCard).join("");
-  refs.toneInToneList.innerHTML = toneInTone.map(renderPaletteCard).join("");
+  refs.baseLedList.innerHTML = baseLed.map(renderPaletteCard).join("");
+  refs.contrastLedList.innerHTML = contrastLed.map(renderPaletteCard).join("");
 }
 
 function renderPaletteCard(palette) {
@@ -793,15 +767,12 @@ function renderGraphSlide(tokens, context) {
   `;
 }
 
-function buildToneOnTonePalette(baseHsl, profile, variant) {
+function buildHarmonyPalette(baseHsl, profile, variant) {
   const wheelBaseHue = snapToColorWheel(baseHsl.h + profile.hueShift);
-  const toneHue = wheelHueFromBase(wheelBaseHue, variant.mainHueStep);
-  const coreColors = variant.lightStops.slice(0, 5).map((lightness, index) => {
-    const saturation = clamp(variant.satStops[index] + profile.saturationShift * 0.18 - profile.neutralBias * 6, 12, 95);
-    const adjustedLightness = clamp(lightness + profile.lightShift * 0.24, 8, 95);
-    return hslToHex(toneHue, saturation, adjustedLightness);
-  });
-  const accentHex = buildAccentColor(baseHsl, profile, variant, "tone-on-tone");
+  const saturation = clamp(baseHsl.s + profile.saturationShift * 0.3 - profile.neutralBias * 4, 24, 82);
+  const lightness = clamp(baseHsl.l + profile.lightShift * 0.16, 20, 80);
+  const coreColors = buildCoreColors(wheelBaseHue, saturation, lightness, variant.mode);
+  const accentHex = buildAccentColor({ ...baseHsl, l: lightness }, profile, variant);
   const swatches = buildPaletteSwatches(coreColors, accentHex);
 
   return {
@@ -810,35 +781,59 @@ function buildToneOnTonePalette(baseHsl, profile, variant) {
     short: variant.short,
     note: variant.note,
     groupLabel: variant.groupLabel,
-    family: "tone-on-tone",
+    family: variant.family,
     colors: swatches.map((swatch) => swatch.hex),
     swatches,
     accentHex,
   };
 }
 
-function buildToneInTonePalette(baseHsl, profile, variant) {
-  const wheelBaseHue = snapToColorWheel(baseHsl.h + profile.hueShift);
-  const saturation = clamp(baseHsl.s + profile.saturationShift * 0.32 - profile.neutralBias * 4, 30, 74);
-  const lightness = clamp(baseHsl.l + profile.lightShift * 0.16, 30, 74);
-  const coreColors = variant.hueStepPattern.slice(0, 5).map((stepOffset) => {
-    const hue = wheelHueFromBase(wheelBaseHue, stepOffset);
-    return hslToHex(hue, saturation, lightness);
-  });
-  const accentHex = buildAccentColor({ ...baseHsl, l: lightness }, profile, variant, "tone-in-tone");
-  const swatches = buildPaletteSwatches(coreColors, accentHex);
+function buildCoreColors(baseHue, saturation, lightness, mode) {
+  if (mode === "monochromatic") {
+    const monoLightOffsets = [-24, -12, 0, 10, 22];
+    const monoSatOffsets = [10, 6, 0, -6, -12];
+    return monoLightOffsets.map((lightOffset, index) => {
+      const sat = clamp(saturation + monoSatOffsets[index], 18, 92);
+      const lit = clamp(lightness + lightOffset, 10, 94);
+      return hslToHex(baseHue, sat, lit);
+    });
+  }
 
-  return {
-    id: variant.id,
-    label: variant.label,
-    short: variant.short,
-    note: variant.note,
-    groupLabel: variant.groupLabel,
-    family: "tone-in-tone",
-    colors: swatches.map((swatch) => swatch.hex),
-    swatches,
-    accentHex,
-  };
+  if (mode === "analogous") {
+    const offsets = [-2, -1, 0, 1, 2];
+    return offsets.map((stepOffset, index) => {
+      const hue = wheelHueFromBase(baseHue, stepOffset);
+      const sat = clamp(saturation + (index === 2 ? 6 : 0), 22, 92);
+      const lit = clamp(lightness + (index - 2) * 7, 12, 90);
+      return hslToHex(hue, sat, lit);
+    });
+  }
+
+  if (mode === "complementary") {
+    const hueSteps = [0, 0, 6, 6, 0];
+    const satOffsets = [8, 0, 10, -4, -10];
+    const lightOffsets = [-16, 4, -8, 10, 24];
+    return hueSteps.map((stepOffset, index) => {
+      const hue = wheelHueFromBase(baseHue, stepOffset);
+      return hslToHex(
+        hue,
+        clamp(saturation + satOffsets[index], 20, 94),
+        clamp(lightness + lightOffsets[index], 10, 92),
+      );
+    });
+  }
+
+  const splitHueSteps = [0, 0, 5, 7, 0];
+  const splitSatOffsets = [6, 0, 8, 8, -10];
+  const splitLightOffsets = [-14, 4, -6, 10, 24];
+  return splitHueSteps.map((stepOffset, index) => {
+    const hue = wheelHueFromBase(baseHue, stepOffset);
+    return hslToHex(
+      hue,
+      clamp(saturation + splitSatOffsets[index], 20, 94),
+      clamp(lightness + splitLightOffsets[index], 10, 92),
+    );
+  });
 }
 
 function buildPurposeProfile(selectedPurposes) {
@@ -1016,13 +1011,11 @@ function buildPaletteSwatches(coreColors, accentHex) {
   ];
 }
 
-function buildAccentColor(baseHsl, profile, variant, family) {
+function buildAccentColor(baseHsl, profile, variant) {
   const wheelBaseHue = snapToColorWheel(baseHsl.h + profile.hueShift);
   const hue = wheelHueFromBase(wheelBaseHue, variant.accentHueStep ?? 6);
   const saturation = clamp(88 + profile.contrast * 0.14 - profile.neutralBias * 8, 78, 98);
-  const lightness = family === "tone-in-tone"
-    ? clamp(baseHsl.l + (baseHsl.l > 56 ? -8 : 8), 34, 66)
-    : clamp(baseHsl.l + (baseHsl.l > 56 ? -10 : 10), 32, 68);
+  const lightness = clamp(baseHsl.l + (baseHsl.l > 56 ? -8 : 10), 32, 68);
 
   return hslToHex(hue, saturation, lightness);
 }
