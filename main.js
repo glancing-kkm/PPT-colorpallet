@@ -569,7 +569,7 @@ function renderTableTemplateSlide(tokens, context) {
       <div class="ppt-ref-layout">
         <div class="ppt-ref-copy">
           <p class="ppt-ref-kicker">${context.primary.slides.tableHeaders[0]} 기준 요약</p>
-          <p>표 구조는 화이트 기반으로 유지하고 헤더만 포인트 컬러를 사용합니다.</p>
+          <p>표 구조는 화이트 기반으로 유지하고 비강조 색상만 사용합니다.</p>
         </div>
         <div class="ppt-ref-panel">
           <table class="ppt-table">
@@ -621,7 +621,7 @@ function renderIconTemplateSlide(tokens, context) {
   const iconItems = context.primary.slides.agenda.map((item, index) => ({
     label: item,
     value: context.primary.slides.barValues[index] ?? context.primary.slides.graphValues[index] ?? 50,
-    color: [tokens.accent, tokens.accentAlt, tokens.secondary, tokens.tertiary][index % 4],
+    color: [tokens.secondary, tokens.tertiary, tokens.accentAlt, tokens.secondary][index % 4],
   }));
 
   const iconRows = iconItems.map((item) => `
@@ -774,6 +774,9 @@ function derivePreviewTokens(palette) {
     accentAlt,
     secondary,
     tertiary,
+    theme: secondary,
+    themeSoft: mixHex(secondary, "#FFFFFF", 0.82),
+    themeLight: mixHex(secondary, "#FFFFFF", 0.68),
     accentSoft: mixHex(accent, "#FFFFFF", 0.82),
     accentLight: mixHex(accent, "#FFFFFF", 0.68),
     accentAltSoft: mixHex(accentAlt, "#FFFFFF", 0.78),
@@ -787,6 +790,9 @@ function buildSlideVars(tokens) {
     `--ppt-muted:${tokens.muted}`,
     `--ppt-line:${tokens.line}`,
     `--ppt-accent:${tokens.accent}`,
+    `--ppt-theme:${tokens.theme}`,
+    `--ppt-theme-soft:${tokens.themeSoft}`,
+    `--ppt-theme-light:${tokens.themeLight}`,
     `--ppt-accent-soft:${tokens.accentSoft}`,
     `--ppt-accent-light:${tokens.accentLight}`,
     `--ppt-accent-alt:${tokens.accentAlt}`,

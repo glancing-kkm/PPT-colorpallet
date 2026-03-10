@@ -1664,17 +1664,22 @@ img {
   border: 1px solid var(--ppt-line, #e6e9f0) !important;
   box-shadow: 0 8px 20px rgba(17, 21, 30, 0.08) !important;
   gap: 0.7rem;
+  --ppt-fs-title: 1rem;
+  --ppt-fs-subtitle: 0.68rem;
+  --ppt-fs-body: 0.62rem;
+  --ppt-fs-caption: 0.54rem;
 }
 
 .slide-card--ref::before {
   height: 4px;
-  background: var(--ppt-accent, #3f63ff) !important;
+  background: var(--ppt-theme, #5d6fbd) !important;
 }
 
 .slide-card--ref .slide-card__label {
-  background: color-mix(in srgb, var(--ppt-accent, #3f63ff) 14%, #ffffff) !important;
+  background: color-mix(in srgb, var(--ppt-theme, #5d6fbd) 14%, #ffffff) !important;
   color: #111 !important;
-  border: 1px solid color-mix(in srgb, var(--ppt-accent, #3f63ff) 30%, #ffffff) !important;
+  border: 1px solid color-mix(in srgb, var(--ppt-theme, #5d6fbd) 30%, #ffffff) !important;
+  font-size: var(--ppt-fs-caption);
 }
 
 .ppt-ref-head {
@@ -1686,12 +1691,14 @@ img {
 
 .ppt-ref-head h3 {
   margin: 0;
-  font-size: 1.06rem;
+  font-size: var(--ppt-fs-title);
+  line-height: 1.2;
   letter-spacing: -0.01em;
+  color: #111;
 }
 
 .ppt-ref-page {
-  font-size: 0.66rem;
+  font-size: var(--ppt-fs-caption);
   color: var(--ppt-muted, #666a73);
 }
 
@@ -1712,14 +1719,14 @@ img {
 .ppt-ref-copy {
   display: grid;
   gap: 0.35rem;
-  font-size: 0.66rem;
+  font-size: var(--ppt-fs-body);
   color: var(--ppt-muted, #666a73);
 }
 
 .ppt-ref-kicker {
   margin: 0;
   color: #111;
-  font-size: 0.68rem;
+  font-size: var(--ppt-fs-subtitle);
   font-weight: 700;
 }
 
@@ -1735,7 +1742,7 @@ img {
   align-items: center;
   padding-top: 0.32rem;
   border-top: 1px solid var(--ppt-line, #e6e9f0);
-  font-size: 0.62rem;
+  font-size: var(--ppt-fs-caption);
   color: var(--ppt-muted, #666a73);
 }
 
@@ -1751,7 +1758,7 @@ img {
   color: #111;
   background:
     radial-gradient(circle at center, #fff 56%, transparent 57%),
-    conic-gradient(var(--ppt-accent, #3f63ff) calc(var(--value) * 1%), var(--ppt-accent-soft, #dbe3ff) 0);
+    conic-gradient(var(--ppt-theme, #5d6fbd) calc(var(--value) * 1%), var(--ppt-theme-soft, #dce2f6) 0);
 }
 
 .ppt-micro-bars {
@@ -1766,7 +1773,7 @@ img {
 .ppt-micro-bars span {
   display: block;
   height: var(--h);
-  background: linear-gradient(180deg, var(--ppt-accent-light, #9fb0ff), var(--ppt-accent, #3f63ff));
+  background: linear-gradient(180deg, var(--ppt-theme-light, #aeb8e2), var(--ppt-theme, #5d6fbd));
 }
 
 .ppt-track {
@@ -1787,14 +1794,14 @@ img {
 .ppt-step span {
   padding: 0.1rem 0.34rem;
   border-radius: 999px;
-  font-size: 0.58rem;
+  font-size: var(--ppt-fs-caption);
   font-weight: 700;
   color: #111;
-  background: color-mix(in srgb, var(--ppt-accent, #3f63ff) 14%, #ffffff);
+  background: color-mix(in srgb, var(--ppt-theme, #5d6fbd) 14%, #ffffff);
 }
 
 .ppt-step strong {
-  font-size: 0.65rem;
+  font-size: var(--ppt-fs-body);
   color: #111;
 }
 
@@ -1804,7 +1811,7 @@ img {
   display: grid;
   gap: 0.34rem;
   color: #111;
-  font-size: 0.64rem;
+  font-size: var(--ppt-fs-body);
 }
 
 .ppt-bullets li {
@@ -1819,7 +1826,7 @@ img {
   margin-bottom: 0.4rem;
   padding: 0.35rem 0.45rem;
   border: 1px solid var(--ppt-line, #e6e9f0);
-  background: color-mix(in srgb, var(--ppt-accent, #3f63ff) 10%, #ffffff);
+  background: color-mix(in srgb, var(--ppt-theme, #5d6fbd) 10%, #ffffff);
 }
 
 .ppt-stat-box strong {
@@ -1829,18 +1836,18 @@ img {
 }
 
 .ppt-stat-box span {
-  font-size: 0.56rem;
+  font-size: var(--ppt-fs-caption);
   color: var(--ppt-muted, #666a73);
 }
 
 .ppt-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.56rem;
+  font-size: var(--ppt-fs-caption);
 }
 
 .ppt-table thead {
-  background: color-mix(in srgb, var(--ppt-accent, #3f63ff) 76%, #ffffff);
+  background: color-mix(in srgb, var(--ppt-theme, #5d6fbd) 78%, #ffffff);
 }
 
 .ppt-table th {
@@ -1848,13 +1855,15 @@ img {
   font-weight: 700;
   text-align: left;
   padding: 0.24rem 0.3rem;
-  border: 1px solid color-mix(in srgb, var(--ppt-accent, #3f63ff) 54%, #ffffff);
+  border: 1px solid color-mix(in srgb, var(--ppt-theme, #5d6fbd) 54%, #ffffff);
+  font-size: var(--ppt-fs-caption);
 }
 
 .ppt-table td {
   color: #111;
   padding: 0.23rem 0.3rem;
   border: 1px solid var(--ppt-line, #e6e9f0);
+  font-size: var(--ppt-fs-caption);
 }
 
 .ppt-line-chart {
@@ -1867,7 +1876,7 @@ img {
   grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 0.2rem;
   margin-top: 0.28rem;
-  font-size: 0.52rem;
+  font-size: var(--ppt-fs-caption);
   color: var(--ppt-muted, #666a73);
 }
 
@@ -1888,11 +1897,11 @@ img {
 .ppt-bar-col span {
   display: block;
   height: var(--h);
-  background: linear-gradient(180deg, var(--ppt-accent-light, #9fb0ff), var(--ppt-accent, #3f63ff));
+  background: linear-gradient(180deg, var(--ppt-theme-light, #aeb8e2), var(--ppt-theme, #5d6fbd));
 }
 
 .ppt-bar-col strong {
-  font-size: 0.5rem;
+  font-size: var(--ppt-fs-caption);
   text-align: center;
   color: #111;
 }
@@ -1917,7 +1926,7 @@ img {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  font-size: 0.52rem;
+  font-size: var(--ppt-fs-caption);
   font-weight: 700;
   color: #111;
   background: color-mix(in srgb, var(--dot) 24%, #ffffff);
@@ -1925,7 +1934,7 @@ img {
 }
 
 .ppt-icon-item strong {
-  font-size: 0.58rem;
+  font-size: var(--ppt-fs-body);
   color: #111;
   text-align: center;
 }
