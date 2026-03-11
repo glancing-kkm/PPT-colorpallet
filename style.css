@@ -427,13 +427,13 @@ img {
   text-align: center;
 }
 
-.rgb-hex-row {
+.hex-helper-row {
   display: flex;
   align-items: center;
   gap: 0.45rem;
 }
 
-.rgb-hex-row__label {
+.hex-helper-row__label {
   width: 2.1rem;
   font-family: "Space Grotesk", "Pretendard", sans-serif;
   font-size: var(--base-card-text-size, 0.8rem);
@@ -466,9 +466,10 @@ img {
 }
 
 .upload-zone--inline {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 0.08rem;
   width: 106px;
   min-width: 106px;
   min-height: 42px;
@@ -487,6 +488,13 @@ img {
   font-weight: 700;
   font-size: 0.7rem;
   line-height: 1.1;
+  text-align: center;
+}
+
+.upload-zone__hint {
+  font-size: 0.62rem;
+  line-height: 1.05;
+  text-align: center;
 }
 
 .upload-result {

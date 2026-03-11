@@ -61,6 +61,19 @@
                   aria-label="색상표 선택"
                 >
               </div>
+              <div class="hex-helper-row">
+                <span class="hex-helper-row__label">HEX</span>
+                <input
+                  class="picker-hex"
+                  id="hexColorPickerLabel"
+                  name="hexColorPickerLabel"
+                  maxlength="7"
+                  value="#1F4C95"
+                  autocomplete="off"
+                  spellcheck="false"
+                  aria-label="HEX 코드 입력"
+                >
+              </div>
               <p class="field-note">예시: #1F4C95</p>
             </article>
 
@@ -80,19 +93,6 @@
                   <input class="number-input" id="bInput" type="number" min="0" max="255" value="149">
                 </label>
               </div>
-              <div class="rgb-hex-row">
-                <span class="rgb-hex-row__label">HEX</span>
-                <input
-                  class="picker-hex"
-                  id="hexColorPickerLabel"
-                  name="hexColorPickerLabel"
-                  maxlength="7"
-                  value="#1F4C95"
-                  autocomplete="off"
-                  spellcheck="false"
-                  aria-label="HEX 코드 입력"
-                >
-              </div>
               <p class="field-note">0~255 범위 입력</p>
             </article>
 
@@ -102,7 +102,7 @@
                 <label class="upload-zone upload-zone--inline" for="imageInput">
                   <input id="imageInput" type="file" accept="image/*" hidden>
                   <span class="upload-zone__title">이미지 첨부</span>
-                  <span class="upload-zone__hint">로고/제품</span>
+                  <span class="upload-zone__hint">로고/제품 등</span>
                 </label>
                 <div class="upload-result">
                   <img id="imagePreview" alt="업로드한 이미지 미리보기" hidden>
