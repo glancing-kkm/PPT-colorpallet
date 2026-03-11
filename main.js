@@ -237,6 +237,7 @@ function bindRefs() {
   refs.bInput = document.getElementById("bInput");
   refs.imageInput = document.getElementById("imageInput");
   refs.imagePreview = document.getElementById("imagePreview");
+  refs.imageClearButton = document.getElementById("imageClearButton");
   refs.imageFeedback = document.getElementById("imageFeedback");
   refs.extractedSwatch = document.getElementById("extractedSwatch");
   refs.extractedColorCode = document.getElementById("extractedColorCode");
@@ -277,6 +278,9 @@ function bindEvents() {
   });
 
   refs.imageInput.addEventListener("change", handleImageUpload);
+  if (refs.imageClearButton) {
+    refs.imageClearButton.addEventListener("click", clearUploadedImage);
+  }
 
   refs.purposeInputs.forEach((input) => {
     input.addEventListener("change", () => {
@@ -380,6 +384,17 @@ async function handleImageUpload(event) {
     refs.imageFeedback.textContent = "이미지에서 색상을 읽지 못했습니다. 다른 이미지를 시도해 주세요.";
     console.error(error);
   }
+}
+
+function clearUploadedImage() {
+  if (refs.imageInput) {
+    refs.imageInput.value = "";
+  }
+  if (refs.imagePreview) {
+    refs.imagePreview.src = "";
+    refs.imagePreview.hidden = true;
+  }
+  refs.imageFeedback.textContent = "이미지를 삭제했습니다. 새 이미지를 첨부해 주세요.";
 }
 
 function setBaseColor(rgb) {

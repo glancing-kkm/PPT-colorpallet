@@ -458,6 +458,14 @@ img {
   transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
 }
 
+.upload-stack {
+  display: grid;
+  gap: 0.3rem;
+  align-content: start;
+  flex: 0 0 106px;
+  width: 106px;
+}
+
 .upload-zone--inline {
   display: grid;
   align-content: center;
@@ -490,6 +498,22 @@ img {
   text-align: center;
 }
 
+.image-clear-button {
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  padding: 0.22rem 0.28rem;
+  background: #fff;
+  color: var(--ink-soft);
+  font-size: 0.62rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.image-clear-button:hover {
+  border-color: rgba(45, 91, 255, 0.32);
+  color: var(--ink);
+}
+
 .upload-result {
   display: flex;
   align-items: center;
@@ -498,12 +522,14 @@ img {
   flex: 1;
 }
 
-.upload-result img {
-  width: 54px;
-  height: 54px;
-  max-height: 54px;
+#imagePreview {
+  width: 106px;
+  height: 68px;
+  max-height: 68px;
   object-fit: cover;
   border-radius: 12px;
+  border: 1px solid var(--line-strong);
+  background: #fff;
 }
 
 .upload-result__info {

@@ -86,13 +86,16 @@
             <article class="base-card base-card--upload">
               <label class="field-label" for="imageInput">이미지 추출</label>
               <div class="base-card__row base-card__row--upload">
-                <label class="upload-zone upload-zone--inline" for="imageInput">
-                  <input id="imageInput" type="file" accept="image/*" hidden>
-                  <span class="upload-zone__title">이미지 첨부</span>
-                  <span class="upload-zone__hint">로고/제품 등</span>
-                </label>
-                <div class="upload-result">
+                <div class="upload-stack">
                   <img id="imagePreview" alt="업로드한 이미지 미리보기" hidden>
+                  <label class="upload-zone upload-zone--inline" for="imageInput">
+                    <input id="imageInput" type="file" accept="image/*" hidden>
+                    <span class="upload-zone__title">이미지 첨부</span>
+                    <span class="upload-zone__hint">로고/제품 등</span>
+                  </label>
+                  <button class="image-clear-button" id="imageClearButton" type="button">이미지 삭제</button>
+                </div>
+                <div class="upload-result">
                   <div class="upload-result__info">
                     <span class="swatch" id="extractedSwatch"></span>
                     <div>
