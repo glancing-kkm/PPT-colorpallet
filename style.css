@@ -281,7 +281,7 @@ img {
 }
 
 .base-card {
-  --base-card-text-size: 0.88rem;
+  --base-card-text-size: 0.8rem;
   display: grid;
   gap: 0.55rem;
   padding: 0.9rem;
@@ -328,10 +328,10 @@ img {
 }
 
 .text-input {
-  min-height: 46px;
-  padding: 0.65rem 0.8rem;
+  min-height: 42px;
+  padding: 0.56rem 0.7rem;
   font-family: "Space Grotesk", "Pretendard", sans-serif;
-  font-size: var(--base-card-text-size, 0.95rem);
+  font-size: var(--base-card-text-size, 0.86rem);
   font-weight: 700;
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -354,6 +354,11 @@ img {
   box-shadow: 0 0 0 5px rgba(255, 141, 103, 0.14);
 }
 
+.picker-hex.is-invalid {
+  border-color: rgba(255, 141, 103, 0.8);
+  box-shadow: 0 0 0 4px rgba(255, 141, 103, 0.14);
+}
+
 .color-input {
   width: 100%;
   min-height: 46px;
@@ -366,19 +371,31 @@ img {
 
 .color-input--inline {
   flex: none;
-  width: 54px;
-  min-width: 54px;
+  width: 46px;
+  min-width: 46px;
   padding: 0.12rem;
 }
 
 .picker-hex {
-  min-width: 7.2ch;
+  width: 8.2ch;
+  min-width: 8.2ch;
+  height: 42px;
+  padding: 0.42rem 0.45rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: #fff;
   font-family: "Space Grotesk", "Pretendard", sans-serif;
   font-size: var(--base-card-text-size, 0.88rem);
   font-weight: 700;
   letter-spacing: 0.02em;
   text-transform: uppercase;
   color: var(--ink);
+  outline: none;
+}
+
+.picker-hex:focus {
+  border-color: rgba(45, 91, 255, 0.55);
+  box-shadow: 0 0 0 4px rgba(45, 91, 255, 0.1);
 }
 
 .color-input:focus {
@@ -436,10 +453,12 @@ img {
   display: flex;
   align-items: center;
   gap: 0.45rem;
-  min-height: 46px;
-  padding: 0.55rem 0.65rem;
+  width: 106px;
+  min-width: 106px;
+  min-height: 42px;
+  padding: 0.45rem 0.5rem;
   border-radius: 14px;
-  flex: 0 0 auto;
+  flex: 0 0 106px;
 }
 
 .upload-zone:hover {
@@ -450,7 +469,8 @@ img {
 
 .upload-zone__title {
   font-weight: 700;
-  font-size: var(--base-card-text-size, var(--text-body));
+  font-size: 0.7rem;
+  line-height: 1.1;
 }
 
 .upload-result {
@@ -474,6 +494,7 @@ img {
   align-items: center;
   gap: 0.5rem;
   min-width: 0;
+  width: 100%;
   padding: 0.45rem 0.55rem;
   border-radius: 12px;
   background: rgba(21, 21, 21, 0.04);
@@ -487,12 +508,12 @@ img {
 
 .upload-result__info strong {
   display: block;
-  min-width: 0;
+  min-width: 7ch;
   font-family: "Space Grotesk", "Pretendard", sans-serif;
-  font-size: var(--base-card-text-size, var(--text-body));
+  font-size: 0.72rem;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow: visible;
+  text-overflow: clip;
 }
 
 .base-card .field-note,

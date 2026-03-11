@@ -36,7 +36,7 @@
         <div class="panel__body">
           <div class="panel__header">
             <h2 id="row1-title">기준색 지정</h2>
-            <p>HEX, RGB, 이미지 중 하나로 기준색을 정합니다.</p>
+            <p>HEX, RGB, 이미지 중 하나로 기준색을 설정합니다.</p>
           </div>
 
           <div class="base-grid">
@@ -60,7 +60,16 @@
                   value="#1F4C95"
                   aria-label="색상표 선택"
                 >
-                <span class="picker-hex" id="hexColorPickerLabel">#1F4C95</span>
+                <input
+                  class="picker-hex"
+                  id="hexColorPickerLabel"
+                  name="hexColorPickerLabel"
+                  maxlength="7"
+                  value="#1F4C95"
+                  autocomplete="off"
+                  spellcheck="false"
+                  aria-label="HEX 코드 입력"
+                >
               </div>
               <p class="field-note">예시: #1F4C95</p>
             </article>
@@ -85,12 +94,12 @@
             </article>
 
             <article class="base-card base-card--upload">
-              <label class="field-label" for="imageInput">이미지로 색상 추출</label>
+              <label class="field-label" for="imageInput">이미지 추출</label>
               <div class="base-card__row base-card__row--upload">
                 <label class="upload-zone upload-zone--inline" for="imageInput">
                   <input id="imageInput" type="file" accept="image/*" hidden>
                   <span class="upload-zone__title">이미지 첨부</span>
-                  <span class="upload-zone__hint">회사로고/제품/브랜드</span>
+                  <span class="upload-zone__hint">로고/제품</span>
                 </label>
                 <div class="upload-result">
                   <img id="imagePreview" alt="업로드한 이미지 미리보기" hidden>
@@ -103,7 +112,7 @@
                   </div>
                 </div>
               </div>
-              <p class="field-note field-note--status" id="imageFeedback">대표 색상을 기준색으로 반영합니다.</p>
+              <p class="field-note field-note--status" id="imageFeedback">추출색을 기준색에 반영합니다.</p>
             </article>
 
           </div>

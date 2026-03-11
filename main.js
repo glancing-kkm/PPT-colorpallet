@@ -261,6 +261,11 @@ function bindEvents() {
     refs.hexInput.classList.remove("is-invalid");
   });
   refs.hexColorPicker.addEventListener("input", handleHexInput);
+  refs.hexColorPickerLabel.addEventListener("input", handleHexLabelInput);
+  refs.hexColorPickerLabel.addEventListener("blur", () => {
+    refs.hexColorPickerLabel.value = rgbToHex(state.baseColor);
+    refs.hexColorPickerLabel.classList.remove("is-invalid");
+  });
 
   [refs.rInput, refs.gInput, refs.bInput].forEach((input) => {
     input.addEventListener("input", handleRgbInput);
@@ -313,6 +318,21 @@ function handleHexInput(event) {
   const value = event.target.value.trim();
   const parsed = parseHex(value);
   const showInvalid = value.replace("#", "").length >= 3 && !parsed;
+  refs.hexInput.classList.toggle("is-invalid", showInvalid);
+  refs.hexColorPickerLabel.classList.toggle("is-invalid", showInvalid);
+
+  if (!parsed) {
+    return;
+  }
+
+  setBaseColor(parsed);
+}
+
+function handleHexLabelInput(event) {
+  const value = event.target.value.trim();
+  const parsed = parseHex(value);
+  const showInvalid = value.replace("#", "").length >= 3 && !parsed;
+  refs.hexColorPickerLabel.classList.toggle("is-invalid", showInvalid);
   refs.hexInput.classList.toggle("is-invalid", showInvalid);
 
   if (!parsed) {
@@ -368,7 +388,7 @@ function syncBaseInputs(rgb) {
   const hex = rgbToHex(rgb);
   refs.hexInput.value = hex;
   refs.hexColorPicker.value = hex;
-  refs.hexColorPickerLabel.textContent = hex;
+  refs.hexColorPickerLabel.value = hex;
   refs.rInput.value = rgb.r;
   refs.gInput.value = rgb.g;
   refs.bInput.value = rgb.b;
