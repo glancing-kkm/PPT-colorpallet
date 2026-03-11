@@ -651,22 +651,22 @@ function renderBodyTemplateSlide(tokens, context) {
         <div class="ppt-col ppt-col--main">
           <div class="ppt-ref-copy">
             <p class="ppt-ref-kicker">${compactText(context.primary.slides.highlightTitle, 11)}</p>
-            <ul class="ppt-bullets">${bulletItems}</ul>
-          </div>
-        </div>
-        <div class="ppt-col ppt-col--side">
-          <div class="ppt-ref-panel ppt-ref-panel--stack">
-            <div class="ppt-stat-box">
-              <strong>${Math.max(...context.primary.slides.graphValues)}</strong>
-              <span>Peak value</span>
-            </div>
-            <p>${compactText(context.primary.slides.highlightCopy, 18)}</p>
-            <div class="ppt-inline-donut">
+            <div class="ppt-body-left-block">
               <div class="ppt-donut ppt-donut--mini" style="--value:${bodyDonutValue};--donut-main:${tokens.accent};--donut-soft:${mixHex(tokens.accent, "#FFFFFF", 0.82)};">
                 <span>${bodyDonutValue}%</span>
               </div>
               <small>Progress</small>
             </div>
+            <ul class="ppt-bullets">${bulletItems}</ul>
+          </div>
+        </div>
+        <div class="ppt-col ppt-col--side">
+          <div class="ppt-ref-panel ppt-ref-panel--stack ppt-ref-panel--body">
+            <div class="ppt-stat-box">
+              <strong>${Math.max(...context.primary.slides.graphValues)}</strong>
+              <span>Peak value</span>
+            </div>
+            <p>${compactText(context.primary.slides.highlightCopy, 18)}</p>
             <div class="ppt-mini-stat-grid">${highlightScores}</div>
           </div>
         </div>
@@ -825,15 +825,17 @@ function renderIconTemplateSlide(tokens, context) {
           <div class="ppt-icon-grid">${iconRows}</div>
         </div>
         <div class="ppt-col ppt-col--side">
-          <div class="ppt-ref-panel ppt-ref-panel--stack">
+          <div class="ppt-ref-panel ppt-ref-panel--stack ppt-ref-panel--icon">
             <p class="ppt-ref-kicker">${compactText("Execution note", 8)}</p>
             <ul class="ppt-bullets">
               ${compactItems(context.primary.slides.bullets, 14, 2).map((item) => `<li>${item}</li>`).join("")}
             </ul>
-            <table class="ppt-table ppt-table--mini">
-              <thead><tr>${iconHeaderRow}</tr></thead>
-              <tbody>${iconBodyRows}</tbody>
-            </table>
+            <div class="ppt-icon-table-wrap">
+              <table class="ppt-table ppt-table--mini">
+                <thead><tr>${iconHeaderRow}</tr></thead>
+                <tbody>${iconBodyRows}</tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
