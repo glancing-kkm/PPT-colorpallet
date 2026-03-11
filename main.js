@@ -463,6 +463,18 @@ function renderPreviews() {
   ].join("");
 }
 
+function compactText(value, max = 22) {
+  const text = String(value ?? "").replace(/\s+/g, " ").trim();
+  if (text.length <= max) {
+    return text;
+  }
+  return `${text.slice(0, Math.max(1, max - 1)).trim()}…`;
+}
+
+function compactItems(items, max = 22, limit = 3) {
+  return (items || []).slice(0, limit).map((item) => compactText(item, max));
+}
+
 function renderMainTemplateSlide(tokens, context) {
   const donutValue = context.primary.slides.barValues[0] || 60;
   const shapePalette = [tokens.theme, tokens.secondary, tokens.tertiary, tokens.accentAlt, tokens.accent];
@@ -476,15 +488,15 @@ function renderMainTemplateSlide(tokens, context) {
     <article class="slide-card slide-card--ref" style="${buildSlideVars(tokens)}">
       <span class="slide-card__label">01 Main</span>
       <div class="ppt-ref-head">
-        <h3>${context.primary.slides.coverTitle}</h3>
+        <h3>${compactText(context.primary.slides.coverTitle, 16)}</h3>
         <span class="ppt-ref-page">01</span>
       </div>
       <div class="ppt-frame">
         <div class="ppt-col ppt-col--main">
           <div class="ppt-ref-copy">
-            <p class="ppt-ref-kicker">${context.primary.previewLabel}</p>
-            <p>${context.primary.slides.coverSubtitle}</p>
-            <p>${context.primary.previewTone}</p>
+            <p class="ppt-ref-kicker">${compactText(context.primary.previewLabel, 12)}</p>
+            <p>${compactText(context.primary.slides.coverSubtitle, 24)}</p>
+            <p>${compactText(context.primary.previewTone, 18)}</p>
           </div>
           <div class="ppt-chip-row">
             ${keyMetrics.map((item, index) => `
@@ -511,8 +523,8 @@ function renderMainTemplateSlide(tokens, context) {
         </div>
       </div>
       <div class="ppt-ref-footer">
-        <span>Executive summary</span>
-        <strong>${context.blendTag}</strong>
+        <span>${compactText("Executive summary", 12)}</span>
+        <strong>${compactText(context.blendTag, 18)}</strong>
       </div>
     </article>
   `;
@@ -520,18 +532,18 @@ function renderMainTemplateSlide(tokens, context) {
 
 function renderContentsTemplateSlide(tokens, context) {
   const agendaCaptions = ["Background", "Objective", "Execution", "Impact"];
-  const items = context.primary.slides.agenda.map((item, index) => `
+  const items = compactItems(context.primary.slides.agenda, 12, 4).map((item, index) => `
     <div class="ppt-step">
       <span>${String(index + 1).padStart(2, "0")}</span>
       <div>
         <strong>${item}</strong>
-        <small>${agendaCaptions[index] || "Detail"}</small>
+        <small>${compactText(agendaCaptions[index] || "Detail", 8)}</small>
       </div>
     </div>
   `).join("");
   const timeline = context.primary.slides.graphLabels.map((label, index) => `
     <div class="ppt-timeline-item">
-      <span>${label}</span>
+      <span>${compactText(label, 8)}</span>
       <strong>${context.primary.slides.graphValues[index] || "-"}</strong>
     </div>
   `).join("");
@@ -546,14 +558,14 @@ function renderContentsTemplateSlide(tokens, context) {
       <div class="ppt-frame">
         <div class="ppt-col ppt-col--main">
           <div class="ppt-ref-copy">
-            <p class="ppt-ref-kicker">${context.summary}</p>
-            <p>핵심 흐름을 한 페이지에서 확인할 수 있도록 구성했습니다.</p>
+            <p class="ppt-ref-kicker">${compactText(context.summary, 14)}</p>
+            <p>${compactText("핵심 흐름 한눈에 확인", 14)}</p>
           </div>
           <div class="ppt-track">${items}</div>
         </div>
         <div class="ppt-col ppt-col--side">
           <div class="ppt-ref-panel">
-            <p class="ppt-ref-kicker">Timeline</p>
+            <p class="ppt-ref-kicker">${compactText("Timeline", 8)}</p>
             <div class="ppt-timeline">${timeline}</div>
           </div>
         </div>
@@ -563,10 +575,10 @@ function renderContentsTemplateSlide(tokens, context) {
 }
 
 function renderBodyTemplateSlide(tokens, context) {
-  const bulletItems = context.primary.slides.bullets.map((item) => `<li>${item}</li>`).join("");
+  const bulletItems = compactItems(context.primary.slides.bullets, 18, 2).map((item) => `<li>${item}</li>`).join("");
   const highlightScores = context.primary.slides.barLabels.map((label, index) => `
     <div class="ppt-mini-stat">
-      <span>${label}</span>
+      <span>${compactText(label, 7)}</span>
       <strong>${context.primary.slides.barValues[index] || 0}%</strong>
     </div>
   `).join("");
@@ -581,7 +593,7 @@ function renderBodyTemplateSlide(tokens, context) {
       <div class="ppt-frame">
         <div class="ppt-col ppt-col--main">
           <div class="ppt-ref-copy">
-            <p class="ppt-ref-kicker">${context.primary.slides.highlightTitle}</p>
+            <p class="ppt-ref-kicker">${compactText(context.primary.slides.highlightTitle, 11)}</p>
             <ul class="ppt-bullets">${bulletItems}</ul>
           </div>
         </div>
@@ -591,7 +603,7 @@ function renderBodyTemplateSlide(tokens, context) {
               <strong>${Math.max(...context.primary.slides.graphValues)}</strong>
               <span>Peak value</span>
             </div>
-            <p>${context.primary.slides.highlightCopy}</p>
+            <p>${compactText(context.primary.slides.highlightCopy, 18)}</p>
             <div class="ppt-mini-stat-grid">${highlightScores}</div>
           </div>
         </div>
@@ -603,19 +615,19 @@ function renderBodyTemplateSlide(tokens, context) {
 function renderTableTemplateSlide(tokens, context) {
   const tablePalette = [tokens.theme, tokens.secondary, tokens.tertiary, tokens.accentAlt, tokens.accent];
   const headerRow = context.primary.slides.tableHeaders.map((header, index) => `
-    <th style="--th:${tablePalette[index % tablePalette.length]};">${header}</th>
+    <th style="--th:${tablePalette[index % tablePalette.length]};">${compactText(header, 8)}</th>
   `).join("");
   const bodyRows = context.primary.slides.tableRows.map((row, rowIndex) => `
     <tr>
       ${row.map((cell, cellIndex) => `
-        <td style="--cell:${tablePalette[(rowIndex + cellIndex) % tablePalette.length]};">${cell}</td>
+        <td style="--cell:${tablePalette[(rowIndex + cellIndex) % tablePalette.length]};">${compactText(cell, 10)}</td>
       `).join("")}
     </tr>
   `).join("");
   const summaryCards = context.primary.slides.tableRows.map((row, index) => `
     <div class="ppt-mini-stat" style="--chip:${tablePalette[index % tablePalette.length]};">
-      <span>${row[0]}</span>
-      <strong>${row[2]}</strong>
+      <span>${compactText(row[0], 8)}</span>
+      <strong>${compactText(row[2], 8)}</strong>
     </div>
   `).join("");
 
@@ -629,8 +641,8 @@ function renderTableTemplateSlide(tokens, context) {
       <div class="ppt-frame">
         <div class="ppt-col ppt-col--main">
           <div class="ppt-ref-copy">
-            <p class="ppt-ref-kicker">${context.primary.slides.tableHeaders[0]} 기준 요약</p>
-            <p>구획만 있는 화면이 아니라 표 + 요약 지표를 함께 배치했습니다.</p>
+            <p class="ppt-ref-kicker">${compactText(`${context.primary.slides.tableHeaders[0]} 기준`, 10)}</p>
+            <p>${compactText("표와 요약 지표 동시 배치", 14)}</p>
           </div>
           <table class="ppt-table">
             <thead><tr>${headerRow}</tr></thead>
@@ -639,7 +651,7 @@ function renderTableTemplateSlide(tokens, context) {
         </div>
         <div class="ppt-col ppt-col--side">
           <div class="ppt-ref-panel">
-            <p class="ppt-ref-kicker">Status summary</p>
+            <p class="ppt-ref-kicker">${compactText("Status summary", 10)}</p>
             <div class="ppt-mini-stat-grid">${summaryCards}</div>
           </div>
         </div>
@@ -655,11 +667,11 @@ function renderGraphTemplateSlide(tokens, context) {
   const graphPalette = [tokens.theme, tokens.secondary, tokens.tertiary, tokens.accentAlt, tokens.accent];
   const linePath = linePoints.map((point) => `${point.x},${point.y}`).join(" ");
   const comparePath = comparePoints.map((point) => `${point.x},${point.y}`).join(" ");
-  const labels = context.primary.slides.graphLabels.map((label) => `<span>${label}</span>`).join("");
+  const labels = context.primary.slides.graphLabels.map((label) => `<span>${compactText(label, 8)}</span>`).join("");
   const bars = context.primary.slides.barValues.map((value, index) => `
     <div class="ppt-bar-col">
       <span style="--h:${Math.max(12, value)}%;--bar:${graphPalette[index % graphPalette.length]};"></span>
-      <strong>${context.primary.slides.barLabels[index] || `S${index + 1}`}</strong>
+      <strong>${compactText(context.primary.slides.barLabels[index] || `S${index + 1}`, 8)}</strong>
     </div>
   `).join("");
   const graphSummary = [
@@ -668,7 +680,7 @@ function renderGraphTemplateSlide(tokens, context) {
     { label: "End", value: graphValues[graphValues.length - 1] || 0 },
   ].map((item, index) => `
     <div class="ppt-mini-stat" style="--chip:${graphPalette[index % graphPalette.length]};">
-      <span>${item.label}</span>
+      <span>${compactText(item.label, 7)}</span>
       <strong>${item.value}</strong>
     </div>
   `).join("");
@@ -696,7 +708,7 @@ function renderGraphTemplateSlide(tokens, context) {
         </div>
         <div class="ppt-col ppt-col--side">
           <div class="ppt-ref-panel">
-            <p class="ppt-ref-kicker">Trend summary</p>
+            <p class="ppt-ref-kicker">${compactText("Trend summary", 10)}</p>
             <div class="ppt-mini-stat-grid">${graphSummary}</div>
           </div>
         </div>
@@ -717,8 +729,8 @@ function renderIconTemplateSlide(tokens, context) {
   const iconRows = iconItems.map((item) => `
     <div class="ppt-icon-item">
       <div class="ppt-icon-dot" style="--dot:${item.color};">${item.value}</div>
-      <strong>${item.label}</strong>
-      <small>${item.desc}</small>
+      <strong>${compactText(item.label, 6)}</strong>
+      <small>${compactText(item.desc, 12)}</small>
     </div>
   `).join("");
 
@@ -732,16 +744,16 @@ function renderIconTemplateSlide(tokens, context) {
       <div class="ppt-frame">
         <div class="ppt-col ppt-col--main">
           <div class="ppt-ref-copy">
-            <p class="ppt-ref-kicker">${context.primary.slides.footerNote}</p>
-            <p>핵심 단계의 수치와 설명을 동시에 보이도록 카드형으로 구성했습니다.</p>
+            <p class="ppt-ref-kicker">${compactText(context.primary.slides.footerNote, 12)}</p>
+            <p>${compactText("단계별 수치 카드 구성", 10)}</p>
           </div>
           <div class="ppt-icon-grid">${iconRows}</div>
         </div>
         <div class="ppt-col ppt-col--side">
           <div class="ppt-ref-panel">
-            <p class="ppt-ref-kicker">Execution note</p>
+            <p class="ppt-ref-kicker">${compactText("Execution note", 8)}</p>
             <ul class="ppt-bullets">
-              ${context.primary.slides.bullets.map((item) => `<li>${item}</li>`).join("")}
+              ${compactItems(context.primary.slides.bullets, 14, 3).map((item) => `<li>${item}</li>`).join("")}
             </ul>
           </div>
         </div>
