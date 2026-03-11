@@ -427,6 +427,22 @@ img {
   text-align: center;
 }
 
+.rgb-hex-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.rgb-hex-row__label {
+  width: 2.1rem;
+  font-family: "Space Grotesk", "Pretendard", sans-serif;
+  font-size: var(--base-card-text-size, 0.8rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
 .field-note,
 .field-note--status,
 .upload-zone__hint,
