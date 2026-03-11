@@ -72,7 +72,7 @@ img {
   grid-template-columns: minmax(0, 1.5fr) auto;
   gap: 1rem;
   align-items: end;
-  padding: 1.35rem 1.4rem 1.4rem;
+  padding: 0.7rem 0.8rem 0.8rem;
   background: rgba(255, 255, 255, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.72);
   border-radius: 32px;
@@ -123,8 +123,8 @@ img {
 
 .hero__copy {
   grid-column: 1 / -1;
-  min-height: 148px;
-  padding-top: 1.45rem;
+  min-height: 74px;
+  padding-top: 0.72rem;
   display: grid;
   place-items: center;
   text-align: center;
@@ -460,15 +460,15 @@ img {
 
 .upload-stack {
   display: grid;
-  gap: 0.28rem;
+  gap: 0.08rem;
   align-content: start;
-  flex: 0 0 106px;
-  width: 106px;
+  flex: 0 0 122px;
+  width: 122px;
 }
 
 .upload-media-slot {
-  width: 106px;
-  min-height: 68px;
+  width: 122px;
+  min-height: 76px;
 }
 
 .upload-zone--inline {
@@ -476,10 +476,10 @@ img {
   align-content: center;
   justify-items: center;
   gap: 0.08rem;
-  width: 106px;
-  min-width: 106px;
-  min-height: 42px;
-  padding: 0.45rem 0.5rem;
+  width: 122px;
+  min-width: 122px;
+  min-height: 50px;
+  padding: 0.5rem 0.55rem;
   border-radius: 14px;
   flex: 0 0 106px;
 }
@@ -528,9 +528,9 @@ img {
 }
 
 #imagePreview {
-  width: 106px;
-  height: 68px;
-  max-height: 68px;
+  width: 122px;
+  height: 76px;
+  max-height: 76px;
   object-fit: cover;
   border-radius: 12px;
   border: 1px solid var(--line-strong);
@@ -1820,6 +1820,12 @@ img {
   padding: 0.5rem;
 }
 
+.ppt-ref-panel--stack {
+  display: grid;
+  gap: 0.2rem;
+  align-content: start;
+}
+
 .ppt-ref-copy {
   display: grid;
   gap: 0.2rem;
@@ -1897,6 +1903,25 @@ img {
   background:
     radial-gradient(circle at center, #fff 56%, transparent 57%),
     conic-gradient(var(--donut-main, var(--ppt-theme, #5d6fbd)) calc(var(--value) * 1%), var(--donut-soft, var(--ppt-theme-soft, #dce2f6)) 0);
+}
+
+.ppt-donut--mini {
+  width: 50px;
+  height: 50px;
+  font-size: 0.52rem;
+}
+
+.ppt-inline-donut {
+  display: flex;
+  align-items: center;
+  gap: 0.28rem;
+  min-width: 0;
+}
+
+.ppt-inline-donut small {
+  font-size: var(--ppt-fs-caption);
+  color: var(--ppt-muted, #666a73);
+  white-space: nowrap;
 }
 
 .ppt-micro-bars {
@@ -2079,6 +2104,16 @@ img {
   font-weight: 700;
 }
 
+.ppt-table--mini th {
+  padding: 0.16rem 0.18rem;
+  font-size: 0.4rem;
+}
+
+.ppt-table--mini td {
+  padding: 0.14rem 0.18rem;
+  font-size: 0.4rem;
+}
+
 .ppt-line-chart {
   width: 100%;
   height: 82px;
@@ -2233,7 +2268,7 @@ img {
   }
 
   .hero {
-    padding: 1.1rem;
+    padding: 0.6rem;
   }
 
   .hero::before {
@@ -2243,7 +2278,7 @@ img {
   }
 
   .hero__copy {
-    padding-top: 1.2rem;
+    padding-top: 0.6rem;
   }
 
   .hero__copy h1 {

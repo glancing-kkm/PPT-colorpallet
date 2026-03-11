@@ -630,7 +630,10 @@ function renderContentsTemplateSlide(tokens, context) {
 
 function renderBodyTemplateSlide(tokens, context) {
   const bulletItems = compactItems(context.primary.slides.bullets, 18, 2).map((item) => `<li>${item}</li>`).join("");
-  const highlightScores = context.primary.slides.barLabels.map((label, index) => `
+  const bodyDonutValue = Math.round(
+    context.primary.slides.barValues.reduce((sum, value) => sum + value, 0) / Math.max(context.primary.slides.barValues.length, 1),
+  );
+  const highlightScores = context.primary.slides.barLabels.slice(0, 3).map((label, index) => `
     <div class="ppt-mini-stat">
       <span>${compactText(label, 7)}</span>
       <strong>${context.primary.slides.barValues[index] || 0}%</strong>
@@ -652,12 +655,18 @@ function renderBodyTemplateSlide(tokens, context) {
           </div>
         </div>
         <div class="ppt-col ppt-col--side">
-          <div class="ppt-ref-panel">
+          <div class="ppt-ref-panel ppt-ref-panel--stack">
             <div class="ppt-stat-box">
               <strong>${Math.max(...context.primary.slides.graphValues)}</strong>
               <span>Peak value</span>
             </div>
             <p>${compactText(context.primary.slides.highlightCopy, 18)}</p>
+            <div class="ppt-inline-donut">
+              <div class="ppt-donut ppt-donut--mini" style="--value:${bodyDonutValue};--donut-main:${tokens.accent};--donut-soft:${mixHex(tokens.accent, "#FFFFFF", 0.82)};">
+                <span>${bodyDonutValue}%</span>
+              </div>
+              <small>Progress</small>
+            </div>
             <div class="ppt-mini-stat-grid">${highlightScores}</div>
           </div>
         </div>
@@ -787,6 +796,18 @@ function renderIconTemplateSlide(tokens, context) {
       <small>${compactText(item.desc, 12)}</small>
     </div>
   `).join("");
+  const iconTableHeaders = context.primary.slides.tableHeaders.slice(0, 3);
+  const iconTableRows = context.primary.slides.tableRows.slice(0, 2);
+  const iconHeaderRow = iconTableHeaders.map((header, index) => `
+    <th style="--th:${iconPalette[index % iconPalette.length]};">${compactText(header, 7)}</th>
+  `).join("");
+  const iconBodyRows = iconTableRows.map((row, rowIndex) => `
+    <tr>
+      ${row.slice(0, 3).map((cell, cellIndex) => `
+        <td style="--cell:${iconPalette[(rowIndex + cellIndex) % iconPalette.length]};">${compactText(cell, 8)}</td>
+      `).join("")}
+    </tr>
+  `).join("");
 
   return `
     <article class="slide-card slide-card--ref" style="${buildSlideVars(tokens)}">
@@ -804,11 +825,15 @@ function renderIconTemplateSlide(tokens, context) {
           <div class="ppt-icon-grid">${iconRows}</div>
         </div>
         <div class="ppt-col ppt-col--side">
-          <div class="ppt-ref-panel">
+          <div class="ppt-ref-panel ppt-ref-panel--stack">
             <p class="ppt-ref-kicker">${compactText("Execution note", 8)}</p>
             <ul class="ppt-bullets">
-              ${compactItems(context.primary.slides.bullets, 14, 3).map((item) => `<li>${item}</li>`).join("")}
+              ${compactItems(context.primary.slides.bullets, 14, 2).map((item) => `<li>${item}</li>`).join("")}
             </ul>
+            <table class="ppt-table ppt-table--mini">
+              <thead><tr>${iconHeaderRow}</tr></thead>
+              <tbody>${iconBodyRows}</tbody>
+            </table>
           </div>
         </div>
       </div>
