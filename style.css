@@ -545,10 +545,6 @@ img {
   display: none;
 }
 
-.upload-stack:not(.has-image) .image-clear-button {
-  display: none;
-}
-
 .upload-result__info {
   display: flex;
   align-items: center;

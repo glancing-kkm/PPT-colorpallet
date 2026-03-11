@@ -988,7 +988,7 @@ async function copyPaletteImage(palette) {
   const swatches = palette.swatches || palette.colors.map((hex) => ({ hex, isAccent: false }));
   const canvas = document.createElement("canvas");
   const width = 960;
-  const height = 300;
+  const height = 180;
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext("2d");
@@ -998,17 +998,10 @@ async function copyPaletteImage(palette) {
 
   ctx.fillStyle = "#FFFFFF";
   ctx.fillRect(0, 0, width, height);
-  ctx.fillStyle = "#10131C";
-  ctx.font = "700 30px Pretendard, sans-serif";
-  ctx.fillText(palette.label, 36, 52);
-  ctx.fillStyle = "#5F6580";
-  ctx.font = "500 18px Pretendard, sans-serif";
-  ctx.fillText(`${palette.short} · ${palette.note}`, 36, 80);
-
-  const stripX = 36;
-  const stripY = 104;
-  const stripW = width - stripX * 2;
-  const stripH = 148;
+  const stripX = 0;
+  const stripY = 0;
+  const stripW = width;
+  const stripH = height;
   const cellW = stripW / swatches.length;
 
   swatches.forEach((swatch, index) => {
@@ -1021,13 +1014,9 @@ async function copyPaletteImage(palette) {
 
     const textColor = getReadableTextColor(hex).includes("255") ? "#FFFFFF" : "#10131C";
     ctx.fillStyle = textColor;
-    ctx.font = "700 18px Space Grotesk, Pretendard, sans-serif";
-    ctx.fillText(hex.toUpperCase(), x + 12, stripY + stripH - 16);
+    ctx.font = "700 22px Space Grotesk, Pretendard, sans-serif";
+    ctx.fillText(hex.toUpperCase(), x + 14, stripY + stripH - 20);
   });
-
-  ctx.strokeStyle = "#D6DEEF";
-  ctx.lineWidth = 2;
-  ctx.strokeRect(stripX, stripY, stripW, stripH);
 
   const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
   if (!blob) {
