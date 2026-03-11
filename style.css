@@ -89,7 +89,16 @@ img {
   top: 1rem;
   height: 14px;
   border-radius: 999px;
-  background: var(--blue);
+  background: linear-gradient(
+    90deg,
+    #ffd8e8 0%,
+    #ffe8bf 16%,
+    #fff5b8 32%,
+    #d7f7d4 48%,
+    #cfeeff 64%,
+    #ddd9ff 82%,
+    #ffd8ef 100%
+  );
 }
 
 .hero__eyebrow,
@@ -427,22 +436,6 @@ img {
   text-align: center;
 }
 
-.hex-helper-row {
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-}
-
-.hex-helper-row__label {
-  width: 2.1rem;
-  font-family: "Space Grotesk", "Pretendard", sans-serif;
-  font-size: var(--base-card-text-size, 0.8rem);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-}
-
 .field-note,
 .field-note--status,
 .upload-zone__hint,
@@ -660,6 +653,7 @@ img {
 }
 
 .purpose-card input[type="checkbox"],
+.purpose-card input[type="radio"],
 .palette-selector input[type="checkbox"] {
   width: 1rem;
   height: 1rem;
@@ -2309,7 +2303,16 @@ body {
 
 .hero::before {
   height: 10px;
-  background: var(--blue);
+  background: linear-gradient(
+    90deg,
+    #ffd8e8 0%,
+    #ffe8bf 16%,
+    #fff5b8 32%,
+    #d7f7d4 48%,
+    #cfeeff 64%,
+    #ddd9ff 82%,
+    #ffd8ef 100%
+  );
 }
 
 .hero__eyebrow {

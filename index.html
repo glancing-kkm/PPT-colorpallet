@@ -61,19 +61,6 @@
                   aria-label="색상표 선택"
                 >
               </div>
-              <div class="hex-helper-row">
-                <span class="hex-helper-row__label">HEX</span>
-                <input
-                  class="picker-hex"
-                  id="hexColorPickerLabel"
-                  name="hexColorPickerLabel"
-                  maxlength="7"
-                  value="#1F4C95"
-                  autocomplete="off"
-                  spellcheck="false"
-                  aria-label="HEX 코드 입력"
-                >
-              </div>
               <p class="field-note">예시: #1F4C95</p>
             </article>
 
@@ -130,12 +117,12 @@
         <div class="panel__body">
           <div class="panel__header">
             <h2 id="row2-title">용도 선택</h2>
-            <p>복수 선택 가능. 체크한 용도 톤이 팔레트와 미리보기에 반영됩니다.</p>
+            <p>한 가지 용도만 선택 가능하며 선택 톤이 팔레트/미리보기에 반영됩니다.</p>
           </div>
 
           <div class="purpose-grid" id="purposeOptions">
             <label class="purpose-card" data-tooltip="묵직한 표현" title="묵직한 표현">
-              <input type="checkbox" name="purpose" value="report" checked title="묵직한 표현">
+              <input type="radio" name="purpose" value="report" checked title="묵직한 표현">
               <div>
                 <strong>보고용</strong>
                 <span>강한 결론과 보고 흐름</span>
@@ -143,7 +130,7 @@
             </label>
 
             <label class="purpose-card" data-tooltip="선명하고 세련된 표현" title="선명하고 세련된 표현">
-              <input type="checkbox" name="purpose" value="proposal" title="선명하고 세련된 표현">
+              <input type="radio" name="purpose" value="proposal" title="선명하고 세련된 표현">
               <div>
                 <strong>제안용</strong>
                 <span>선명한 설득 톤</span>
@@ -151,7 +138,7 @@
             </label>
 
             <label class="purpose-card" data-tooltip="차분하고 안정적 표현" title="차분하고 안정적 표현">
-              <input type="checkbox" name="purpose" value="planning" title="차분하고 안정적 표현">
+              <input type="radio" name="purpose" value="planning" title="차분하고 안정적 표현">
               <div>
                 <strong>계획용</strong>
                 <span>안정적 실행 톤</span>
@@ -159,7 +146,7 @@
             </label>
 
             <label class="purpose-card" data-tooltip="명확한 표현" title="명확한 표현">
-              <input type="checkbox" name="purpose" value="analysis" title="명확한 표현">
+              <input type="radio" name="purpose" value="analysis" title="명확한 표현">
               <div>
                 <strong>분석용</strong>
                 <span>명료한 데이터 톤</span>
@@ -167,7 +154,7 @@
             </label>
 
             <label class="purpose-card" data-tooltip="무난하고 보수적 표현" title="무난하고 보수적 표현">
-              <input type="checkbox" name="purpose" value="submission" title="무난하고 보수적 표현">
+              <input type="radio" name="purpose" value="submission" title="무난하고 보수적 표현">
               <div>
                 <strong>제출용</strong>
                 <span>보수적 공식 톤</span>

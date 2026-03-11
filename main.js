@@ -5,7 +5,7 @@ const PURPOSES = [
     previewLabel: "Report Mode",
     previewTone: "Grounded editorial tone",
     tooltip: "묵직한 표현",
-    profile: { hueShift: 0, saturationShift: -6, lightShift: -5, contrast: 18, neutralBias: 0.18 },
+    profile: { hueShift: -18, saturationShift: -20, lightShift: -10, contrast: 28, neutralBias: 0.38 },
     slides: {
       coverTitle: "Board Review",
       coverSubtitle: "A concise premium deck for performance reporting.",
@@ -38,7 +38,7 @@ const PURPOSES = [
     previewLabel: "Pitch Mode",
     previewTone: "Sharp and polished tone",
     tooltip: "선명하고 세련된 표현",
-    profile: { hueShift: 8, saturationShift: 14, lightShift: 2, contrast: 14, neutralBias: -0.06 },
+    profile: { hueShift: 24, saturationShift: 30, lightShift: 8, contrast: 34, neutralBias: -0.22 },
     slides: {
       coverTitle: "Concept Pitch",
       coverSubtitle: "A refined proposal deck with clear persuasion points.",
@@ -71,7 +71,7 @@ const PURPOSES = [
     previewLabel: "Planning Mode",
     previewTone: "Composed operational tone",
     tooltip: "차분하고 안정적 표현",
-    profile: { hueShift: -10, saturationShift: -10, lightShift: 5, contrast: 8, neutralBias: 0.22 },
+    profile: { hueShift: -36, saturationShift: -24, lightShift: 14, contrast: 12, neutralBias: 0.45 },
     slides: {
       coverTitle: "Execution Plan",
       coverSubtitle: "A stable planning deck built for roadmap clarity.",
@@ -104,7 +104,7 @@ const PURPOSES = [
     previewLabel: "Analysis Mode",
     previewTone: "Crisp analytical tone",
     tooltip: "명확한 표현",
-    profile: { hueShift: -18, saturationShift: 2, lightShift: 0, contrast: 22, neutralBias: 0.04 },
+    profile: { hueShift: -60, saturationShift: 16, lightShift: -2, contrast: 36, neutralBias: 0.02 },
     slides: {
       coverTitle: "Market Readout",
       coverSubtitle: "A data-first deck with crisp hierarchy and fast scan paths.",
@@ -137,7 +137,7 @@ const PURPOSES = [
     previewLabel: "Submission Mode",
     previewTone: "Formal and neutral tone",
     tooltip: "무난하고 보수적 표현",
-    profile: { hueShift: 4, saturationShift: -14, lightShift: 7, contrast: 10, neutralBias: 0.28 },
+    profile: { hueShift: 10, saturationShift: -34, lightShift: 18, contrast: 8, neutralBias: 0.56 },
     slides: {
       coverTitle: "Formal Submission",
       coverSubtitle: "A disciplined presentation style for official review settings.",
@@ -261,11 +261,13 @@ function bindEvents() {
     refs.hexInput.classList.remove("is-invalid");
   });
   refs.hexColorPicker.addEventListener("input", handleHexInput);
-  refs.hexColorPickerLabel.addEventListener("input", handleHexLabelInput);
-  refs.hexColorPickerLabel.addEventListener("blur", () => {
-    refs.hexColorPickerLabel.value = rgbToHex(state.baseColor);
-    refs.hexColorPickerLabel.classList.remove("is-invalid");
-  });
+  if (refs.hexColorPickerLabel) {
+    refs.hexColorPickerLabel.addEventListener("input", handleHexLabelInput);
+    refs.hexColorPickerLabel.addEventListener("blur", () => {
+      refs.hexColorPickerLabel.value = rgbToHex(state.baseColor);
+      refs.hexColorPickerLabel.classList.remove("is-invalid");
+    });
+  }
 
   [refs.rInput, refs.gInput, refs.bInput].forEach((input) => {
     input.addEventListener("input", handleRgbInput);
@@ -319,7 +321,9 @@ function handleHexInput(event) {
   const parsed = parseHex(value);
   const showInvalid = value.replace("#", "").length >= 3 && !parsed;
   refs.hexInput.classList.toggle("is-invalid", showInvalid);
-  refs.hexColorPickerLabel.classList.toggle("is-invalid", showInvalid);
+  if (refs.hexColorPickerLabel) {
+    refs.hexColorPickerLabel.classList.toggle("is-invalid", showInvalid);
+  }
 
   if (!parsed) {
     return;
@@ -329,6 +333,10 @@ function handleHexInput(event) {
 }
 
 function handleHexLabelInput(event) {
+  if (!refs.hexColorPickerLabel) {
+    return;
+  }
+
   const value = event.target.value.trim();
   const parsed = parseHex(value);
   const showInvalid = value.replace("#", "").length >= 3 && !parsed;
@@ -388,7 +396,9 @@ function syncBaseInputs(rgb) {
   const hex = rgbToHex(rgb);
   refs.hexInput.value = hex;
   refs.hexColorPicker.value = hex;
-  refs.hexColorPickerLabel.value = hex;
+  if (refs.hexColorPickerLabel) {
+    refs.hexColorPickerLabel.value = hex;
+  }
   refs.rInput.value = rgb.r;
   refs.gInput.value = rgb.g;
   refs.bInput.value = rgb.b;
@@ -783,9 +793,9 @@ function renderIconTemplateSlide(tokens, context) {
 }
 function buildHarmonyPalette(baseHsl, profile, variant) {
   const wheelBaseHue = snapToColorWheel(baseHsl.h + profile.hueShift);
-  const saturation = clamp(baseHsl.s + profile.saturationShift * 0.3 - profile.neutralBias * 4, 24, 82);
-  const lightness = clamp(baseHsl.l + profile.lightShift * 0.16, 20, 80);
-  const coreColors = buildCoreColors(wheelBaseHue, saturation, lightness, variant.mode);
+  const saturation = clamp(baseHsl.s + profile.saturationShift * 0.85 - profile.neutralBias * 10, 16, 92);
+  const lightness = clamp(baseHsl.l + profile.lightShift * 0.5 + profile.contrast * 0.06 - profile.neutralBias * 3, 12, 88);
+  const coreColors = buildCoreColors(wheelBaseHue, saturation, lightness, variant.mode, profile.contrast);
   const accentHex = buildAccentColor({ ...baseHsl, l: lightness }, profile, variant);
   const swatches = buildPaletteSwatches(coreColors, accentHex);
 
@@ -802,10 +812,12 @@ function buildHarmonyPalette(baseHsl, profile, variant) {
   };
 }
 
-function buildCoreColors(baseHue, saturation, lightness, mode) {
+function buildCoreColors(baseHue, saturation, lightness, mode, contrast = 0) {
+  const contrastFactor = clamp(contrast / 26, 0.45, 1.8);
+
   if (mode === "monochromatic") {
-    const monoLightOffsets = [-24, -12, 0, 10, 22];
-    const monoSatOffsets = [10, 6, 0, -6, -12];
+    const monoLightOffsets = [-24, -12, 0, 10, 22].map((offset) => offset * contrastFactor);
+    const monoSatOffsets = [10, 6, 0, -6, -12].map((offset) => offset * contrastFactor);
     return monoLightOffsets.map((lightOffset, index) => {
       const sat = clamp(saturation + monoSatOffsets[index], 18, 92);
       const lit = clamp(lightness + lightOffset, 10, 94);
@@ -817,16 +829,16 @@ function buildCoreColors(baseHue, saturation, lightness, mode) {
     const offsets = [-2, -1, 0, 1, 2];
     return offsets.map((stepOffset, index) => {
       const hue = wheelHueFromBase(baseHue, stepOffset);
-      const sat = clamp(saturation + (index === 2 ? 6 : 0), 22, 92);
-      const lit = clamp(lightness + (index - 2) * 7, 12, 90);
+      const sat = clamp(saturation + (index === 2 ? 6 : 0) * contrastFactor, 22, 92);
+      const lit = clamp(lightness + (index - 2) * 7 * contrastFactor, 12, 90);
       return hslToHex(hue, sat, lit);
     });
   }
 
   if (mode === "complementary") {
     const hueSteps = [0, 0, 6, 6, 0];
-    const satOffsets = [8, 0, 10, -4, -10];
-    const lightOffsets = [-16, 4, -8, 10, 24];
+    const satOffsets = [8, 0, 10, -4, -10].map((offset) => offset * contrastFactor);
+    const lightOffsets = [-16, 4, -8, 10, 24].map((offset) => offset * contrastFactor);
     return hueSteps.map((stepOffset, index) => {
       const hue = wheelHueFromBase(baseHue, stepOffset);
       return hslToHex(
@@ -838,8 +850,8 @@ function buildCoreColors(baseHue, saturation, lightness, mode) {
   }
 
   const splitHueSteps = [0, 0, 5, 7, 0];
-  const splitSatOffsets = [6, 0, 8, 8, -10];
-  const splitLightOffsets = [-14, 4, -6, 10, 24];
+  const splitSatOffsets = [6, 0, 8, 8, -10].map((offset) => offset * contrastFactor);
+  const splitLightOffsets = [-14, 4, -6, 10, 24].map((offset) => offset * contrastFactor);
   return splitHueSteps.map((stepOffset, index) => {
     const hue = wheelHueFromBase(baseHue, stepOffset);
     return hslToHex(
