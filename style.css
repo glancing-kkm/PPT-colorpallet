@@ -460,10 +460,15 @@ img {
 
 .upload-stack {
   display: grid;
-  gap: 0.3rem;
+  gap: 0.28rem;
   align-content: start;
   flex: 0 0 106px;
   width: 106px;
+}
+
+.upload-media-slot {
+  width: 106px;
+  min-height: 68px;
 }
 
 .upload-zone--inline {
@@ -530,6 +535,18 @@ img {
   border-radius: 12px;
   border: 1px solid var(--line-strong);
   background: #fff;
+}
+
+.upload-stack:not(.has-image) #imagePreview {
+  display: none;
+}
+
+.upload-stack.has-image .upload-zone {
+  display: none;
+}
+
+.upload-stack:not(.has-image) .image-clear-button {
+  display: none;
 }
 
 .upload-result__info {

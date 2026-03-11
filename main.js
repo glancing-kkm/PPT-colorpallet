@@ -237,6 +237,7 @@ function bindRefs() {
   refs.bInput = document.getElementById("bInput");
   refs.imageInput = document.getElementById("imageInput");
   refs.imagePreview = document.getElementById("imagePreview");
+  refs.uploadStack = document.getElementById("uploadStack");
   refs.imageClearButton = document.getElementById("imageClearButton");
   refs.imageFeedback = document.getElementById("imageFeedback");
   refs.extractedSwatch = document.getElementById("extractedSwatch");
@@ -311,10 +312,16 @@ function bindEvents() {
     }
 
     try {
-      await copyText(palette.colors.join(", "));
-      refs.copyStatus.textContent = `${palette.label} 팔레트를 클립보드에 복사했습니다.`;
+      await copyPaletteImage(palette);
+      refs.copyStatus.textContent = `${palette.label} 팔레트 이미지를 클립보드에 복사했습니다.`;
     } catch (error) {
-      refs.copyStatus.textContent = "클립보드 복사에 실패했습니다.";
+      try {
+        await copyText(palette.colors.join(", "));
+        refs.copyStatus.textContent = "이미지 복사를 지원하지 않아 HEX 코드로 복사했습니다.";
+      } catch (fallbackError) {
+        refs.copyStatus.textContent = "클립보드 복사에 실패했습니다.";
+        console.error(fallbackError);
+      }
       console.error(error);
     }
   });
@@ -373,6 +380,7 @@ async function handleImageUpload(event) {
     const dataUrl = await readFileAsDataUrl(file);
     refs.imagePreview.src = dataUrl;
     refs.imagePreview.hidden = false;
+    refs.uploadStack?.classList.add("has-image");
     const extracted = await extractDominantColor(dataUrl);
     const extractedHex = rgbToHex(extracted);
     state.lastExtractedHex = extractedHex;
@@ -394,6 +402,7 @@ function clearUploadedImage() {
     refs.imagePreview.src = "";
     refs.imagePreview.hidden = true;
   }
+  refs.uploadStack?.classList.remove("has-image");
   refs.imageFeedback.textContent = "이미지를 삭제했습니다. 새 이미지를 첨부해 주세요.";
 }
 
@@ -969,6 +978,67 @@ function getSelectedPurposes() {
 
 function getActivePalette() {
   return state.palettes.find((palette) => palette.id === state.activePaletteId) || null;
+}
+
+async function copyPaletteImage(palette) {
+  if (!navigator.clipboard || typeof ClipboardItem === "undefined") {
+    throw new Error("Image clipboard API is not supported.");
+  }
+
+  const swatches = palette.swatches || palette.colors.map((hex) => ({ hex, isAccent: false }));
+  const canvas = document.createElement("canvas");
+  const width = 960;
+  const height = 300;
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) {
+    throw new Error("Canvas context is unavailable.");
+  }
+
+  ctx.fillStyle = "#FFFFFF";
+  ctx.fillRect(0, 0, width, height);
+  ctx.fillStyle = "#10131C";
+  ctx.font = "700 30px Pretendard, sans-serif";
+  ctx.fillText(palette.label, 36, 52);
+  ctx.fillStyle = "#5F6580";
+  ctx.font = "500 18px Pretendard, sans-serif";
+  ctx.fillText(`${palette.short} · ${palette.note}`, 36, 80);
+
+  const stripX = 36;
+  const stripY = 104;
+  const stripW = width - stripX * 2;
+  const stripH = 148;
+  const cellW = stripW / swatches.length;
+
+  swatches.forEach((swatch, index) => {
+    const x = stripX + cellW * index;
+    const isLast = index === swatches.length - 1;
+    const w = isLast ? stripX + stripW - x : cellW;
+    const hex = swatch.hex;
+    ctx.fillStyle = hex;
+    ctx.fillRect(x, stripY, w, stripH);
+
+    const textColor = getReadableTextColor(hex).includes("255") ? "#FFFFFF" : "#10131C";
+    ctx.fillStyle = textColor;
+    ctx.font = "700 18px Space Grotesk, Pretendard, sans-serif";
+    ctx.fillText(hex.toUpperCase(), x + 12, stripY + stripH - 16);
+  });
+
+  ctx.strokeStyle = "#D6DEEF";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(stripX, stripY, stripW, stripH);
+
+  const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+  if (!blob) {
+    throw new Error("Unable to create image blob.");
+  }
+
+  await navigator.clipboard.write([
+    new ClipboardItem({
+      "image/png": blob,
+    }),
+  ]);
 }
 
 function createPolylinePoints(values, width, height, padding) {
