@@ -165,16 +165,21 @@ function bindEvents() {
 
   refs.copyPaletteButton.addEventListener("click", async () => {
     if (!state.palette) return;
-    const payload = [
-      `Primary ${state.palette.primary}`,
-      `Secondary ${state.palette.secondary}`,
-      `Neutral ${state.palette.neutral}`,
-      `Accent ${state.palette.accent}`,
-      `Support ${state.palette.support}`,
-      `Dark ${state.palette.dark}`,
-    ].join("\n");
-    await copyToClipboard(payload);
-    showCopyToast("팔레트 전체를 클립보드에 복사했습니다.");
+    try {
+      await copyPaletteImageToClipboard(state.palette);
+      showCopyToast("팔레트 이미지를 클립보드에 복사했습니다.");
+    } catch {
+      const payload = [
+        `Primary ${state.palette.primary}`,
+        `Secondary ${state.palette.secondary}`,
+        `Neutral ${state.palette.neutral}`,
+        `Accent ${state.palette.accent}`,
+        `Support ${state.palette.support}`,
+        `Dark ${state.palette.dark}`,
+      ].join("\n");
+      await copyToClipboard(payload);
+      showCopyToast("이미지 복사에 실패해 색상 텍스트로 복사했습니다.");
+    }
   });
 
   refs.downloadThemeButton.addEventListener("click", async () => {
@@ -539,6 +544,97 @@ function showCopyToast(message) {
   state.toastTimer = window.setTimeout(() => {
     refs.copyToast.classList.remove("is-visible");
   }, 1800);
+}
+
+async function copyPaletteImageToClipboard(palette) {
+  if (!navigator.clipboard || typeof ClipboardItem === "undefined") {
+    throw new Error("Clipboard image unsupported");
+  }
+
+  const blob = await renderPaletteImageBlob(palette);
+  await navigator.clipboard.write([
+    new ClipboardItem({
+      "image/png": blob,
+    }),
+  ]);
+}
+
+function renderPaletteImageBlob(palette) {
+  const width = 1400;
+  const height = 380;
+  const padding = 28;
+  const radius = 36;
+  const labelHeight = 78;
+  const colors = [
+    { name: "Primary", hex: palette.primary, text: "#FFFFFF" },
+    { name: "Secondary", hex: palette.secondary, text: "#FFFFFF" },
+    { name: "Neutral", hex: palette.neutral, text: "#101214" },
+    { name: "Accent", hex: palette.accent, text: "#FFFFFF" },
+    { name: "Support", hex: palette.support, text: "#FFFFFF" },
+    { name: "Dark", hex: palette.dark, text: "#FFFFFF" },
+  ];
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+
+  ctx.fillStyle = "#F5F6F7";
+  ctx.fillRect(0, 0, width, height);
+
+  drawRoundedRect(ctx, padding, padding, width - padding * 2, height - padding * 2, radius);
+  ctx.save();
+  ctx.clip();
+
+  const bandWidth = (width - padding * 2) / colors.length;
+  colors.forEach((color, index) => {
+    const x = padding + bandWidth * index;
+    ctx.fillStyle = color.hex;
+    ctx.fillRect(x, padding, bandWidth + 1, height - padding * 2);
+
+    const gradient = ctx.createLinearGradient(0, height - padding - labelHeight, 0, height - padding);
+    gradient.addColorStop(0, "rgba(0,0,0,0)");
+    gradient.addColorStop(1, color.text === "#101214" ? "rgba(255,255,255,0.34)" : "rgba(0,0,0,0.32)");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(x, height - padding - labelHeight, bandWidth + 1, labelHeight);
+
+    ctx.fillStyle = color.text;
+    ctx.textAlign = "left";
+    ctx.font = "700 26px Inter, sans-serif";
+    ctx.fillText(color.hex, x + 22, height - padding - 30);
+    ctx.font = "500 18px Inter, sans-serif";
+    ctx.globalAlpha = color.text === "#101214" ? 0.65 : 0.78;
+    ctx.fillText(color.name, x + 22, height - padding - 8);
+    ctx.globalAlpha = 1;
+  });
+
+  ctx.restore();
+
+  ctx.strokeStyle = "rgba(12, 15, 16, 0.06)";
+  ctx.lineWidth = 2;
+  drawRoundedRect(ctx, padding, padding, width - padding * 2, height - padding * 2, radius);
+  ctx.stroke();
+
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (blob) resolve(blob);
+      else reject(new Error("Palette blob render failed"));
+    }, "image/png");
+  });
+}
+
+function drawRoundedRect(ctx, x, y, width, height, radius) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
 }
 
 function buildThemeFileName() {
