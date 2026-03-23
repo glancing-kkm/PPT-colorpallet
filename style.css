@@ -2685,7 +2685,9 @@ body[data-page="chromatic-curator"] {
   --primary-container: #799dff;
   --neutral: #dadddf;
   --accent: #8d3a8b;
+  --support: #5e8bff;
   --dark: #0c0f10;
+  scroll-behavior: smooth;
 }
 
 body[data-page="chromatic-curator"] .material-symbols-outlined {
@@ -2714,6 +2716,14 @@ body[data-page="chromatic-curator"] .palette-band {
 
 body[data-page="chromatic-curator"] .palette-band.is-copied {
   transform: scale(1.02);
+}
+
+body[data-page="chromatic-curator"] .palette-meta {
+  opacity: 0.46;
+}
+
+body[data-page="chromatic-curator"] .palette-band:hover .palette-meta {
+  opacity: 1;
 }
 
 body[data-page="chromatic-curator"] .preview-accent,

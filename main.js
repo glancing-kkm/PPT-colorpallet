@@ -106,10 +106,14 @@ function bindRefs() {
   refs.lockIcon = document.getElementById("lockIcon");
   refs.sidebarVersion = document.getElementById("sidebarVersion");
   refs.paletteBands = Array.from(document.querySelectorAll(".palette-band"));
+  refs.copyPaletteButton = document.getElementById("copyPaletteButton");
+  refs.downloadThemeButton = document.getElementById("downloadThemeButton");
+  refs.copyToast = document.getElementById("copyToast");
   refs.labelPrimary = document.getElementById("labelPrimary");
   refs.labelSecondary = document.getElementById("labelSecondary");
   refs.labelNeutral = document.getElementById("labelNeutral");
   refs.labelAccent = document.getElementById("labelAccent");
+  refs.labelSupport = document.getElementById("labelSupport");
   refs.labelDark = document.getElementById("labelDark");
 }
 
@@ -157,6 +161,27 @@ function bindEvents() {
   refs.lockPaletteButton.addEventListener("click", () => {
     setLocked(!state.locked);
     setFeedback(state.locked ? "현재 팔레트를 잠갔습니다." : "팔레트 잠금을 해제했습니다.");
+  });
+
+  refs.copyPaletteButton.addEventListener("click", async () => {
+    if (!state.palette) return;
+    const payload = [
+      `Primary ${state.palette.primary}`,
+      `Secondary ${state.palette.secondary}`,
+      `Neutral ${state.palette.neutral}`,
+      `Accent ${state.palette.accent}`,
+      `Support ${state.palette.support}`,
+      `Dark ${state.palette.dark}`,
+    ].join("\n");
+    await copyToClipboard(payload);
+    showCopyToast("팔레트 전체를 클립보드에 복사했습니다.");
+  });
+
+  refs.downloadThemeButton.addEventListener("click", async () => {
+    if (!state.palette) return;
+    const blob = buildThemeBlob(state.palette, PURPOSES[state.purpose].label);
+    downloadBlob(blob, buildThemeFileName());
+    showCopyToast(".thmx 테마 파일을 다운로드했습니다.");
   });
 
   for (const eventName of ["dragenter", "dragover"]) {
@@ -233,6 +258,7 @@ function applyPalette(palette) {
   setCssVar("--primary-container", palette.secondary);
   setCssVar("--neutral", palette.neutral);
   setCssVar("--accent", palette.accent);
+  setCssVar("--support", palette.support);
   setCssVar("--dark", palette.dark);
 
   refs.anchorSwatch.style.backgroundColor = palette.primary;
@@ -240,6 +266,7 @@ function applyPalette(palette) {
   refs.labelSecondary.textContent = palette.secondary;
   refs.labelNeutral.textContent = palette.neutral;
   refs.labelAccent.textContent = palette.accent;
+  refs.labelSupport.textContent = palette.support;
   refs.labelDark.textContent = palette.dark;
 
   const values = {
@@ -247,6 +274,7 @@ function applyPalette(palette) {
     secondary: palette.secondary,
     neutral: palette.neutral,
     accent: palette.accent,
+    support: palette.support,
     dark: palette.dark,
   };
 
@@ -313,13 +341,18 @@ function buildPalette(baseHex, purpose, variant) {
     s: clamp(primaryHsl.s + 6 + purpose.contrastBias * 20 + variant.saturationNudge * 0.6, 28, 88),
     l: clamp(44 + purpose.lightnessBias * 0.3 - variant.lightNudge * 0.25, 28, 62),
   });
+  const support = hslToHex({
+    h: wrapHue(primaryHsl.h - purpose.accentShift * 0.55 + variant.hueNudge * 0.35),
+    s: clamp(primaryHsl.s * 0.72 + 4 + variant.saturationNudge * 0.3, 22, 84),
+    l: clamp(primaryHsl.l + 8 + variant.lightNudge * 0.4, 34, 72),
+  });
   const dark = hslToHex({
     h: wrapHue(primaryHsl.h + variant.hueNudge * 0.2),
     s: clamp(primaryHsl.s * 0.38, 10, 28),
     l: clamp(10 + purpose.contrastBias * 8, 8, 20),
   });
 
-  return { primary: tunedPrimary, secondary, neutral, accent, dark };
+  return { primary: tunedPrimary, secondary, neutral, accent, support, dark };
 }
 
 async function applyImageColor(file) {
@@ -496,4 +529,249 @@ function flashBand(band) {
 
 function setFeedback(message) {
   refs.uploadFeedback.textContent = message;
+}
+
+function showCopyToast(message) {
+  if (!refs.copyToast) return;
+  refs.copyToast.textContent = message;
+  refs.copyToast.classList.add("is-visible");
+  window.clearTimeout(state.toastTimer);
+  state.toastTimer = window.setTimeout(() => {
+    refs.copyToast.classList.remove("is-visible");
+  }, 1800);
+}
+
+function buildThemeFileName() {
+  const purpose = PURPOSES[state.purpose].label.replace(/\s+/g, "-");
+  return `chromatic-curator-${purpose.toLowerCase()}.thmx`;
+}
+
+function buildThemeBlob(palette, purposeLabel) {
+  const themeXml = buildThemeXml(palette, purposeLabel);
+  const files = [
+    { name: "[Content_Types].xml", data: xmlBytes(buildContentTypesXml()) },
+    { name: "_rels/.rels", data: xmlBytes(buildRootRelsXml()) },
+    { name: "theme/theme/themeManager.xml", data: xmlBytes(buildThemeManagerXml()) },
+    { name: "theme/theme/_rels/themeManager.xml.rels", data: xmlBytes(buildThemeManagerRelsXml()) },
+    { name: "theme/theme/theme1.xml", data: xmlBytes(themeXml) },
+  ];
+
+  return new Blob([createStoredZip(files)], {
+    type: "application/vnd.ms-officetheme",
+  });
+}
+
+function buildContentTypesXml() {
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
+  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Override PartName="/theme/theme/themeManager.xml" ContentType="application/vnd.openxmlformats-officedocument.themeManager+xml"/>
+  <Override PartName="/theme/theme/theme1.xml" ContentType="application/vnd.openxmlformats-officedocument.theme+xml"/>
+</Types>`;
+}
+
+function buildRootRelsXml() {
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/themeManager" Target="theme/theme/themeManager.xml"/>
+</Relationships>`;
+}
+
+function buildThemeManagerXml() {
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<a:themeManager xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"/>`;
+}
+
+function buildThemeManagerRelsXml() {
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" Target="theme1.xml"/>
+</Relationships>`;
+}
+
+function buildThemeXml(palette, purposeLabel) {
+  const name = xmlEscape(`Chromatic Curator ${purposeLabel}`);
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<a:theme xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="${name}">
+  <a:themeElements>
+    <a:clrScheme name="${name}">
+      <a:dk1><a:srgbClr val="0C0F10"/></a:dk1>
+      <a:lt1><a:srgbClr val="FFFFFF"/></a:lt1>
+      <a:dk2><a:srgbClr val="${stripHash(palette.dark)}"/></a:dk2>
+      <a:lt2><a:srgbClr val="${stripHash(palette.neutral)}"/></a:lt2>
+      <a:accent1><a:srgbClr val="${stripHash(palette.primary)}"/></a:accent1>
+      <a:accent2><a:srgbClr val="${stripHash(palette.secondary)}"/></a:accent2>
+      <a:accent3><a:srgbClr val="${stripHash(palette.neutral)}"/></a:accent3>
+      <a:accent4><a:srgbClr val="${stripHash(palette.accent)}"/></a:accent4>
+      <a:accent5><a:srgbClr val="${stripHash(palette.support)}"/></a:accent5>
+      <a:accent6><a:srgbClr val="${stripHash(palette.dark)}"/></a:accent6>
+      <a:hlink><a:srgbClr val="${stripHash(palette.primary)}"/></a:hlink>
+      <a:folHlink><a:srgbClr val="${stripHash(palette.accent)}"/></a:folHlink>
+    </a:clrScheme>
+    <a:fontScheme name="${name}">
+      <a:majorFont>
+        <a:latin typeface="Aptos Display"/>
+        <a:ea typeface="Malgun Gothic"/>
+        <a:cs typeface="Arial"/>
+      </a:majorFont>
+      <a:minorFont>
+        <a:latin typeface="Aptos"/>
+        <a:ea typeface="Malgun Gothic"/>
+        <a:cs typeface="Arial"/>
+      </a:minorFont>
+    </a:fontScheme>
+    <a:fmtScheme name="${name}">
+      <a:fillStyleLst>
+        <a:solidFill><a:schemeClr val="phClr"/></a:solidFill>
+        <a:gradFill rotWithShape="1">
+          <a:gsLst>
+            <a:gs pos="0"><a:schemeClr val="phClr"><a:tint val="50000"/><a:satMod val="300000"/></a:schemeClr></a:gs>
+            <a:gs pos="100000"><a:schemeClr val="phClr"><a:shade val="50000"/><a:satMod val="300000"/></a:schemeClr></a:gs>
+          </a:gsLst>
+          <a:lin ang="5400000" scaled="0"/>
+        </a:gradFill>
+        <a:gradFill rotWithShape="1">
+          <a:gsLst>
+            <a:gs pos="0"><a:schemeClr val="phClr"><a:tint val="95000"/><a:satMod val="170000"/></a:schemeClr></a:gs>
+            <a:gs pos="50000"><a:schemeClr val="phClr"><a:tint val="55000"/><a:satMod val="130000"/></a:schemeClr></a:gs>
+            <a:gs pos="100000"><a:schemeClr val="phClr"><a:shade val="25000"/><a:satMod val="120000"/></a:schemeClr></a:gs>
+          </a:gsLst>
+          <a:lin ang="5400000" scaled="0"/>
+        </a:gradFill>
+      </a:fillStyleLst>
+      <a:lnStyleLst>
+        <a:ln w="6350" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill></a:ln>
+        <a:ln w="12700" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill></a:ln>
+        <a:ln w="19050" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill></a:ln>
+      </a:lnStyleLst>
+      <a:effectStyleLst>
+        <a:effectStyle><a:effectLst/></a:effectStyle>
+        <a:effectStyle><a:effectLst/></a:effectStyle>
+        <a:effectStyle><a:effectLst/></a:effectStyle>
+      </a:effectStyleLst>
+      <a:bgFillStyleLst>
+        <a:solidFill><a:schemeClr val="phClr"/></a:solidFill>
+        <a:solidFill><a:schemeClr val="lt1"/></a:solidFill>
+        <a:gradFill rotWithShape="1">
+          <a:gsLst>
+            <a:gs pos="0"><a:schemeClr val="lt2"/></a:gs>
+            <a:gs pos="100000"><a:schemeClr val="lt1"/></a:gs>
+          </a:gsLst>
+          <a:lin ang="5400000" scaled="0"/>
+        </a:gradFill>
+      </a:bgFillStyleLst>
+    </a:fmtScheme>
+  </a:themeElements>
+  <a:objectDefaults/>
+  <a:extraClrSchemeLst/>
+</a:theme>`;
+}
+
+function xmlBytes(text) {
+  return new TextEncoder().encode(text);
+}
+
+function stripHash(hex) {
+  return hex.replace("#", "");
+}
+
+function xmlEscape(text) {
+  return text.replaceAll("&", "&amp;").replaceAll("\"", "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+}
+
+function downloadBlob(blob, fileName) {
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = fileName;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+}
+
+function createStoredZip(entries) {
+  const localChunks = [];
+  const centralChunks = [];
+  let offset = 0;
+
+  for (const entry of entries) {
+    const nameBytes = new TextEncoder().encode(entry.name);
+    const data = entry.data;
+    const crc = crc32(data);
+    const localHeader = new Uint8Array(30 + nameBytes.length);
+    const localView = new DataView(localHeader.buffer);
+    localView.setUint32(0, 0x04034b50, true);
+    localView.setUint16(4, 20, true);
+    localView.setUint16(6, 0, true);
+    localView.setUint16(8, 0, true);
+    localView.setUint16(10, 0, true);
+    localView.setUint16(12, 0, true);
+    localView.setUint32(14, crc, true);
+    localView.setUint32(18, data.length, true);
+    localView.setUint32(22, data.length, true);
+    localView.setUint16(26, nameBytes.length, true);
+    localView.setUint16(28, 0, true);
+    localHeader.set(nameBytes, 30);
+    localChunks.push(localHeader, data);
+
+    const centralHeader = new Uint8Array(46 + nameBytes.length);
+    const centralView = new DataView(centralHeader.buffer);
+    centralView.setUint32(0, 0x02014b50, true);
+    centralView.setUint16(4, 20, true);
+    centralView.setUint16(6, 20, true);
+    centralView.setUint16(8, 0, true);
+    centralView.setUint16(10, 0, true);
+    centralView.setUint16(12, 0, true);
+    centralView.setUint16(14, 0, true);
+    centralView.setUint32(16, crc, true);
+    centralView.setUint32(20, data.length, true);
+    centralView.setUint32(24, data.length, true);
+    centralView.setUint16(28, nameBytes.length, true);
+    centralView.setUint16(30, 0, true);
+    centralView.setUint16(32, 0, true);
+    centralView.setUint16(34, 0, true);
+    centralView.setUint16(36, 0, true);
+    centralView.setUint32(38, 0, true);
+    centralView.setUint32(42, offset, true);
+    centralHeader.set(nameBytes, 46);
+    centralChunks.push(centralHeader);
+
+    offset += localHeader.length + data.length;
+  }
+
+  const centralSize = centralChunks.reduce((sum, chunk) => sum + chunk.length, 0);
+  const endRecord = new Uint8Array(22);
+  const endView = new DataView(endRecord.buffer);
+  endView.setUint32(0, 0x06054b50, true);
+  endView.setUint16(4, 0, true);
+  endView.setUint16(6, 0, true);
+  endView.setUint16(8, entries.length, true);
+  endView.setUint16(10, entries.length, true);
+  endView.setUint32(12, centralSize, true);
+  endView.setUint32(16, offset, true);
+  endView.setUint16(20, 0, true);
+
+  return new Blob([...localChunks, ...centralChunks, endRecord]);
+}
+
+const CRC_TABLE = (() => {
+  const table = new Uint32Array(256);
+  for (let n = 0; n < 256; n += 1) {
+    let c = n;
+    for (let k = 0; k < 8; k += 1) {
+      c = (c & 1) ? (0xedb88320 ^ (c >>> 1)) : (c >>> 1);
+    }
+    table[n] = c >>> 0;
+  }
+  return table;
+})();
+
+function crc32(bytes) {
+  let crc = 0xffffffff;
+  for (let index = 0; index < bytes.length; index += 1) {
+    crc = CRC_TABLE[(crc ^ bytes[index]) & 0xff] ^ (crc >>> 8);
+  }
+  return (crc ^ 0xffffffff) >>> 0;
 }
