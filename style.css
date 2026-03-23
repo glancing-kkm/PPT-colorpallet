@@ -2679,3 +2679,96 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+body[data-page="chromatic-curator"] {
+  --primary: #0052d0;
+  --primary-container: #799dff;
+  --neutral: #dadddf;
+  --accent: #8d3a8b;
+  --dark: #0c0f10;
+}
+
+body[data-page="chromatic-curator"] .material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+body[data-page="chromatic-curator"] .active-glow {
+  box-shadow: 0 0 0 2px var(--primary), 0 10px 25px -5px rgba(0, 82, 208, 0.2);
+}
+
+body[data-page="chromatic-curator"] .purpose-card.is-active {
+  background: #fff;
+  color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary), 0 10px 25px -5px rgba(0, 82, 208, 0.18);
+  transform: translateY(-2px);
+}
+
+body[data-page="chromatic-curator"] .purpose-card.is-active .purpose-icon {
+  background: color-mix(in srgb, var(--primary) 10%, white);
+  color: var(--primary);
+}
+
+body[data-page="chromatic-curator"] .palette-band {
+  transition: background-color 180ms ease, transform 180ms ease;
+}
+
+body[data-page="chromatic-curator"] .palette-band.is-copied {
+  transform: scale(1.02);
+}
+
+body[data-page="chromatic-curator"] .preview-accent,
+body[data-page="chromatic-curator"] .preview-primary,
+body[data-page="chromatic-curator"] .preview-secondary,
+body[data-page="chromatic-curator"] .preview-neutral,
+body[data-page="chromatic-curator"] .preview-dark {
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+body[data-page="chromatic-curator"] .upload-zone.is-dragging {
+  border-color: var(--primary);
+  background: rgba(121, 157, 255, 0.12);
+}
+
+body[data-page="chromatic-curator"] .copied-toast {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+body[data-page="chromatic-curator"] .copied-toast.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 1023px) {
+  body[data-page="chromatic-curator"] .app-sidebar {
+    position: static;
+    height: auto;
+    width: auto;
+    border-radius: 1.5rem;
+    margin: 1rem;
+    padding-top: 1.5rem;
+  }
+
+  body[data-page="chromatic-curator"] .app-main {
+    margin-left: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 1.5rem;
+  }
+
+  body[data-page="chromatic-curator"] .app-footer > div {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  body[data-page="chromatic-curator"] .hero-title {
+    font-size: 2.5rem;
+    line-height: 1.02;
+  }
+
+  body[data-page="chromatic-curator"] .palette-stack {
+    height: 13rem;
+  }
+}
