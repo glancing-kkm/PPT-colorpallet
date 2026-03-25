@@ -159,16 +159,16 @@
 
     <main class="app-main lg:ml-64 lg:max-w-[1600px] lg:px-12 lg:pb-24 lg:pt-12">
       <header class="mb-12 mt-6 lg:mb-16 lg:mt-0">
-        <h1 class="hero-title mb-4 font-headline text-5xl font-black tracking-tighter text-on-surface lg:text-6xl">의도를 담은 <span id="heroPrimaryText" style="color: var(--primary);">캔버스</span>.</h1>
-        <p class="max-w-2xl text-base text-on-surface-variant sm:text-lg">핵심 분위기를 정의하세요. 이미지에서 톤을 추출하거나 단일 HEX 코드를 고정하여 에디토리얼 스타일의 변화를 경험해 보세요.</p>
+        <h1 class="hero-title mb-4 font-headline text-5xl font-black tracking-tighter text-on-surface lg:text-6xl">색에 의도를 담은 <span id="heroPrimaryText" style="color: var(--primary);">캔버스</span>.</h1>
+        <p class="max-w-2xl text-base text-on-surface-variant sm:text-lg">한 가지 색으로 슬라이드 톤을 설계하세요.</p>
       </header>
 
       <section class="mb-16 grid grid-cols-12 gap-6 lg:mb-20 lg:gap-8" id="tools-section">
         <div class="col-span-12 flex flex-col gap-6 lg:col-span-5">
           <div class="h-full rounded-xl bg-surface-container p-6 sm:p-8">
-            <h2 class="mb-6 flex items-center gap-2 font-headline text-xl font-bold"><span class="material-symbols-outlined" style="color: var(--primary);">colorize</span>기본 색상 선택</h2>
+            <h2 class="mb-6 flex items-center gap-2 font-headline text-xl font-bold"><span class="material-symbols-outlined" style="color: var(--primary);">colorize</span>기준색 설정</h2>
             <div class="mb-6 rounded-xl bg-surface-container-lowest p-6 shadow-sm">
-              <label class="mb-3 block text-xs uppercase tracking-widest text-on-surface-variant" for="baseHexInput">기본 앵커</label>
+              <label class="mb-3 block text-xs uppercase tracking-widest text-on-surface-variant" for="baseHexInput">기준색</label>
               <div class="flex items-center gap-4">
                 <div class="h-16 w-16 rounded-lg shadow-inner" id="anchorSwatch" style="background-color: var(--primary);"></div>
                 <input class="flex-1 border-none bg-transparent font-label text-3xl font-bold uppercase text-on-surface focus:ring-0" id="baseHexInput" type="text" value="#0052D0" maxlength="7" autocomplete="off" spellcheck="false">
@@ -177,16 +177,16 @@
             <label class="upload-zone group flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-outline-variant/30 p-8 text-center transition-colors hover:bg-surface-container-low" for="imageInput" id="uploadZone">
               <input id="imageInput" type="file" accept="image/*" class="hidden">
               <span class="material-symbols-outlined mb-4 text-4xl text-outline-variant transition-colors group-hover:text-primary">add_photo_alternate</span>
-              <p class="font-label font-bold text-on-surface">이미지를 드래그하여 추출</p>
+              <p class="font-label font-bold text-on-surface">이미지에서 톤 추출</p>
               <p class="mt-1 text-xs text-on-surface-variant">PNG, JPG 또는 WebP (최대 10MB)</p>
-              <p class="mt-3 text-xs font-semibold" id="uploadFeedback" style="color: var(--primary);">현재 기준색을 직접 입력해도 됩니다.</p>
+              <p class="mt-3 text-xs font-semibold" id="uploadFeedback" style="color: var(--primary);">HEX 직접 입력 가능</p>
             </label>
           </div>
         </div>
 
         <div class="col-span-12 lg:col-span-7">
           <div class="h-full rounded-xl bg-surface-container-low p-6 sm:p-8">
-            <h2 class="mb-6 flex items-center gap-2 font-headline text-xl font-bold"><span class="material-symbols-outlined" style="color: var(--accent);">psychology</span>사용 목적</h2>
+            <h2 class="mb-6 flex items-center gap-2 font-headline text-xl font-bold"><span class="material-symbols-outlined" style="color: var(--accent);">psychology</span>사용 장면</h2>
             <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5" id="purposeGrid">
               <button class="purpose-card is-active flex cursor-pointer flex-col items-center rounded-xl bg-surface-container-lowest p-4 text-center transition-all hover:-translate-y-1" data-purpose="report" type="button">
                 <div class="purpose-icon mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
@@ -220,8 +220,8 @@
               </button>
             </div>
             <div class="mt-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-              <p class="text-sm text-on-surface-variant" id="purposeSummary">보고용 톤을 기준으로 안정적인 팔레트를 생성합니다.</p>
-              <button class="flex items-center gap-3 rounded-full px-8 py-4 font-headline font-black text-white shadow-lg transition-transform hover:scale-105" id="generateButton" style="background-image: linear-gradient(90deg, var(--primary), var(--primary-container));">팔레트 생성하기 <span class="material-symbols-outlined">bolt</span></button>
+              <p class="text-sm text-on-surface-variant" id="purposeSummary">보고서에 적합한 균형감 있는 팔레트입니다.</p>
+              <button class="flex items-center gap-3 rounded-full px-8 py-4 font-headline font-black text-white shadow-lg transition-transform hover:scale-105" id="generateButton" style="background-image: linear-gradient(90deg, var(--primary), var(--primary-container));">팔레트 생성 <span class="material-symbols-outlined">bolt</span></button>
             </div>
           </div>
         </div>
@@ -230,8 +230,8 @@
       <section class="mb-16 lg:mb-20" id="templates-section">
         <div class="mb-8 flex items-end justify-between gap-4">
           <div>
-            <h2 class="font-headline text-3xl font-bold tracking-tight">추천 팔레트</h2>
-            <p class="text-on-surface-variant" id="paletteDescription">에디토리얼 보고서 및 데이터가 많은 프레젠테이션을 위해 특별히 선정되었습니다.</p>
+            <h2 class="font-headline text-3xl font-bold tracking-tight">큐레이션 팔레트</h2>
+            <p class="text-on-surface-variant" id="paletteDescription">선택한 톤에 맞춰 정제한 조합입니다.</p>
           </div>
           <div class="flex gap-2">
             <button class="flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-500 shadow-sm transition-colors hover:text-primary" id="copyPaletteButton" type="button">
@@ -240,7 +240,7 @@
             </button>
             <button class="flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-500 shadow-sm transition-colors hover:text-primary" id="downloadThemeButton" type="button">
               <span class="material-symbols-outlined text-base">download</span>
-              THMX 다운로드
+              테마 저장
             </button>
             <button class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-slate-400 shadow-sm transition-colors hover:text-primary" id="refreshPaletteButton" type="button">
               <span class="material-symbols-outlined">refresh</span>
@@ -289,13 +289,13 @@
             </div>
           </div>
         </div>
-        <p class="copied-toast mt-3 text-sm font-medium" id="copyToast" style="color: var(--primary);">팔레트를 클립보드에 복사했습니다.</p>
+        <p class="copied-toast mt-3 text-sm font-medium" id="copyToast" style="color: var(--primary);">팔레트를 복사했습니다.</p>
       </section>
 
       <section id="tutorials-section">
         <div class="mb-8 flex items-center gap-4">
           <div class="h-px flex-1 bg-outline-variant/30"></div>
-          <h2 class="px-4 text-center font-headline text-xl font-bold text-on-surface-variant">PPT 미리보기 목업</h2>
+          <h2 class="px-4 text-center font-headline text-xl font-bold text-on-surface-variant">슬라이드 미리보기</h2>
           <div class="h-px flex-1 bg-outline-variant/30"></div>
         </div>
 
@@ -311,7 +311,7 @@
                 <div class="preview-secondary h-8 w-8 rounded" style="background-color: var(--primary-container);"></div>
               </div>
             </div>
-            <p class="mt-3 text-center font-label text-sm font-bold">메인 슬라이드</p>
+            <p class="mt-3 text-center font-label text-sm font-bold">표지</p>
           </div>
 
           <div class="group">
@@ -338,7 +338,7 @@
                 <div class="h-1 w-full rounded-full bg-slate-300"></div>
               </div>
             </div>
-            <p class="mt-3 text-center font-label text-sm font-bold">본문 스타일</p>
+            <p class="mt-3 text-center font-label text-sm font-bold">본문</p>
           </div>
 
           <div class="group">
@@ -352,7 +352,7 @@
                 <div class="preview-neutral col-span-4 h-12 rounded-sm" style="background-color: color-mix(in srgb, var(--neutral) 50%, white);"></div>
               </div>
             </div>
-            <p class="mt-3 text-center font-label text-sm font-bold">표 레이아웃</p>
+            <p class="mt-3 text-center font-label text-sm font-bold">표</p>
           </div>
 
           <div class="group">
@@ -362,7 +362,7 @@
               <div class="preview-accent h-16 flex-1 rounded-t-sm" style="background-color: var(--accent);"></div>
               <div class="preview-dark h-28 flex-1 rounded-t-sm" style="background-color: color-mix(in srgb, var(--dark) 85%, var(--primary));"></div>
             </div>
-            <p class="mt-3 text-center font-label text-sm font-bold">그래프 분석</p>
+            <p class="mt-3 text-center font-label text-sm font-bold">차트</p>
           </div>
 
           <div class="group">
@@ -386,7 +386,7 @@
                 <div class="h-1 w-8 rounded-full bg-slate-200"></div>
               </div>
             </div>
-            <p class="mt-3 text-center font-label text-sm font-bold">아이콘 세트</p>
+            <p class="mt-3 text-center font-label text-sm font-bold">아이콘</p>
           </div>
         </div>
       </section>
@@ -394,11 +394,11 @@
       <section class="mt-16 rounded-[2rem] bg-white/70 p-6 shadow-sm lg:mt-20 lg:p-8" id="community-section">
         <div class="mb-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 class="font-headline text-3xl font-bold tracking-tight">커뮤니티와 가이드</h2>
-            <p class="text-on-surface-variant">메뉴가 실제로 이동하도록 연결했고, 아래에서 빠른 활용 가이드와 협업 흐름을 확인할 수 있습니다.</p>
+            <h2 class="font-headline text-3xl font-bold tracking-tight">활용 가이드</h2>
+            <p class="text-on-surface-variant">바로 적용할 수 있는 예시를 확인하세요.</p>
           </div>
           <a class="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white" href="#tools-section">
-            도구로 돌아가기
+            다시 생성하기
             <span class="material-symbols-outlined text-base">north_west</span>
           </a>
         </div>
@@ -406,18 +406,18 @@
         <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
           <article class="rounded-2xl bg-surface p-5 shadow-sm">
             <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Template</p>
-            <h3 class="mb-2 font-headline text-xl font-bold">보고서 기본형</h3>
-            <p class="text-sm text-on-surface-variant">차분한 본문, 얕은 강조색, 안정적인 표/차트 구성에 맞춘 기본 패턴입니다.</p>
+            <h3 class="mb-2 font-headline text-xl font-bold">리포트 베이스</h3>
+            <p class="text-sm text-on-surface-variant">차분한 본문과 안정적인 표 구성에 맞춘 패턴입니다.</p>
           </article>
           <article class="rounded-2xl bg-surface p-5 shadow-sm">
             <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Tutorial</p>
-            <h3 class="mb-2 font-headline text-xl font-bold">3단계 색상 적용</h3>
-            <p class="text-sm text-on-surface-variant">기준색 입력, 목적 선택, 팔레트 복사만으로 빠르게 슬라이드 기본 톤을 고정할 수 있습니다.</p>
+            <h3 class="mb-2 font-headline text-xl font-bold">3단계 적용</h3>
+            <p class="text-sm text-on-surface-variant">기준색, 목적, 복사만으로 슬라이드 톤을 정할 수 있습니다.</p>
           </article>
           <article class="rounded-2xl bg-surface p-5 shadow-sm">
             <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Community</p>
-            <h3 class="mb-2 font-headline text-xl font-bold">협업용 공유 흐름</h3>
-            <p class="text-sm text-on-surface-variant">팔레트를 통째로 복사해 디자이너, 기획자, 발표 자료 작성자 간 동일한 톤을 맞출 수 있습니다.</p>
+            <h3 class="mb-2 font-headline text-xl font-bold">팀 공유</h3>
+            <p class="text-sm text-on-surface-variant">팔레트를 그대로 공유해 팀 전체의 톤을 맞출 수 있습니다.</p>
           </article>
         </div>
       </section>
