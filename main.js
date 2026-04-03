@@ -330,7 +330,7 @@ function handleRgbCommit() {
   state.baseHex = hex;
   refs.baseHexInput.value = hex;
   refreshExperience(true);
-  setFeedback("RGB 값으로 기준색을 업데이트했습니다.");
+  setFeedback("");
 }
 
 async function handleEyedropper() {
