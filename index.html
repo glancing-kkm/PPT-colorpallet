@@ -178,13 +178,13 @@
               </div>
               <div class="flex items-center gap-1">
                 <span class="w-5 text-center text-xs font-bold uppercase text-on-surface-variant">R</span>
-                <input id="rgbR" type="number" min="0" max="255" value="0" class="w-12 rounded-lg border-none bg-surface-container px-1 py-1.5 text-center text-base font-bold text-on-surface focus:ring-0">
+                <input id="rgbR" type="number" min="0" max="255" value="0" class="w-10 rounded-lg border-none bg-surface-container px-1 py-1 text-center text-xs font-bold text-on-surface focus:ring-0">
                 <span class="px-0.5 text-xs text-on-surface-variant/40">·</span>
                 <span class="w-5 text-center text-xs font-bold uppercase text-on-surface-variant">G</span>
-                <input id="rgbG" type="number" min="0" max="255" value="82" class="w-12 rounded-lg border-none bg-surface-container px-1 py-1.5 text-center text-base font-bold text-on-surface focus:ring-0">
+                <input id="rgbG" type="number" min="0" max="255" value="82" class="w-10 rounded-lg border-none bg-surface-container px-1 py-1 text-center text-xs font-bold text-on-surface focus:ring-0">
                 <span class="px-0.5 text-xs text-on-surface-variant/40">·</span>
                 <span class="w-5 text-center text-xs font-bold uppercase text-on-surface-variant">B</span>
-                <input id="rgbB" type="number" min="0" max="255" value="208" class="w-12 rounded-lg border-none bg-surface-container px-1 py-1.5 text-center text-base font-bold text-on-surface focus:ring-0">
+                <input id="rgbB" type="number" min="0" max="255" value="208" class="w-10 rounded-lg border-none bg-surface-container px-1 py-1 text-center text-xs font-bold text-on-surface focus:ring-0">
               </div>
             </div>
           </div>
@@ -193,7 +193,7 @@
         <div class="col-span-12 lg:col-span-3">
           <div class="h-full rounded-xl bg-surface-container p-5">
             <h2 class="mb-4 flex items-center gap-2 font-headline text-xl font-bold"><span class="material-symbols-outlined" style="color: var(--support);">apartment</span>브랜드 팔레트</h2>
-            <div class="mb-4 flex items-center gap-3 rounded-xl bg-surface-container-lowest px-4 py-3 shadow-sm">
+            <div class="mb-4 flex items-center gap-2 rounded-xl bg-surface-container-lowest px-3 py-3 shadow-sm">
               <span class="material-symbols-outlined text-on-surface-variant">search</span>
               <input id="brandInput" type="text" placeholder="예: Google, 네이버, Slack…" autocomplete="off" spellcheck="false" class="flex-1 border-none bg-transparent text-sm font-medium text-on-surface placeholder:text-on-surface-variant/50 focus:ring-0">
               <button id="brandClearBtn" type="button" class="hidden text-on-surface-variant transition-colors hover:text-on-surface">
@@ -207,12 +207,11 @@
               <p id="brandColorHint" class="mb-3 text-xs text-on-surface-variant"></p>
               <button id="applyBrandBtn" type="button" class="w-full rounded-xl py-3 text-sm font-bold text-white shadow-sm transition-opacity hover:opacity-90" style="background-color: var(--primary);">이 브랜드로 팔레트 적용</button>
             </div>
-            <label class="upload-zone group mt-4 flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-outline-variant/30 p-4 text-center transition-colors hover:bg-surface-container-low" for="imageInput" id="uploadZone">
+            <label class="upload-zone group mt-3 flex cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed border-outline-variant/30 px-3 py-3 transition-colors hover:bg-surface-container-low" for="imageInput" id="uploadZone">
               <input id="imageInput" type="file" accept="image/*" class="hidden">
-              <span class="material-symbols-outlined mb-2 text-2xl text-outline-variant transition-colors group-hover:text-primary">add_photo_alternate</span>
-              <p class="text-sm font-bold text-on-surface">이미지에서 톤 추출</p>
-              <p class="mt-0.5 text-xs text-on-surface-variant">PNG, JPG 또는 WebP (최대 10MB)</p>
-              <p class="mt-1.5 text-xs font-semibold" id="uploadFeedback" style="color: var(--primary);">HEX 직접 입력 가능</p>
+              <span class="material-symbols-outlined text-base text-outline-variant transition-colors group-hover:text-primary">add_photo_alternate</span>
+              <span class="text-xs font-bold text-on-surface">이미지 톤 추출</span>
+              <span class="ml-auto flex-shrink-0 text-xs font-semibold" id="uploadFeedback" style="color: var(--primary);">HEX 직접 입력</span>
             </label>
           </div>
         </div>
