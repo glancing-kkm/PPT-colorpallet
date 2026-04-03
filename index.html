@@ -165,40 +165,33 @@
 
       <section class="mb-16 grid grid-cols-12 gap-5 lg:mb-20 lg:gap-6" id="tools-section">
         <div class="col-span-12 lg:col-span-4">
-          <div class="h-full rounded-xl bg-surface-container p-5 sm:p-6">
-            <h2 class="mb-5 flex items-center gap-2 font-headline text-xl font-bold"><span class="material-symbols-outlined" style="color: var(--primary);">palette</span>기준색 설정</h2>
-            <div class="mb-5 rounded-xl bg-surface-container-lowest p-5 shadow-sm">
-              <label class="mb-3 block text-xs uppercase tracking-widest text-on-surface-variant" for="baseHexInput">기준색</label>
-              <div class="flex items-center gap-3">
-                <div class="h-14 w-14 flex-shrink-0 rounded-lg shadow-inner" id="anchorSwatch" style="background-color: var(--primary);"></div>
-                <input class="min-w-0 flex-1 border-none bg-transparent font-label text-2xl font-bold uppercase text-on-surface focus:ring-0" id="baseHexInput" type="text" value="#0052D0" maxlength="7" autocomplete="off" spellcheck="false">
-                <button id="eyedropperBtn" type="button" title="화면에서 색 선택 (스포이드)" class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-on-surface-variant transition-colors hover:bg-surface-container hover:text-primary">
-                  <span class="material-symbols-outlined" style="font-size: 1.25rem;">colorize</span>
+          <div class="h-full rounded-xl bg-surface-container p-5">
+            <h2 class="mb-4 flex items-center gap-2 font-headline text-xl font-bold"><span class="material-symbols-outlined" style="color: var(--primary);">palette</span>기준색 설정</h2>
+            <div class="rounded-xl bg-surface-container-lowest p-4 shadow-sm">
+              <label class="mb-2 block text-xs uppercase tracking-widest text-on-surface-variant" for="baseHexInput">기준색</label>
+              <div class="mb-3 flex items-center gap-3">
+                <div class="h-10 w-10 flex-shrink-0 rounded-lg shadow-inner" id="anchorSwatch" style="background-color: var(--primary);"></div>
+                <input class="min-w-0 flex-1 border-none bg-transparent font-label text-base font-bold uppercase text-on-surface focus:ring-0" id="baseHexInput" type="text" value="#0052D0" maxlength="7" autocomplete="off" spellcheck="false">
+                <button id="eyedropperBtn" type="button" title="화면에서 색 선택 (스포이드)" class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-on-surface-variant transition-colors hover:bg-surface-container hover:text-primary">
+                  <span class="material-symbols-outlined text-base">colorize</span>
                 </button>
               </div>
-              <div class="mt-3 flex items-center gap-1">
-                <span class="w-6 text-center text-xs font-bold uppercase text-on-surface-variant">R</span>
-                <input id="rgbR" type="number" min="0" max="255" value="0" class="w-12 rounded-lg border-none bg-surface-container px-1 py-1.5 text-center text-sm font-bold text-on-surface focus:ring-0">
-                <span class="px-1 text-xs text-on-surface-variant/40">·</span>
-                <span class="w-6 text-center text-xs font-bold uppercase text-on-surface-variant">G</span>
-                <input id="rgbG" type="number" min="0" max="255" value="82" class="w-12 rounded-lg border-none bg-surface-container px-1 py-1.5 text-center text-sm font-bold text-on-surface focus:ring-0">
-                <span class="px-1 text-xs text-on-surface-variant/40">·</span>
-                <span class="w-6 text-center text-xs font-bold uppercase text-on-surface-variant">B</span>
-                <input id="rgbB" type="number" min="0" max="255" value="208" class="w-12 rounded-lg border-none bg-surface-container px-1 py-1.5 text-center text-sm font-bold text-on-surface focus:ring-0">
+              <div class="flex items-center gap-1">
+                <span class="w-5 text-center text-xs font-bold uppercase text-on-surface-variant">R</span>
+                <input id="rgbR" type="number" min="0" max="255" value="0" class="w-12 rounded-lg border-none bg-surface-container px-1 py-1.5 text-center text-base font-bold text-on-surface focus:ring-0">
+                <span class="px-0.5 text-xs text-on-surface-variant/40">·</span>
+                <span class="w-5 text-center text-xs font-bold uppercase text-on-surface-variant">G</span>
+                <input id="rgbG" type="number" min="0" max="255" value="82" class="w-12 rounded-lg border-none bg-surface-container px-1 py-1.5 text-center text-base font-bold text-on-surface focus:ring-0">
+                <span class="px-0.5 text-xs text-on-surface-variant/40">·</span>
+                <span class="w-5 text-center text-xs font-bold uppercase text-on-surface-variant">B</span>
+                <input id="rgbB" type="number" min="0" max="255" value="208" class="w-12 rounded-lg border-none bg-surface-container px-1 py-1.5 text-center text-base font-bold text-on-surface focus:ring-0">
               </div>
             </div>
-            <label class="upload-zone group flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-outline-variant/30 p-5 text-center transition-colors hover:bg-surface-container-low" for="imageInput" id="uploadZone">
-              <input id="imageInput" type="file" accept="image/*" class="hidden">
-              <span class="material-symbols-outlined mb-3 text-3xl text-outline-variant transition-colors group-hover:text-primary">add_photo_alternate</span>
-              <p class="font-label font-bold text-on-surface">이미지에서 톤 추출</p>
-              <p class="mt-1 text-xs text-on-surface-variant">PNG, JPG 또는 WebP (최대 10MB)</p>
-              <p class="mt-2 text-xs font-semibold" id="uploadFeedback" style="color: var(--primary);">HEX 직접 입력 가능</p>
-            </label>
           </div>
         </div>
 
         <div class="col-span-12 lg:col-span-3">
-          <div class="h-full rounded-xl bg-surface-container p-5 sm:p-6">
+          <div class="h-full rounded-xl bg-surface-container p-5">
             <h2 class="mb-4 flex items-center gap-2 font-headline text-xl font-bold"><span class="material-symbols-outlined" style="color: var(--support);">apartment</span>브랜드 팔레트</h2>
             <div class="mb-4 flex items-center gap-3 rounded-xl bg-surface-container-lowest px-4 py-3 shadow-sm">
               <span class="material-symbols-outlined text-on-surface-variant">search</span>
@@ -214,47 +207,54 @@
               <p id="brandColorHint" class="mb-3 text-xs text-on-surface-variant"></p>
               <button id="applyBrandBtn" type="button" class="w-full rounded-xl py-3 text-sm font-bold text-white shadow-sm transition-opacity hover:opacity-90" style="background-color: var(--primary);">이 브랜드로 팔레트 적용</button>
             </div>
+            <label class="upload-zone group mt-4 flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-outline-variant/30 p-4 text-center transition-colors hover:bg-surface-container-low" for="imageInput" id="uploadZone">
+              <input id="imageInput" type="file" accept="image/*" class="hidden">
+              <span class="material-symbols-outlined mb-2 text-2xl text-outline-variant transition-colors group-hover:text-primary">add_photo_alternate</span>
+              <p class="text-sm font-bold text-on-surface">이미지에서 톤 추출</p>
+              <p class="mt-0.5 text-xs text-on-surface-variant">PNG, JPG 또는 WebP (최대 10MB)</p>
+              <p class="mt-1.5 text-xs font-semibold" id="uploadFeedback" style="color: var(--primary);">HEX 직접 입력 가능</p>
+            </label>
           </div>
         </div>
 
         <div class="col-span-12 lg:col-span-5">
-          <div class="h-full rounded-xl bg-surface-container-low p-5 sm:p-6">
-            <h2 class="mb-5 flex items-center gap-2 font-headline text-xl font-bold"><span class="material-symbols-outlined" style="color: var(--accent);">psychology</span>PPT 형식</h2>
-            <div class="grid grid-cols-3 gap-3 sm:grid-cols-5" id="purposeGrid">
-              <button class="purpose-card is-active flex cursor-pointer flex-col items-center rounded-xl bg-surface-container-lowest p-3 text-center transition-all hover:-translate-y-1" data-purpose="report" type="button">
-                <div class="purpose-icon mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <span class="material-symbols-outlined text-xl">description</span>
+          <div class="h-full rounded-xl bg-surface-container-low p-5">
+            <h2 class="mb-4 flex items-center gap-2 font-headline text-xl font-bold"><span class="material-symbols-outlined" style="color: var(--accent);">psychology</span>PPT 형식</h2>
+            <div class="grid grid-cols-5 gap-2" id="purposeGrid">
+              <button class="purpose-card is-active flex cursor-pointer flex-col items-center rounded-xl bg-surface-container-lowest p-2 text-center transition-all hover:-translate-y-1" data-purpose="report" type="button">
+                <div class="purpose-icon mb-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <span class="material-symbols-outlined text-lg">description</span>
                 </div>
                 <span class="font-label text-xs font-bold">보고서</span>
               </button>
-              <button class="purpose-card flex cursor-pointer flex-col items-center rounded-xl bg-surface-container-high/40 p-3 text-center transition-all hover:bg-surface-container-lowest" data-purpose="proposal" type="button">
-                <div class="purpose-icon mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-slate-200 text-slate-500">
-                  <span class="material-symbols-outlined text-xl">campaign</span>
+              <button class="purpose-card flex cursor-pointer flex-col items-center rounded-xl bg-surface-container-high/40 p-2 text-center transition-all hover:bg-surface-container-lowest" data-purpose="proposal" type="button">
+                <div class="purpose-icon mb-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 text-slate-500">
+                  <span class="material-symbols-outlined text-lg">campaign</span>
                 </div>
                 <span class="font-label text-xs font-bold">제안서</span>
               </button>
-              <button class="purpose-card flex cursor-pointer flex-col items-center rounded-xl bg-surface-container-high/40 p-3 text-center transition-all hover:bg-surface-container-lowest" data-purpose="planning" type="button">
-                <div class="purpose-icon mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-slate-200 text-slate-500">
-                  <span class="material-symbols-outlined text-xl">map</span>
+              <button class="purpose-card flex cursor-pointer flex-col items-center rounded-xl bg-surface-container-high/40 p-2 text-center transition-all hover:bg-surface-container-lowest" data-purpose="planning" type="button">
+                <div class="purpose-icon mb-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 text-slate-500">
+                  <span class="material-symbols-outlined text-lg">map</span>
                 </div>
                 <span class="font-label text-xs font-bold">기획서</span>
               </button>
-              <button class="purpose-card flex cursor-pointer flex-col items-center rounded-xl bg-surface-container-high/40 p-3 text-center transition-all hover:bg-surface-container-lowest" data-purpose="analysis" type="button">
-                <div class="purpose-icon mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-slate-200 text-slate-500">
-                  <span class="material-symbols-outlined text-xl">analytics</span>
+              <button class="purpose-card flex cursor-pointer flex-col items-center rounded-xl bg-surface-container-high/40 p-2 text-center transition-all hover:bg-surface-container-lowest" data-purpose="analysis" type="button">
+                <div class="purpose-icon mb-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 text-slate-500">
+                  <span class="material-symbols-outlined text-lg">analytics</span>
                 </div>
                 <span class="font-label text-xs font-bold">분석</span>
               </button>
-              <button class="purpose-card flex cursor-pointer flex-col items-center rounded-xl bg-surface-container-high/40 p-3 text-center transition-all hover:bg-surface-container-lowest" data-purpose="submission" type="button">
-                <div class="purpose-icon mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-slate-200 text-slate-500">
-                  <span class="material-symbols-outlined text-xl">send</span>
+              <button class="purpose-card flex cursor-pointer flex-col items-center rounded-xl bg-surface-container-high/40 p-2 text-center transition-all hover:bg-surface-container-lowest" data-purpose="submission" type="button">
+                <div class="purpose-icon mb-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 text-slate-500">
+                  <span class="material-symbols-outlined text-lg">send</span>
                 </div>
                 <span class="font-label text-xs font-bold">제출용</span>
               </button>
             </div>
-            <div class="mt-6 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
-              <p class="text-sm text-on-surface-variant" id="purposeSummary">보고서에 적합한 균형감 있는 팔레트입니다.</p>
-              <button class="flex items-center gap-2 rounded-full px-6 py-3 font-headline font-black text-white shadow-lg transition-transform hover:scale-105" id="generateButton" style="background-image: linear-gradient(90deg, var(--primary), var(--primary-container));">팔레트 생성 <span class="material-symbols-outlined">bolt</span></button>
+            <div class="mt-4 flex flex-row items-center justify-between gap-3">
+              <p class="min-w-0 flex-1 text-xs text-on-surface-variant" id="purposeSummary">보고서에 적합한 균형감 있는 팔레트입니다.</p>
+              <button class="flex flex-shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-2.5 font-headline text-sm font-black text-white shadow-lg transition-transform hover:scale-105" id="generateButton" style="background-image: linear-gradient(90deg, var(--primary), var(--primary-container));">팔레트 생성 <span class="material-symbols-outlined text-base">bolt</span></button>
             </div>
           </div>
         </div>
