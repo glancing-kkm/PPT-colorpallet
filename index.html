@@ -178,13 +178,13 @@
               </div>
               <div class="flex items-center justify-center gap-1">
                 <span class="w-5 text-center text-xs font-bold uppercase text-on-surface-variant">R</span>
-                <input id="rgbR" type="number" min="0" max="255" value="0" class="w-12 rounded-lg border-none bg-surface-container px-1 py-1 text-center text-xs font-bold text-on-surface focus:ring-0">
+                <input id="rgbR" type="number" min="0" max="255" value="0" class="rgb-spin w-14 rounded-lg border-none bg-surface-container px-1.5 py-1 text-xs font-bold text-on-surface focus:ring-0">
                 <span class="px-0.5 text-xs text-on-surface-variant/40">·</span>
                 <span class="w-5 text-center text-xs font-bold uppercase text-on-surface-variant">G</span>
-                <input id="rgbG" type="number" min="0" max="255" value="82" class="w-12 rounded-lg border-none bg-surface-container px-1 py-1 text-center text-xs font-bold text-on-surface focus:ring-0">
+                <input id="rgbG" type="number" min="0" max="255" value="82" class="rgb-spin w-14 rounded-lg border-none bg-surface-container px-1.5 py-1 text-xs font-bold text-on-surface focus:ring-0">
                 <span class="px-0.5 text-xs text-on-surface-variant/40">·</span>
                 <span class="w-5 text-center text-xs font-bold uppercase text-on-surface-variant">B</span>
-                <input id="rgbB" type="number" min="0" max="255" value="208" class="w-12 rounded-lg border-none bg-surface-container px-1 py-1 text-center text-xs font-bold text-on-surface focus:ring-0">
+                <input id="rgbB" type="number" min="0" max="255" value="208" class="rgb-spin w-14 rounded-lg border-none bg-surface-container px-1.5 py-1 text-xs font-bold text-on-surface focus:ring-0">
               </div>
             </div>
           </div>
@@ -207,12 +207,12 @@
               <p id="brandColorHint" class="mb-3 text-xs text-on-surface-variant"></p>
               <button id="applyBrandBtn" type="button" class="w-full rounded-xl py-3 text-sm font-bold text-white shadow-sm transition-opacity hover:opacity-90" style="background-color: var(--primary);">이 브랜드로 팔레트 적용</button>
             </div>
-            <label class="upload-zone group mt-3 flex cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed border-outline-variant/30 px-3 py-3 transition-colors hover:bg-surface-container-low" for="imageInput" id="uploadZone">
+            <label class="upload-zone group mt-2 flex cursor-pointer items-center gap-2 rounded-xl border-2 border-dashed border-outline-variant/30 px-3 py-3 transition-colors hover:bg-surface-container-low" for="imageInput" id="uploadZone">
               <input id="imageInput" type="file" accept="image/*" class="hidden">
               <span class="material-symbols-outlined flex-shrink-0 text-base text-outline-variant transition-colors group-hover:text-primary">add_photo_alternate</span>
               <span class="whitespace-nowrap text-xs font-bold text-on-surface">이미지 톤 추출</span>
             </label>
-            <p class="mt-1.5 truncate text-xs font-semibold" id="uploadFeedback" style="color: var(--primary);">HEX 직접 입력 가능</p>
+            <p class="mt-1 truncate text-xs font-semibold" id="uploadFeedback" style="color: var(--primary);"></p>
           </div>
         </div>
 

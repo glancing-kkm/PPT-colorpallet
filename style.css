@@ -1,3 +1,10 @@
+/* RGB spinner arrows always visible */
+.rgb-spin::-webkit-inner-spin-button,
+.rgb-spin::-webkit-outer-spin-button {
+  opacity: 1;
+  -webkit-appearance: inner-spin-button;
+}
+
 :root {
   --bg: #f7f6f1;
   --bg-soft: #fffdf8;
