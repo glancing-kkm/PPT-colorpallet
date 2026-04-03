@@ -68,6 +68,46 @@ const VARIANTS = [
   { name: "contrast", hueNudge: 18, lightNudge: -8, saturationNudge: 12 },
 ];
 
+const BRAND_COLORS = {
+  google:    { name: "Google",    aliases: ["구글"],                colors: ["#4285F4","#EA4335","#FBBC04","#34A853"] },
+  microsoft: { name: "Microsoft", aliases: ["마이크로소프트","ms"],   colors: ["#F25022","#7FBA00","#00A4EF","#FFB900"] },
+  apple:     { name: "Apple",     aliases: ["애플"],                colors: ["#000000","#0071E3","#F5F5F7"] },
+  meta:      { name: "Meta",      aliases: ["메타","facebook","페이스북"], colors: ["#0082FB","#00C7FF"] },
+  instagram: { name: "Instagram", aliases: ["인스타그램","인스타"],   colors: ["#833AB4","#E1306C","#F77737","#FCAF45"] },
+  youtube:   { name: "YouTube",   aliases: ["유튜브"],               colors: ["#FF0000","#282828"] },
+  netflix:   { name: "Netflix",   aliases: ["넷플릭스"],             colors: ["#E50914","#221F1F"] },
+  spotify:   { name: "Spotify",   aliases: ["스포티파이"],           colors: ["#1DB954","#191414"] },
+  amazon:    { name: "Amazon",    aliases: ["아마존"],               colors: ["#FF9900","#232F3E"] },
+  slack:     { name: "Slack",     aliases: ["슬랙"],                colors: ["#4A154B","#ECB22E","#2EB67D","#E01E5A"] },
+  figma:     { name: "Figma",     aliases: ["피그마"],               colors: ["#F24E1E","#A259FF","#1ABCFE","#0ACF83"] },
+  airbnb:    { name: "Airbnb",    aliases: ["에어비앤비"],            colors: ["#FF5A5F","#00A699"] },
+  tesla:     { name: "Tesla",     aliases: ["테슬라"],               colors: ["#E82127","#FFFFFF"] },
+  nike:      { name: "Nike",      aliases: ["나이키"],               colors: ["#000000","#FFFFFF"] },
+  starbucks: { name: "Starbucks", aliases: ["스타벅스"],             colors: ["#00704A","#CBA258","#D4E9E2"] },
+  adobe:     { name: "Adobe",     aliases: ["어도비"],               colors: ["#FF0000","#1473E6"] },
+  linkedin:  { name: "LinkedIn",  aliases: ["링크드인"],             colors: ["#0A66C2","#FFFFFF"] },
+  twitter:   { name: "X (Twitter)", aliases: ["트위터","x"],          colors: ["#000000","#FFFFFF"] },
+  naver:     { name: "네이버",     aliases: ["naver"],              colors: ["#03C75A","#FFFFFF"] },
+  kakao:     { name: "카카오",     aliases: ["kakao"],              colors: ["#FAE100","#3C1E1E"] },
+  samsung:   { name: "삼성",      aliases: ["samsung","삼성전자"],  colors: ["#1428A0","#FFFFFF"] },
+  lg:        { name: "LG",        aliases: ["엘지","lge"],          colors: ["#A50034","#FFFFFF"] },
+  hyundai:   { name: "현대",      aliases: ["hyundai","현대자동차"], colors: ["#002C5F","#FFFFFF"] },
+  kia:       { name: "기아",      aliases: ["kia"],                colors: ["#BB162B","#000000"] },
+  sk:        { name: "SK",        aliases: ["에스케이"],            colors: ["#EA0029","#FFFFFF"] },
+  kt:        { name: "KT",        aliases: ["케이티"],              colors: ["#E60012","#FFFFFF"] },
+  coupang:   { name: "쿠팡",      aliases: ["coupang"],            colors: ["#FF4800","#FFFFFF"] },
+  baemin:    { name: "배달의민족", aliases: ["baemin","배민"],       colors: ["#2AC1BC","#FFCD00"] },
+  toss:      { name: "토스",      aliases: ["toss"],               colors: ["#0064FF","#FFFFFF"] },
+  shinhan:   { name: "신한",      aliases: ["shinhan","신한은행"],   colors: ["#004A97","#FFFFFF"] },
+  kb:        { name: "KB국민",    aliases: ["kb","국민은행"],        colors: ["#FFBE00","#FFFFFF"] },
+  hana:      { name: "하나",      aliases: ["hana","하나은행"],      colors: ["#009E60","#FFFFFF"] },
+  woori:     { name: "우리",      aliases: ["woori","우리은행"],     colors: ["#0045A4","#FFFFFF"] },
+  lguplus:   { name: "LG U+",     aliases: ["lg유플러스","유플러스","uplus"], colors: ["#E6007E","#FFFFFF"] },
+  olleh:     { name: "올리브영",   aliases: ["oliveyoung","olive"], colors: ["#2EAC79","#FFFFFF"] },
+  musinsa:   { name: "무신사",     aliases: ["musinsa"],           colors: ["#000000","#FFFFFF"] },
+  line:      { name: "Line",      aliases: ["라인"],               colors: ["#00B900","#FFFFFF"] },
+};
+
 const refs = {};
 
 const state = {
@@ -78,6 +118,7 @@ const state = {
   palette: null,
   copyTimer: null,
   toastTimer: null,
+  selectedBrand: null,
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -115,6 +156,18 @@ function bindRefs() {
   refs.labelAccent = document.getElementById("labelAccent");
   refs.labelSupport = document.getElementById("labelSupport");
   refs.labelDark = document.getElementById("labelDark");
+  refs.rgbR = document.getElementById("rgbR");
+  refs.rgbG = document.getElementById("rgbG");
+  refs.rgbB = document.getElementById("rgbB");
+  refs.eyedropperBtn = document.getElementById("eyedropperBtn");
+  refs.brandInput = document.getElementById("brandInput");
+  refs.brandClearBtn = document.getElementById("brandClearBtn");
+  refs.brandSuggestions = document.getElementById("brandSuggestions");
+  refs.brandPreview = document.getElementById("brandPreview");
+  refs.brandPreviewName = document.getElementById("brandPreviewName");
+  refs.brandColorStrip = document.getElementById("brandColorStrip");
+  refs.brandColorHint = document.getElementById("brandColorHint");
+  refs.applyBrandBtn = document.getElementById("applyBrandBtn");
 }
 
 function bindEvents() {
@@ -122,6 +175,32 @@ function bindEvents() {
   refs.baseHexInput.addEventListener("keyup", (event) => {
     if (event.key === "Enter") handleHexCommit();
   });
+
+  for (const ref of [refs.rgbR, refs.rgbG, refs.rgbB]) {
+    ref.addEventListener("change", handleRgbCommit);
+    ref.addEventListener("keyup", (event) => {
+      if (event.key === "Enter") handleRgbCommit();
+    });
+  }
+
+  refs.eyedropperBtn.addEventListener("click", handleEyedropper);
+
+  refs.brandInput.addEventListener("input", () => {
+    const query = refs.brandInput.value.trim();
+    refs.brandClearBtn.classList.toggle("hidden", !query);
+    renderBrandSuggestions(filterBrands(query));
+    if (!query) refs.brandPreview.classList.add("hidden");
+  });
+
+  refs.brandClearBtn.addEventListener("click", () => {
+    refs.brandInput.value = "";
+    refs.brandClearBtn.classList.add("hidden");
+    refs.brandSuggestions.innerHTML = "";
+    refs.brandPreview.classList.add("hidden");
+    state.selectedBrand = null;
+  });
+
+  refs.applyBrandBtn.addEventListener("click", applyBrandPalette);
 
   refs.purposeGrid.addEventListener("click", (event) => {
     const card = event.target.closest(".purpose-card");
@@ -234,8 +313,145 @@ function handleHexCommit() {
   setLocked(false);
   state.baseHex = normalized;
   refs.baseHexInput.value = normalized;
+  syncRgbFromHex(normalized);
   refreshExperience(true);
   setFeedback("기준색을 직접 업데이트했습니다.");
+}
+
+function handleRgbCommit() {
+  const r = clamp(parseInt(refs.rgbR.value) || 0, 0, 255);
+  const g = clamp(parseInt(refs.rgbG.value) || 0, 0, 255);
+  const b = clamp(parseInt(refs.rgbB.value) || 0, 0, 255);
+  refs.rgbR.value = r;
+  refs.rgbG.value = g;
+  refs.rgbB.value = b;
+  const hex = rgbToHex(r, g, b);
+  setLocked(false);
+  state.baseHex = hex;
+  refs.baseHexInput.value = hex;
+  refreshExperience(true);
+  setFeedback("RGB 값으로 기준색을 업데이트했습니다.");
+}
+
+async function handleEyedropper() {
+  if (!window.EyeDropper) {
+    setFeedback("스포이드는 Chrome · Edge 에서만 지원됩니다.");
+    return;
+  }
+  try {
+    const result = await new EyeDropper().open();
+    const hex = result.sRGBHex.toUpperCase();
+    setLocked(false);
+    state.baseHex = hex;
+    refs.baseHexInput.value = hex;
+    syncRgbFromHex(hex);
+    refreshExperience(true);
+    setFeedback("스포이드로 색을 선택했습니다.");
+  } catch {
+    /* 사용자가 취소함 */
+  }
+}
+
+function syncRgbFromHex(hex) {
+  const { r, g, b } = hexToRgb(hex);
+  refs.rgbR.value = r;
+  refs.rgbG.value = g;
+  refs.rgbB.value = b;
+}
+
+function filterBrands(query) {
+  const q = query.toLowerCase().trim();
+  if (!q) return [];
+  return Object.entries(BRAND_COLORS).filter(([key, brand]) =>
+    key.includes(q) ||
+    brand.name.toLowerCase().includes(q) ||
+    (brand.aliases || []).some((a) => a.toLowerCase().includes(q))
+  );
+}
+
+function renderBrandSuggestions(entries) {
+  refs.brandSuggestions.innerHTML = "";
+  if (!entries.length) return;
+  for (const [key, brand] of entries.slice(0, 8)) {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.textContent = brand.name;
+    chip.className =
+      "rounded-full border border-outline-variant/40 bg-surface-container-lowest px-3 py-1 text-xs font-semibold text-on-surface transition-colors hover:text-white";
+    chip.style.setProperty("--hover-bg", "var(--primary)");
+    chip.addEventListener("mouseenter", () => { chip.style.backgroundColor = "var(--primary)"; });
+    chip.addEventListener("mouseleave", () => { chip.style.backgroundColor = ""; });
+    chip.addEventListener("click", () => selectBrand(key));
+    refs.brandSuggestions.appendChild(chip);
+  }
+}
+
+function selectBrand(key) {
+  state.selectedBrand = key;
+  const brand = BRAND_COLORS[key];
+
+  refs.brandPreviewName.textContent = `${brand.name} 브랜드 색상`;
+  refs.brandColorStrip.innerHTML = brand.colors
+    .map((c) => `<div class="flex-1 group relative" style="background-color:${c};" title="${c}"><span class="absolute inset-0 flex items-center justify-center text-xs font-bold opacity-0 group-hover:opacity-100" style="color:${isLight(c) ? "#000" : "#fff"}">${c}</span></div>`)
+    .join("");
+
+  const brandCount = brand.colors.length;
+  const autoCount = 6 - brandCount;
+  refs.brandColorHint.textContent =
+    `브랜드 색상 ${brandCount}개 + 자동 생성 ${autoCount}개로 팔레트를 구성합니다.`;
+
+  refs.brandPreview.classList.remove("hidden");
+}
+
+function isLight(hex) {
+  const { r, g, b } = hexToRgb(hex);
+  return (r * 299 + g * 587 + b * 114) / 1000 > 128;
+}
+
+function applyBrandPalette() {
+  if (!state.selectedBrand) return;
+  const brand = BRAND_COLORS[state.selectedBrand];
+  state.baseHex = brand.colors[0];
+  refs.baseHexInput.value = brand.colors[0];
+  syncRgbFromHex(brand.colors[0]);
+  setLocked(false);
+  const palette = buildBrandPalette(state.selectedBrand, PURPOSES[state.purpose], VARIANTS[state.variantIndex]);
+  state.palette = palette;
+  applyPalette(palette);
+  updateText(palette);
+  setFeedback(`${brand.name} 브랜드 팔레트를 적용했습니다.`);
+}
+
+function buildBrandPalette(brandKey, purpose, variant) {
+  const brand = BRAND_COLORS[brandKey];
+  const colors = brand.colors;
+
+  const saturated = [];
+  let lightColor = null;
+  let darkColor = null;
+
+  for (const hex of colors) {
+    const hsl = rgbToHslObject(hexToRgb(hex));
+    if (hsl.l > 85) {
+      if (!lightColor) lightColor = hex;
+    } else if (hsl.l < 20) {
+      if (!darkColor) darkColor = hex;
+    } else {
+      saturated.push(hex);
+    }
+  }
+
+  const primaryColor = saturated[0] || colors[0];
+  const base = buildPalette(primaryColor, purpose, variant);
+
+  return {
+    primary:   saturated[0] || base.primary,
+    accent:    saturated[1] || base.accent,
+    support:   saturated[2] || base.support,
+    secondary: saturated[3] || base.secondary,
+    neutral:   lightColor   || base.neutral,
+    dark:      darkColor    || base.dark,
+  };
 }
 
 function syncUI() {
@@ -300,6 +516,7 @@ function updateText(palette) {
   refs.sidebarVersion.textContent = purpose.version;
   refs.generateButton.dataset.variant = variant.name;
   refs.baseHexInput.value = state.baseHex;
+  syncRgbFromHex(state.baseHex);
 
   refs.paletteBands.forEach((band) => {
     band.title = `${band.dataset.hex} 클릭 시 복사`;
@@ -366,6 +583,7 @@ async function applyImageColor(file) {
     setLocked(false);
     state.baseHex = extracted;
     refs.baseHexInput.value = extracted;
+    syncRgbFromHex(extracted);
     refreshExperience(true);
     setFeedback("이미지 평균색을 기준색으로 반영했습니다.");
   } catch {

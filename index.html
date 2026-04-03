@@ -165,13 +165,26 @@
 
       <section class="mb-16 grid grid-cols-12 gap-6 lg:mb-20 lg:gap-8" id="tools-section">
         <div class="col-span-12 flex flex-col gap-6 lg:col-span-5">
-          <div class="h-full rounded-xl bg-surface-container p-6 sm:p-8">
-            <h2 class="mb-6 flex items-center gap-2 font-headline text-xl font-bold"><span class="material-symbols-outlined" style="color: var(--primary);">colorize</span>기준색 설정</h2>
+          <div class="rounded-xl bg-surface-container p-6 sm:p-8">
+            <h2 class="mb-6 flex items-center gap-2 font-headline text-xl font-bold"><span class="material-symbols-outlined" style="color: var(--primary);">palette</span>기준색 설정</h2>
             <div class="mb-6 rounded-xl bg-surface-container-lowest p-6 shadow-sm">
               <label class="mb-3 block text-xs uppercase tracking-widest text-on-surface-variant" for="baseHexInput">기준색</label>
               <div class="flex items-center gap-4">
-                <div class="h-16 w-16 rounded-lg shadow-inner" id="anchorSwatch" style="background-color: var(--primary);"></div>
-                <input class="flex-1 border-none bg-transparent font-label text-3xl font-bold uppercase text-on-surface focus:ring-0" id="baseHexInput" type="text" value="#0052D0" maxlength="7" autocomplete="off" spellcheck="false">
+                <div class="h-16 w-16 flex-shrink-0 rounded-lg shadow-inner" id="anchorSwatch" style="background-color: var(--primary);"></div>
+                <input class="min-w-0 flex-1 border-none bg-transparent font-label text-3xl font-bold uppercase text-on-surface focus:ring-0" id="baseHexInput" type="text" value="#0052D0" maxlength="7" autocomplete="off" spellcheck="false">
+                <button id="eyedropperBtn" type="button" title="화면에서 색 선택 (스포이드)" class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg text-on-surface-variant transition-colors hover:bg-surface-container hover:text-primary">
+                  <span class="material-symbols-outlined" style="font-size: 1.25rem;">colorize</span>
+                </button>
+              </div>
+              <div class="mt-3 flex items-center gap-1">
+                <span class="w-6 text-center text-xs font-bold uppercase text-on-surface-variant">R</span>
+                <input id="rgbR" type="number" min="0" max="255" value="0" class="w-14 rounded-lg border-none bg-surface-container px-2 py-1.5 text-center text-sm font-bold text-on-surface focus:ring-0">
+                <span class="px-1 text-xs text-on-surface-variant/40">·</span>
+                <span class="w-6 text-center text-xs font-bold uppercase text-on-surface-variant">G</span>
+                <input id="rgbG" type="number" min="0" max="255" value="82" class="w-14 rounded-lg border-none bg-surface-container px-2 py-1.5 text-center text-sm font-bold text-on-surface focus:ring-0">
+                <span class="px-1 text-xs text-on-surface-variant/40">·</span>
+                <span class="w-6 text-center text-xs font-bold uppercase text-on-surface-variant">B</span>
+                <input id="rgbB" type="number" min="0" max="255" value="208" class="w-14 rounded-lg border-none bg-surface-container px-2 py-1.5 text-center text-sm font-bold text-on-surface focus:ring-0">
               </div>
             </div>
             <label class="upload-zone group flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-outline-variant/30 p-8 text-center transition-colors hover:bg-surface-container-low" for="imageInput" id="uploadZone">
@@ -181,6 +194,23 @@
               <p class="mt-1 text-xs text-on-surface-variant">PNG, JPG 또는 WebP (최대 10MB)</p>
               <p class="mt-3 text-xs font-semibold" id="uploadFeedback" style="color: var(--primary);">HEX 직접 입력 가능</p>
             </label>
+          </div>
+          <div class="rounded-xl bg-surface-container p-6 sm:p-8">
+            <h2 class="mb-4 flex items-center gap-2 font-headline text-xl font-bold"><span class="material-symbols-outlined" style="color: var(--support);">apartment</span>브랜드 팔레트</h2>
+            <div class="mb-4 flex items-center gap-3 rounded-xl bg-surface-container-lowest px-4 py-3 shadow-sm">
+              <span class="material-symbols-outlined text-on-surface-variant">search</span>
+              <input id="brandInput" type="text" placeholder="브랜드명 입력 (예: Google, 네이버, Slack…)" autocomplete="off" spellcheck="false" class="flex-1 border-none bg-transparent text-sm font-medium text-on-surface placeholder:text-on-surface-variant/50 focus:ring-0">
+              <button id="brandClearBtn" type="button" class="hidden text-on-surface-variant transition-colors hover:text-on-surface">
+                <span class="material-symbols-outlined text-base">close</span>
+              </button>
+            </div>
+            <div id="brandSuggestions" class="flex flex-wrap gap-2"></div>
+            <div id="brandPreview" class="mt-4 hidden">
+              <p id="brandPreviewName" class="mb-2 text-sm font-bold text-on-surface"></p>
+              <div id="brandColorStrip" class="mb-3 flex h-10 overflow-hidden rounded-lg shadow-sm"></div>
+              <p id="brandColorHint" class="mb-3 text-xs text-on-surface-variant"></p>
+              <button id="applyBrandBtn" type="button" class="w-full rounded-xl py-3 text-sm font-bold text-white shadow-sm transition-opacity hover:opacity-90" style="background-color: var(--primary);">이 브랜드로 팔레트 적용</button>
+            </div>
           </div>
         </div>
 
