@@ -136,7 +136,6 @@ function bindRefs() {
   refs.anchorSwatch = document.getElementById("anchorSwatch");
   refs.uploadZone = document.getElementById("uploadZone");
   refs.imageInput = document.getElementById("imageInput");
-  refs.uploadFeedback = document.getElementById("uploadFeedback");
   refs.purposeGrid = document.getElementById("purposeGrid");
   refs.purposeSummary = document.getElementById("purposeSummary");
   refs.paletteDescription = document.getElementById("paletteDescription");
@@ -750,9 +749,7 @@ function flashBand(band) {
   }, 220);
 }
 
-function setFeedback(message) {
-  refs.uploadFeedback.textContent = message;
-}
+function setFeedback(message) {}
 
 function showCopyToast(message) {
   if (!refs.copyToast) return;
