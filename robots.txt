@@ -1,11 +1,14 @@
 User-agent: *
 Allow: /
-Disallow: /ads.txt
+Disallow:
 
 User-agent: Googlebot
 Allow: /
 
 User-agent: Yeti
+Allow: /
+
+User-agent: Bingbot
 Allow: /
 
 Sitemap: https://ppt-pallet.web.app/sitemap.xml
